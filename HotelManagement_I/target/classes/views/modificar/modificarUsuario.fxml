@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.modificar.ModificarUsuarioController" spacing="10">
+    <TextField fx:id="nombreUsuarioField" promptText="Ingresa el nuevo nombre"/>
+    <TextField fx:id="emailUsuarioField" promptText="Ingresa el nuevo email"/>
+    <TextField fx:id="modificarRolField" promptText="Ingresa el nuevo email"/>
+    <Button text="Guardar Cambios" onAction="#guardarCambios"/>
+    <Button text="Volver" onAction="#volver"/>
+    <Button text="Cerrar" onAction="#cerrarVentana"/>
+</VBox>

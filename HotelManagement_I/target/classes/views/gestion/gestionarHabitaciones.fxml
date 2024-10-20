@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.gestionar.GestionarHabitacionesController">
+    <children>
+        <Label text="Gestión de Habitaciones" layoutX="20" layoutY="20" />
+
+        <TableView fx:id="tablaHabitaciones" layoutX="20" layoutY="50" prefHeight="400" prefWidth="400">
+            <columns>
+                <TableColumn fx:id="columnaTipo" text="Tipo" />
+                <TableColumn fx:id="columnaEstado" text="Estado" />
+                <TableColumn fx:id="columnaMetrosCuadrados" text="Metros Cuadrados" />
+                <TableColumn fx:id="columnaCantidadCamas" text="Cantidad de Camas" />
+                <TableColumn fx:id="columnaCapacidad" text="Capacidad" />
+                <!-- Agrega más columnas según lo que necesites -->
+            </columns>
+        </TableView>
+
+        <Button text="Crear Habitación" layoutX="450" layoutY="50" onAction="#onCrearHabitacion" />
+        <Button text="Modificar Habitación" layoutX="450" layoutY="100" onAction="#onModificarHabitacion" />
+        <Button text="Habilitar/Inhabilitar Habitación" layoutX="450" layoutY="150" onAction="#onHabilitarInhabilitarHabitacion" />
+        <Button text="Borrar Habitación" layoutX="450" layoutY="200" onAction="#onBorrarHabitacion" />
+        <Button text="Ver Detalle Habitación" layoutX="450" layoutY="250" onAction="#onVerDetalleHabitacion" />
+        <Button text="Volver" layoutX="450" layoutY="350" onAction="#volverAlMenuAdmin" />
+    </children>
+</AnchorPane>
