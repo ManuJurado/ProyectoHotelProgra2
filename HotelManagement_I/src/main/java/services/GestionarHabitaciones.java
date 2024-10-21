@@ -17,16 +17,19 @@ public class GestionarHabitaciones {
     }
 
     private void cargarHabitacionesHardcodeadas() {
-        habitaciones.add(new Habitacion("Simple", "Disponible", 20, 1));
-        habitaciones.add(new Habitacion("Doble", "No disponible", 30, 2));
-        habitaciones.add(new Habitacion("Suite", "Disponible", 50, 3));
-        habitaciones.add(new Habitacion("Familiar", "Disponible", 60, 4));
+        agregarHabitacion(new Habitacion("Simple", "disponible", 20, 2));
+        agregarHabitacion(new Habitacion("Doble", "no disponible", 30, 3));
+        agregarHabitacion(new Habitacion("Suite", "disponible", 50, 1));
+        agregarHabitacion(new Habitacion("Familiar", "disponible", 60, 4));
         // Puedes agregar más habitaciones según necesites
     }
 
-    // Método para agregar una nueva habitación
-    public void agregarHabitacion(Habitacion habitacion) {
-        habitaciones.add(habitacion);
+    public void agregarHabitacion(Habitacion nuevaHabitacion) {
+        // Establecer el número de habitación como la cantidad actual de habitaciones + 1
+        int nuevoNumeroHabitacion = habitaciones.size() + 1; // Asumiendo que 'habitaciones' es la lista que almacena las habitaciones
+        nuevaHabitacion.setNroHabitacion(nuevoNumeroHabitacion); // Necesitas un setter para nroHabitacion
+
+        habitaciones.add(nuevaHabitacion); // Agrega la habitación a la lista
     }
 
     // Método para modificar una habitación existente
@@ -53,5 +56,10 @@ public class GestionarHabitaciones {
         String nuevoEstado = habitacion.getEstado().equals("disponible") ? "no disponible" : "disponible";
         habitacion.setEstado(nuevoEstado);
     }
+
+    public List<Habitacion> getHabitaciones(){
+        return habitaciones;
+    }
+
 
 }

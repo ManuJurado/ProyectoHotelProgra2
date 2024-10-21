@@ -4,6 +4,7 @@ import controllers.BaseController;
 import controllers.gestionar.GestionarUsuariosController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
@@ -13,7 +14,7 @@ import models.Usuario;
 public class ModificarUsuarioController extends BaseController {
 
     @FXML
-    public TextField modificarRolField;
+    private ComboBox<String> rolChoiceBox; // Combo para seleccionar rol (Cliente/Conserje)
     @FXML
     private TextField nombreUsuarioField; // Campo para el nombre del usuario
     @FXML
@@ -35,7 +36,7 @@ public class ModificarUsuarioController extends BaseController {
         // Llenar los campos con la información actual del usuario
         nombreUsuarioField.setText(usuario.getNombre());
         emailUsuarioField.setText(usuario.getEmail());
-        modificarRolField.setText(usuario.getRol());
+        rolChoiceBox.getItems().addAll("Cliente", "Conserje", "Administrador"); // Agregar roles disponibles
     }
 
     @FXML
@@ -45,7 +46,7 @@ public class ModificarUsuarioController extends BaseController {
     }
 
     @FXML
-    private void volver(ActionEvent event) {
+    private void volver(ActionEvent event) {/// metodo existente en caso de querer utilizar una escena en lugar de un nuevo stage para modificad un usuario.
         volver("/views/gestion/gestionarUsuarios.fxml", "Gestión de Usuarios", (Node) event.getSource(),
                 () -> gestionarUsuariosController.actualizarListaUsuarios()); // Llama a actualizarListaUsuarios al volver
     }
@@ -54,7 +55,7 @@ public class ModificarUsuarioController extends BaseController {
     private void guardarCambios(ActionEvent event) {
         String nuevoNombre = nombreUsuarioField.getText();
         String nuevoEmail = emailUsuarioField.getText();
-        String nuevoRol = modificarRolField.getText(); // Obtener el nuevo rol
+        String nuevoRol = rolChoiceBox.getValue(); // Obtener el nuevo rol
 
         if (!nuevoNombre.isEmpty() && !nuevoEmail.isEmpty() && !nuevoRol.isEmpty()) { // Comprobar que el rol no esté vacío
             gestionarUsuariosController.actualizarUsuario(usuarioOriginal, nuevoNombre, nuevoEmail, nuevoRol); // Pasar el nuevo rol
@@ -64,7 +65,6 @@ public class ModificarUsuarioController extends BaseController {
             mostrarAlerta("Advertencia", "El nombre, el email y el rol no pueden estar vacíos.");
         }
     }
-
 
     private void mostrarAlerta(String titulo, String mensaje) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);

@@ -1,21 +1,30 @@
 package controllers;
 
 import controllers.gestionar.GestionarHabitacionesController;
+import controllers.gestionar.GestionarReservasController;
 import controllers.gestionar.GestionarUsuariosController;
 import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 import models.Habitacion;
+import models.Reserva;
+import services.GestionReservas;
 import services.GestionarHabitaciones;
 import services.GestionarUsuarios;
 import javafx.scene.control.Alert;
 
+import java.io.IOException;
 import java.util.List;
 
 public class AdministradorController extends BaseController {
 
     private GestionarUsuarios gestionarUsuarios = new GestionarUsuarios();
     private GestionarHabitaciones gestionarHabitaciones = new GestionarHabitaciones();
+    private GestionReservas gestionarReservas = new GestionReservas();
 
     @FXML
     private void gestionarUsuarios(ActionEvent event) {
@@ -50,10 +59,31 @@ public class AdministradorController extends BaseController {
         }
     }
 
-
     @FXML
     private void gestionarReservas(ActionEvent event) {
-        cambiarEscena("/views/gestion/gestionarReservas.fxml", "Gestión de Reservas", (Node) event.getSource());
+        // Aquí puedes cargar la lista de reservas desde gestionarReservas
+        List<Reserva> reservas = gestionarReservas.getReservas();
+
+        // Cambiar a la escena de gestionar reservas y obtener el controlador
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/gestion/gestionarReservas.fxml"));
+        Parent root;
+        try {
+            root = loader.load(); // Carga la vista
+        } catch (IOException e) {
+            mostrarAlerta("Error", "No se pudo cargar la vista de gestión de reservas.");
+            return; // Salimos si hay un error
+        }
+
+        // Obtiene el controlador del FXML cargado
+        GestionarReservasController reservasController = loader.getController();
+        reservasController.setReservas(reservas); // Configura el controlador con las reservas
+
+        // Cambia la escena
+        Scene scene = new Scene(root);
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.setTitle("Gestión de Reservas");
+        stage.show();
     }
 
     @FXML

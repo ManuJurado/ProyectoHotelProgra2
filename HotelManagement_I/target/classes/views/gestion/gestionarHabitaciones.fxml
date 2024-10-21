@@ -7,8 +7,9 @@
     <children>
         <Label text="Gestión de Habitaciones" layoutX="20" layoutY="20" />
 
-        <TableView fx:id="tablaHabitaciones" layoutX="20" layoutY="50" prefHeight="400" prefWidth="400">
+        <TableView fx:id="tablaHabitaciones" layoutX="20" layoutY="50" prefHeight="400" prefWidth="600">
             <columns>
+                <TableColumn fx:id="nroHabitacion" text="Id habitacion" prefWidth="25"/>
                 <TableColumn fx:id="columnaTipo" text="Tipo" />
                 <TableColumn fx:id="columnaEstado" text="Estado" />
                 <TableColumn fx:id="columnaMetrosCuadrados" text="Metros Cuadrados" />
@@ -18,11 +19,11 @@
             </columns>
         </TableView>
 
-        <Button text="Crear Habitación" layoutX="450" layoutY="50" onAction="#onCrearHabitacion" />
-        <Button text="Modificar Habitación" layoutX="450" layoutY="100" onAction="#onModificarHabitacion" />
-        <Button text="Habilitar/Inhabilitar Habitación" layoutX="450" layoutY="150" onAction="#onHabilitarInhabilitarHabitacion" />
-        <Button text="Borrar Habitación" layoutX="450" layoutY="200" onAction="#onBorrarHabitacion" />
-        <Button text="Ver Detalle Habitación" layoutX="450" layoutY="250" onAction="#onVerDetalleHabitacion" />
-        <Button text="Volver" layoutX="450" layoutY="350" onAction="#volverAlMenuAdmin" />
+        <Button text="Crear Habitación" layoutX="650" layoutY="50" onAction="#onCrearHabitacion" />
+        <Button text="Modificar Habitación" layoutX="650" layoutY="100" onAction="#onModificarHabitacion" />
+        <Button text="Habilitar/Inhabilitar Habitación" layoutX="650" layoutY="150" onAction="#onHabilitarInhabilitarHabitacion" />
+        <Button text="Borrar Habitación" layoutX="650" layoutY="200" onAction="#onBorrarHabitacion" />
+        <Button text="Ver Detalle Habitación" layoutX="650" layoutY="250" onAction="#onVerDetalleHabitacion" />
+        <Button text="Volver" layoutX="650" layoutY="350" onAction="#volverAlMenuAdmin" />
     </children>
 </AnchorPane>

@@ -12,6 +12,7 @@ module tu.paquete {
     requires com.almasb.fxgl.all;
     requires javafx.media;
     requires java.json;
+    requires java.desktop;
 
     opens controllers to javafx.fxml; // Permite que JavaFX acceda a los controladores en el paquete
     opens models to javafx.base; // Permite que JavaFX acceda de forma reflexiva al paquete models (donde se encuentra Usuario)
@@ -23,4 +24,6 @@ module tu.paquete {
     opens controllers.modificar to javafx.fxml;
     exports controllers.gestionar;
     opens controllers.gestionar to javafx.fxml;
+    exports controllers.details;
+    opens controllers.details to javafx.fxml;
 }

@@ -23,6 +23,8 @@ public class CrearHabitacionController extends BaseController {
     private TextField metrosCuadradosField; // Metros cuadrados
     @FXML
     private TextField cantidadCamasField; // Cantidad de camas
+    @FXML
+    private TextField nroHabitacionField; // Cambié el nombre para evitar confusiones
 
     private GestionarHabitacionesController gestionarHabitacionesController;
 
@@ -40,6 +42,7 @@ public class CrearHabitacionController extends BaseController {
         String estado = estadoField.getText();
         int metrosCuadrados = Integer.parseInt(metrosCuadradosField.getText());
         int cantidadCamas = Integer.parseInt(cantidadCamasField.getText());
+        Integer nroHabitacion = Integer.parseInt(nroHabitacionField.getText()); // Asegúrate de usar el nombre correcto del campo
 
         Habitacion nuevaHabitacion = new Habitacion(tipoHabitacion, estado, metrosCuadrados, cantidadCamas);
         gestionarHabitaciones.agregarHabitacion(nuevaHabitacion);
@@ -54,7 +57,7 @@ public class CrearHabitacionController extends BaseController {
                 tipoHabitacionField.getText(), // Tipo de habitación
                 estadoField.getText(), // Estado
                 Integer.parseInt(metrosCuadradosField.getText()), // Metros cuadrados
-                Integer.parseInt(cantidadCamasField.getText()) // Cantidad de camas
+                Integer.parseInt(cantidadCamasField.getText())// Cantidad de camas
         );
 
         // Llama al método para agregar la nueva habitación

@@ -1,6 +1,7 @@
 package controllers.gestionar;
 
 import controllers.BaseController;
+import controllers.crear.CrearUsuarioController;
 import controllers.modificar.ModificarUsuarioController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -29,6 +30,8 @@ public class GestionarUsuariosController extends BaseController {
     private TableColumn<Usuario, String> columnaEmail;
     @FXML
     private TableColumn<Usuario, String> columnaRol;
+    @FXML
+    private TableColumn<Usuario, String> columnaHabilitacion;
 
     @FXML
     private TextField nombreUsuarioField;
@@ -48,6 +51,7 @@ public class GestionarUsuariosController extends BaseController {
         columnaNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         columnaEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
         columnaRol.setCellValueFactory(new PropertyValueFactory<>("rol"));
+        columnaHabilitacion.setCellValueFactory(new PropertyValueFactory<>("habilitacion"));
 
         cargarUsuarios(); // Carga usuarios al inicializar
 
@@ -55,6 +59,26 @@ public class GestionarUsuariosController extends BaseController {
         nombreUsuarioField.textProperty().addListener((observable, oldValue, newValue) -> {
             filtrarUsuarios(); // Filtrar usuarios cada vez que cambia el texto
         });
+    }
+
+    @FXML
+    private void onCrearNuevoUsuarioButtonClick(ActionEvent event) {
+        // Lógica para crear un nuevo usuario
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/crear/crearUsuario.fxml"));
+            Parent root = loader.load();
+
+            // Asumir que tienes un controlador CrearUsuarioController
+            CrearUsuarioController crearUsuarioController = loader.getController();
+            crearUsuarioController.setGestionarUsuarios(gestionarUsuarios, this);
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Crear Nuevo Usuario");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -87,6 +111,18 @@ public class GestionarUsuariosController extends BaseController {
     }
 
     @FXML
+    private void onHabilitarInhabilitarUsuario(ActionEvent event) {
+        Usuario usuarioSeleccionado = tablaUsuarios.getSelectionModel().getSelectedItem();
+        if (usuarioSeleccionado != null) {
+            String nuevoRol = usuarioSeleccionado.getHabilitacion().equals("habilitado") ? "inhabilitado" : "habilitado";
+            usuarioSeleccionado.setHabilitacion(nuevoRol);
+            actualizarListaUsuarios(); // Actualiza la lista para reflejar los cambios
+        } else {
+            mostrarAlerta("Advertencia", "Por favor, selecciona un usuario para habilitar/inhabilitar.");
+        }
+    }
+
+    @FXML
     private void filtrarUsuarios() {
         String filtro = nombreUsuarioField.getText().toLowerCase(); // Obtener el texto y pasarlo a minúsculas
 
@@ -105,11 +141,9 @@ public class GestionarUsuariosController extends BaseController {
                 usuariosFiltrados.add(usuario);
             }
         }
-
         // Actualizar la tabla con los usuarios filtrados
         tablaUsuarios.setItems(usuariosFiltrados);
     }
-
 
     public void setGestionarUsuarios(GestionarUsuarios gestionarUsuarios) {
         this.gestionarUsuarios = gestionarUsuarios;
@@ -155,13 +189,6 @@ public class GestionarUsuariosController extends BaseController {
             actualizarListaUsuarios(); // Recargar la lista de usuarios para reflejar los cambios
         }
     }
-
-    public void setUsuarioOriginal(Usuario usuarioOriginal) {
-        this.usuarioOriginal = usuarioOriginal;
-        nombreUsuarioField.setText(usuarioOriginal.getNombre());
-        emailUsuarioField.setText(usuarioOriginal.getEmail());
-    }
-
 
     private void abrirFormularioModificacion(Usuario usuario) {
         try {

@@ -1,6 +1,7 @@
 package models;
 
 public class Habitacion {
+    private Integer nroHabitacion; // Tipo de habitación (ej. "Simple", "Doble", "Suite")
     private String tipoHabitacion; // Tipo de habitación (ej. "Simple", "Doble", "Suite")
     private String estado; // Estado de la habitación (ej. "Disponible", "No disponible", etc.)
     private int metrosCuadrados; // Metros cuadrados de la habitación
@@ -20,12 +21,24 @@ public class Habitacion {
         return tipoHabitacion;
     }
 
+    public Integer getNroHabitacion() {
+        return nroHabitacion;
+    }
+
+    public void setNroHabitacion(Integer nroHabitacion) {
+        this.nroHabitacion = nroHabitacion;
+    }
+
     public void setTipoHabitacion(String tipoHabitacion) {
         this.tipoHabitacion = tipoHabitacion;
     }
 
     public String getEstado() {
         return estado;
+    }
+
+    public Integer getId(){
+        return nroHabitacion;
     }
 
     public void setEstado(String estado) {

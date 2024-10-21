@@ -1,72 +1,67 @@
 package services;
+
 import models.Usuario;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class GestionarUsuarios {
-    private List<Usuario> usuarios;
+    private List<Usuario> usuarios; // Lista de usuarios
 
     public GestionarUsuarios() {
         usuarios = new ArrayList<>();
-        // Agregamos algunos usuarios hardcodeados
-        usuarios.add(new Usuario("Juan Perez", "juan@example.com","Cliente"));
-        usuarios.add(new Usuario("Maria Lopez", "maria@example.com","Cliente"));
+        cargarUsuariosHardcodeados(); // Cargar usuarios hardcodeados
     }
 
-    public List<Usuario> obtenerUsuarios() {
-        return usuarios;
+    private void cargarUsuariosHardcodeados() {
+        // Ejemplo de carga de usuarios, puedes modificar esto según necesites
+        usuarios.add(new Usuario("Juan", "juan@example.com", "administrador"));
+        usuarios.add(new Usuario("Maria", "maria@example.com", "cliente"));
+        // Agrega más usuarios según lo necesites
     }
 
-    public void agregarUsuario(Usuario nuevoUsuario) {
-        usuarios.add(nuevoUsuario);
-        guardarUsuariosEnArchivo(); // Persistir cambios después de agregar
+    // Método para agregar un nuevo usuario
+    public void agregarUsuario(Usuario usuario) {
+        usuarios.add(usuario);
+        guardarUsuarios(); // Guarda los cambios en la lista
     }
 
+    // Método para habilitar o inhabilitar un usuario
+    public void habilitarInhabilitarUsuario(Usuario usuario) {
+        String nuevoEstado = usuario.getHabilitacion().equals("Habilitado") ? "Inhabilitado" : "Habilitado";
+        usuario.setHabilitacion(nuevoEstado);
+        guardarUsuarios(); // Guarda los cambios en la lista
+    }
+
+    // Método para modificar un usuario existente
+    public void modificarUsuario(Usuario usuario, String nuevoNombre, String nuevoEmail, String nuevoRol) {
+        usuario.setNombre(nuevoNombre);
+        usuario.setEmail(nuevoEmail);
+        usuario.setRol(nuevoRol);
+        guardarUsuarios(); // Guarda los cambios en la lista
+    }
+
+    // Método para eliminar un usuario
     public void eliminarUsuario(Usuario usuario) {
         usuarios.remove(usuario);
-        guardarUsuariosEnArchivo(); // Persistir cambios después de eliminar
+        guardarUsuarios(); // Guarda los cambios en la lista
     }
 
-    public Usuario buscarUsuarioPorNombre(String nombre) {
-        return usuarios.stream()
-                .filter(usuario -> usuario.getNombre().equalsIgnoreCase(nombre))
-                .findFirst()
-                .orElse(null);
+    // Método para obtener la lista de usuarios
+    public ObservableList<Usuario> obtenerUsuarios() {
+        return FXCollections.observableArrayList(usuarios);
     }
 
-    public List<Usuario> filtrarUsuariosPorRol(String rol) {
-        return usuarios.stream()
-                .filter(usuario -> usuario.getRol().equalsIgnoreCase(rol))
-                .collect(Collectors.toList());
+    // Método para guardar la lista de usuarios (puede tener lógica adicional si es necesario)
+    private void guardarUsuarios() {
+        // Aquí puedes implementar la lógica para guardar cambios en la lista si es necesario
+        // En este caso, simplemente actualiza la lista en memoria
+        System.out.println("Lista de usuarios actualizada. Total de usuarios: " + usuarios.size());
     }
 
-    public void modificarUsuario(Usuario usuarioOriginal, Usuario usuarioModificado) {
-        if (usuarioOriginal != null) {
-            usuarioOriginal.setNombre(usuarioModificado.getNombre());
-            usuarioOriginal.setEmail(usuarioModificado.getEmail());
-            usuarioOriginal.setRol(usuarioModificado.getRol());
-            guardarUsuariosEnArchivo(); // Persistir cambios después de modificar
-        }
-    }
-
-    private void cargarUsuariosDesdeArchivo() {
-        // Lógica para cargar usuarios desde un archivo o base de datos
-        // Aquí podrías leer de un JSON o base de datos y llenar la lista
-    }
-
-    private void guardarUsuariosEnArchivo() {
-        // Lógica para guardar usuarios en un archivo o base de datos
-        // Aquí podrías escribir en un JSON o base de datos
-    }
-
-    public void modificarUsuario(int index, String nuevoNombre, String nuevoEmail,String nuevoRol) {
-        if (index >= 0 && index < usuarios.size()) {
-            Usuario usuario = usuarios.get(index);
-            usuario.setNombre(nuevoNombre);
-            usuario.setEmail(nuevoEmail);
-            usuario.setRol(nuevoRol);
-        }
+    public List<Usuario> getUsuarios(){
+        return usuarios;
     }
 }
