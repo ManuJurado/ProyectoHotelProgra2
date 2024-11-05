@@ -1,0 +1,29 @@
+[
+  {
+    "numero": 101,
+    "tipoHabitacion": "Doble",
+    "capacidad": 2,
+    "camas": ["Individual", "Individual"],
+    "disponible": false,
+    "estado": "limpieza",
+    "detalleEstado": "La habitación está siendo limpiada"
+  },
+  {
+    "numero": 102,
+    "tipoHabitacion": "Suite",
+    "capacidad": 3,
+    "camas": ["Matrimonial", "Individual"],
+    "disponible": true,
+    "estado": "alquilada",
+    "detalleEstado": ""
+  },
+  {
+    "numero": 103,
+    "tipoHabitacion": "Individual",
+    "capacidad": 1,
+    "camas": ["Individual"],
+    "disponible": false,
+    "estado": "reparación",
+    "detalleEstado": "Problema con el aire acondicionado"
+  }
+]
