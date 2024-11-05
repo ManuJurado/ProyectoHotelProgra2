@@ -1,9 +1,6 @@
 package services;
 
 import com.almasb.fxgl.net.Client;
-import controllers.gestionar.GestionarHabitacionesController;
-import controllers.gestionar.GestionarUsuariosController;
-import models.Habitacion;
 import models.Pasajero;
 import models.Reserva;
 import models.Usuario;

@@ -1,4 +1,4 @@
-package Models;
+package main.java.models.Habitacion;
 
 import Enums.EstadoHabitacion;
 import Exceptions.CapacidadInvalidaException;

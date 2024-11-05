@@ -18,9 +18,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import models.Habitacion;
-import models.Usuario;
-import services.GestionarHabitaciones;
 
 import java.io.IOException;
 import java.util.List;
@@ -41,12 +38,12 @@ public class GestionarHabitacionesController extends BaseController {
     @FXML
     private TableColumn<Habitacion, Integer> nroHabitacion;
 
-    private GestionarHabitaciones gestionarHabitaciones;
+    private services.GestionarHabitaciones gestionarHabitaciones;
     private ObservableList<Habitacion> habitacionesOriginales;
 
     @FXML
     public void initialize() {
-        gestionarHabitaciones = new GestionarHabitaciones();
+        gestionarHabitaciones = new services.GestionarHabitaciones();
         // Configura las columnas de la tabla
         nroHabitacion.setCellValueFactory(new PropertyValueFactory<>("nroHabitacion"));
         columnaTipo.setCellValueFactory(new PropertyValueFactory<>("tipoHabitacion"));
@@ -56,7 +53,7 @@ public class GestionarHabitacionesController extends BaseController {
     }
 
     // Método para establecer el servicio de gestión de habitaciones
-    public void setGestionarHabitaciones(GestionarHabitaciones gestionarHabitaciones) {
+    public void setGestionarHabitaciones(services.GestionarHabitaciones gestionarHabitaciones) {
         this.gestionarHabitaciones = gestionarHabitaciones;
         cargarHabitaciones(); // Carga habitaciones después de configurar
     }

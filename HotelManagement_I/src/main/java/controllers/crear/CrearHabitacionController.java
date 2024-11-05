@@ -8,12 +8,10 @@ import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import services.GestionarHabitaciones;
-import models.Habitacion;
 
 public class CrearHabitacionController extends BaseController {
 
-    private GestionarHabitaciones gestionarHabitaciones;
+    private services.GestionarHabitaciones gestionarHabitaciones;
 
     @FXML
     private TextField tipoHabitacionField; // Tipo de habitación
@@ -28,7 +26,7 @@ public class CrearHabitacionController extends BaseController {
 
     private GestionarHabitacionesController gestionarHabitacionesController;
 
-    public void setGestionarHabitaciones(GestionarHabitaciones gestionarHabitaciones) {
+    public void setGestionarHabitaciones(services.GestionarHabitaciones gestionarHabitaciones) {
         this.gestionarHabitaciones = gestionarHabitaciones;
     }
 

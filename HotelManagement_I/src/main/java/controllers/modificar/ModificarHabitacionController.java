@@ -9,9 +9,6 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
-import models.Habitacion;
-
-import javax.swing.*;
 
 public class ModificarHabitacionController extends BaseController {
 

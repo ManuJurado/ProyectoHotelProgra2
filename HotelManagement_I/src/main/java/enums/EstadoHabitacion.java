@@ -1,4 +1,4 @@
-package Enums;
+package main.java.enums;
 
 public enum EstadoHabitacion {
     OCUPADA("Ocupada"),

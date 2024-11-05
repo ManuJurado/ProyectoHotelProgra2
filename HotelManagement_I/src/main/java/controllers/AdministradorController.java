@@ -10,10 +10,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import models.Habitacion;
 import models.Reserva;
 import services.GestionReservas;
-import services.GestionarHabitaciones;
 import services.GestionarUsuarios;
 import javafx.scene.control.Alert;
 
@@ -23,7 +21,7 @@ import java.util.List;
 public class AdministradorController extends BaseController {
 
     private GestionarUsuarios gestionarUsuarios = new GestionarUsuarios();
-    private GestionarHabitaciones gestionarHabitaciones = new GestionarHabitaciones();
+    private services.GestionarHabitaciones gestionarHabitaciones = new services.GestionarHabitaciones();
     private GestionReservas gestionarReservas = new GestionReservas();
 
     @FXML

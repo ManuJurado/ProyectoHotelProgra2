@@ -1,4 +1,4 @@
-package ManejoJSON;
+package main.java.manejoJson;
 
 import java.io.*;
 import org.json.JSONArray;
@@ -6,9 +6,10 @@ import org.json.JSONTokener;
 
 public class JSONUtiles {
 
-    public static void grabar(JSONArray array) {
+    //Se agrega parametro para pasarle el nombre del archivo y reutilizar el metodo
+    public static void grabar(JSONArray array, String fileName) {
         try {
-            FileWriter file = new FileWriter("habitaciones.json");
+            FileWriter file = new FileWriter(fileName);
             file.write(array.toString());
             file.flush();
             file.close();
