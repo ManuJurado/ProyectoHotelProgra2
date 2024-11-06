@@ -1,12 +1,14 @@
 package main.java.models.Habitacion;
 
-import Enums.EstadoHabitacion;
-import Exceptions.CapacidadInvalidaException;
-import Exceptions.NroHabitacionInvalidoException;
+import main.java.exceptions.CapacidadInvalidaException;
+import main.java.exceptions.NroHabitacionInvalidoException;
+import main.java.enums.EstadoHabitacion;
+
 import java.util.*;
 
 public abstract class Habitacion {
     //Atributos
+    private String tipo;
     private int numero;
     private int capacidad;
     private List<String> camas;
@@ -20,6 +22,14 @@ public abstract class Habitacion {
     }
 
     //Getters y Setters
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
     public int getNumero() {
         return numero;
     }
@@ -79,7 +89,8 @@ public abstract class Habitacion {
     @Override
     public String toString() {
         return "Habitacion{" +
-                "numero=" + numero +
+                "tipo='" + tipo + '\'' +
+                ", numero=" + numero +
                 ", capacidad=" + capacidad +
                 ", camas=" + camas +
                 ", disponible=" + disponible +

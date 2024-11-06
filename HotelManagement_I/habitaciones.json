@@ -1,29 +1,53 @@
 [
   {
+    "tipo": "Doble",
     "numero": 101,
-    "tipoHabitacion": "Doble",
     "capacidad": 2,
     "camas": ["Individual", "Individual"],
     "disponible": false,
     "estado": "limpieza",
-    "detalleEstado": "La habitación está siendo limpiada"
+    "detalleEstado": "Limpieza matutina realizada por Ernesto."
   },
   {
+    "tipo": "Apartamento",
     "numero": 102,
-    "tipoHabitacion": "Suite",
-    "capacidad": 3,
-    "camas": ["Matrimonial", "Individual"],
+    "capacidad": 5,
+    "ambientes": 3,
+    "cocina": true,
+    "camas": ["Matrimonial", "Individual", "Individual", "Individual"],
     "disponible": true,
-    "estado": "alquilada",
+    "estado": "",
     "detalleEstado": ""
   },
   {
+    "tipo": "Individual",
     "numero": 103,
-    "tipoHabitacion": "Individual",
     "capacidad": 1,
     "camas": ["Individual"],
     "disponible": false,
     "estado": "reparación",
-    "detalleEstado": "Problema con el aire acondicionado"
+    "detalleEstado": "Problema con el aire acondicionado."
+  },
+  {
+    "tipo": "Presidencial",
+    "numero": 101,
+    "capacidad": 2,
+    "adicionales": ["Sala de conferencias", "Ascensor", "Pileta", "Terraza", "Billar"],
+    "dimension": 52.5,
+    "camas": ["King"],
+    "disponible": false,
+    "estado": "alquilada",
+    "detalleEstado": ""
+  },
+  {
+    "tipo": "Suite",
+    "numero": 101,
+    "capacidad": 2,
+    "balcon": false,
+    "comedor": true,
+    "camas": ["Queen"],
+    "disponible": true,
+    "estado": "",
+    "detalleEstado": ""
   }
 ]
