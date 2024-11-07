@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.Scene?>
+<?import javafx.stage.Stage?>
+
+<VBox alignment="CENTER" xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.gestionar.GestionarReservasController" spacing="10">
+    <Label text="Gestión de Reservas" style="-fx-font-size: 20; -fx-font-weight: bold;"/>
+
+    <TableView fx:id="tablaReservas" prefHeight="400">
+        <columns>
+            <TableColumn fx:id="idColumn" text="ID Reserva" />
+            <TableColumn fx:id="habitacionColumn" text="Id Habitacion" />
+            <TableColumn fx:id="fechaInicioColumn" text="Fecha Inicio" />
+            <TableColumn fx:id="fechaFinColumn" text="Fecha Fin" />
+            <TableColumn fx:id="clienteColumn" text="Nombre Cliente" />
+            <TableColumn fx:id="estadoColumn" text="Estado" />
+        </columns>
+    </TableView>
+
+    <HBox spacing="10">
+        <Button text="Crear Reserva" onAction="#onCrearReserva"/>
+        <Button text="Modificar Reserva" onAction="#onModificarReserva"/>
+        <Button text="Cancelar Reserva" onAction="#onCancelarReserva"/>
+        <Button text="Ver Detalle" onAction="#onVerDetalleReserva"/>
+        <Button text="Volver" onAction="#volverAlMenuAdmin"/>
+    </HBox>
+</VBox>

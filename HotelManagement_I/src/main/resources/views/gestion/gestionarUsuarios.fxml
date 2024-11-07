@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.gestionar.GestionarUsuariosController">
+    <children>
+        <Label text="Gestión de Usuarios" layoutX="20" layoutY="20" />
+
+        <TableView fx:id="tablaUsuarios" layoutX="20" layoutY="50" prefHeight="400" prefWidth="450">
+            <columns>
+                <TableColumn fx:id="columnaNombre" text="Nombre" />
+                <TableColumn fx:id="columnaRol" text="Rol" />
+                <TableColumn fx:id="columnaEmail" text="Email" />
+                <TableColumn fx:id="columnaHabilitacion" text="Habilitado" /> <!-- Nueva columna para estado de habilitación -->
+                <!-- Agrega más columnas según lo que necesites -->
+            </columns>
+        </TableView>
+
+        <TextField fx:id="nombreUsuarioField" layoutX="20" layoutY="470" prefWidth="300" promptText="Buscar Usuario" onKeyReleased="#filtrarUsuarios" />
+
+        <Button text="Crear Nuevo Usuario" layoutX="550" layoutY="150" onAction="#onCrearNuevoUsuarioButtonClick" /> <!-- Botón para crear nuevo usuario -->
+        <Button text="Modificar Datos Usuario" layoutX="550" layoutY="100" onAction="#onModificarUsuarioButtonClick" />
+        <Button text="Habilitar/ Inhabilitar Usuario" layoutX="550" layoutY="200" onAction="#onHabilitarInhabilitarUsuario" /> <!-- Botón para habilitar/inhabilitar usuario -->
+        <Button text="Volver" layoutX="550" layoutY="350" onAction="#volverAlMenuAdmin" />
+    </children>
+</AnchorPane>

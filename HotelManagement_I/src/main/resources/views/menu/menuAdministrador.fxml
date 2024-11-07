@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="CENTER" spacing="10.0" xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.AdministradorController">
+    <Button text="Gestionar Usuarios" onAction="#gestionarUsuarios"/>
+    <Button text="Gestionar Habitaciones" onAction="#gestionarHabitaciones"/>
+    <Button text="Gestionar Reservas" onAction="#gestionarReservas"/>
+    <Button text="Gestionar Servicios" onAction="#gestionarServicios"/>
+    <Button text="Crear Backup" onAction="#crearBackup"/>
+    <Button text="Cerrar Sesión" onAction="#cerrarSesion"/>
+    <Button text="Salir" onAction="#salir"/>
+</VBox>
