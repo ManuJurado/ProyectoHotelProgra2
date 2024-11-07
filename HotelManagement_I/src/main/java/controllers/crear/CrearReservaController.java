@@ -8,6 +8,7 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import models.Habitacion.Habitacion;
 import models.Pasajero;
 import models.Usuario;
 import services.GestionReservas;
@@ -226,7 +227,7 @@ public class CrearReservaController extends BaseController {
 
         // Buscar la habitación en la lista de habitaciones
         for (Habitacion habitacion : gestionReservas.getListaHabitaciones()) {
-            if (habitacion.getId().equals(numeroHabitacion)) {
+            if (habitacion.getNumero()==numeroHabitacion) {
                 return habitacion; // Retorna la habitación encontrada
             }
         }

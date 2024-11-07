@@ -1,6 +1,8 @@
 package models;
 
 
+import models.Habitacion.Habitacion;
+
 import java.time.LocalDate;
 import java.util.List;
 

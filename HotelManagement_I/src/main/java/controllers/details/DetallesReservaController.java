@@ -8,6 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
+import models.Habitacion.Habitacion;
 import models.Pasajero;
 import models.Reserva;
 import models.Usuario;
@@ -34,7 +35,7 @@ public class DetallesReservaController {
     public void mostrarDetalles(Reserva reserva) {
         this.reserva = reserva; // Guardar la reserva
         labelCliente.setText("Cliente: " + reserva.getCliente().getNombre());
-        labelHabitacion.setText("Habitación: " + reserva.getHabitacion().getId());
+        labelHabitacion.setText("Habitación: " + reserva.getHabitacion().getNumero());
         labelFechaInicio.setText("Fecha de Inicio: " + reserva.getFechaInicio().toString());
         labelFechaFin.setText("Fecha de Fin: " + reserva.getFechaFin().toString());
         labelEstado.setText("Estado: " + reserva.getEstado());
@@ -70,14 +71,14 @@ public class DetallesReservaController {
             // Obtener el controlador de la nueva ventana
             DetallesGeneralesController controller = loader.getController();
 
-            // Llamar al método para mostrar detalles
-            if (datos instanceof Usuario) {
-                controller.mostrarDetallesUsuario((Usuario) datos);
-            } else if (datos instanceof Habitacion) {
-                controller.mostrarDetallesHabitacion(String.valueOf(((Habitacion) datos).getId()), ((Habitacion) datos).getTipoHabitacion(), ((Habitacion) datos).getEstado(),((Habitacion) datos).getMetrosCuadrados(),((Habitacion) datos).getCantidadCamas());
-            } else if (datos instanceof List<?>) {
-                controller.mostrarDetallesPasajeros((List<Pasajero>) datos);
-            }
+//            // Llamar al método para mostrar detalles
+//            if (datos instanceof Usuario) {
+//                controller.mostrarDetallesUsuario((Usuario) datos);
+//            } else if (datos instanceof Habitacion) {
+//                controller.mostrarDetallesHabitacion(String.valueOf(((Habitacion) datos).getNumero()), ((Habitacion) datos).getTipo(), ((Habitacion) datos).getEstado(),((Habitacion) datos).getCapacidad(),((Habitacion) datos).getCamas());
+//            } else if (datos instanceof List<?>) {
+//                controller.mostrarDetallesPasajeros((List<Pasajero>) datos);
+//            }
 
             Stage stage = new Stage();
             stage.setTitle(titulo);

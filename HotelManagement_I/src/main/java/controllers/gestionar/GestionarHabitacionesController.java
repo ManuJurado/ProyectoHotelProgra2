@@ -18,6 +18,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import models.Habitacion.Habitacion;
+import services.GestionHabitaciones;
 
 import java.io.IOException;
 import java.util.List;
@@ -38,12 +40,12 @@ public class GestionarHabitacionesController extends BaseController {
     @FXML
     private TableColumn<Habitacion, Integer> nroHabitacion;
 
-    private services.GestionarHabitaciones gestionarHabitaciones;
+    private services.GestionHabitaciones gestionarHabitaciones;
     private ObservableList<Habitacion> habitacionesOriginales;
 
     @FXML
     public void initialize() {
-        gestionarHabitaciones = new services.GestionarHabitaciones();
+        gestionarHabitaciones = new GestionHabitaciones();
         // Configura las columnas de la tabla
         nroHabitacion.setCellValueFactory(new PropertyValueFactory<>("nroHabitacion"));
         columnaTipo.setCellValueFactory(new PropertyValueFactory<>("tipoHabitacion"));
@@ -53,7 +55,7 @@ public class GestionarHabitacionesController extends BaseController {
     }
 
     // Método para establecer el servicio de gestión de habitaciones
-    public void setGestionarHabitaciones(services.GestionarHabitaciones gestionarHabitaciones) {
+/*    public void setGestionarHabitaciones(GestionHabitaciones gestionarHabitaciones) {
         this.gestionarHabitaciones = gestionarHabitaciones;
         cargarHabitaciones(); // Carga habitaciones después de configurar
     }
@@ -72,7 +74,7 @@ public class GestionarHabitacionesController extends BaseController {
         } else {
             System.out.println("GestionarHabitaciones es nulo."); // Depuración adicional
         }
-    }
+    }*/
 
 
     @FXML
@@ -101,7 +103,7 @@ public class GestionarHabitacionesController extends BaseController {
         }
     }
 
-    @FXML
+/*    @FXML
     private void onModificarHabitacion(ActionEvent event) {
         Habitacion habitacionSeleccionada = tablaHabitaciones.getSelectionModel().getSelectedItem();
         if (habitacionSeleccionada != null) {
@@ -129,9 +131,9 @@ public class GestionarHabitacionesController extends BaseController {
         } else {
             mostrarAlerta("Advertencia", "Por favor, selecciona una habitación para modificar.");
         }
-    }
+    }*/
 
-    @FXML
+/*    @FXML
     private void onHabilitarInhabilitarHabitacion(ActionEvent event) {
         Habitacion habitacionSeleccionada = tablaHabitaciones.getSelectionModel().getSelectedItem();
         if (habitacionSeleccionada != null) {
@@ -189,7 +191,7 @@ public class GestionarHabitacionesController extends BaseController {
         } else {
             mostrarAlerta("Advertencia", "Por favor, selecciona una habitación para ver detalles.");
         }
-    }
+    }*/
 
     @FXML
     private void volverAlMenuAdmin(ActionEvent event) {

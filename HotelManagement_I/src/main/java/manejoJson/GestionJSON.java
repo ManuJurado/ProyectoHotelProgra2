@@ -1,8 +1,8 @@
-package main.java.manejoJson;
+package manejoJson;
 
 import main.java.enums.EstadoHabitacion;
-import main.java.models.Habitacion.*;
-import main.java.services.GestionHabitaciones;
+import models.Habitacion.*;
+import services.GestionHabitaciones;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

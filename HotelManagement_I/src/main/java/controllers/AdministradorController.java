@@ -10,6 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import models.Habitacion.Habitacion;
 import models.Reserva;
 import services.GestionReservas;
 import services.GestionarUsuarios;
@@ -21,7 +22,7 @@ import java.util.List;
 public class AdministradorController extends BaseController {
 
     private GestionarUsuarios gestionarUsuarios = new GestionarUsuarios();
-    private services.GestionarHabitaciones gestionarHabitaciones = new services.GestionarHabitaciones();
+//    private services.GestionarHabitaciones gestionarHabitaciones = new services.GestionarHabitaciones();
     private GestionReservas gestionarReservas = new GestionReservas();
 
     @FXML
@@ -38,7 +39,7 @@ public class AdministradorController extends BaseController {
         }
     }
 
-    @FXML
+    /*@FXML
     private void gestionarHabitaciones(ActionEvent event) {
         // Primero, carga las habitaciones
         List<Habitacion> habitaciones = gestionarHabitaciones.obtenerHabitaciones();
@@ -55,7 +56,7 @@ public class AdministradorController extends BaseController {
             // Mostrar una alerta si algo falló
             mostrarAlerta("Error", "No se pudo cargar la vista de gestión de habitaciones.");
         }
-    }
+    }*/
 
     @FXML
     private void gestionarReservas(ActionEvent event) {

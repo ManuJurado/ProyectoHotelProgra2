@@ -1,4 +1,4 @@
-package main.java.manejoJson;
+package manejoJson;
 
 import java.io.*;
 import org.json.JSONArray;

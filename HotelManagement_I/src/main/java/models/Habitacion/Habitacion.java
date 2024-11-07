@@ -1,4 +1,4 @@
-package main.java.models.Habitacion;
+package models.Habitacion;
 
 import main.java.exceptions.CapacidadInvalidaException;
 import main.java.exceptions.NroHabitacionInvalidoException;

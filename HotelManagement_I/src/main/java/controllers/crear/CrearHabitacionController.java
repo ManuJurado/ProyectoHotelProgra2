@@ -8,10 +8,11 @@ import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import services.GestionHabitaciones;
 
 public class CrearHabitacionController extends BaseController {
 
-    private services.GestionarHabitaciones gestionarHabitaciones;
+    private GestionHabitaciones gestionarHabitaciones;
 
     @FXML
     private TextField tipoHabitacionField; // Tipo de habitación
@@ -26,7 +27,7 @@ public class CrearHabitacionController extends BaseController {
 
     private GestionarHabitacionesController gestionarHabitacionesController;
 
-    public void setGestionarHabitaciones(services.GestionarHabitaciones gestionarHabitaciones) {
+    public void setGestionarHabitaciones(services.GestionHabitaciones gestionarHabitaciones) {
         this.gestionarHabitaciones = gestionarHabitaciones;
     }
 
@@ -34,7 +35,7 @@ public class CrearHabitacionController extends BaseController {
         this.gestionarHabitacionesController = gestionarHabitacionesController;
     }
 
-    @FXML
+    /*@FXML
     private void crearHabitacion(ActionEvent event) {
         String tipoHabitacion = tipoHabitacionField.getText();
         String estado = estadoField.getText();
@@ -46,9 +47,9 @@ public class CrearHabitacionController extends BaseController {
         gestionarHabitaciones.agregarHabitacion(nuevaHabitacion);
 
         mostrarAlerta("Éxito", "Habitación creada con éxito.");
-    }
+    }*/
 
-    @FXML
+    /*@FXML
     private void guardarHabitacion(ActionEvent event) {
         // Crear una nueva habitación usando los datos del formulario
         Habitacion nuevaHabitacion = new Habitacion(
@@ -80,7 +81,7 @@ public class CrearHabitacionController extends BaseController {
         // Muestra un mensaje de éxito y cierra la ventana
         mostrarAlerta("Éxito", "La habitación fue creada con éxito.");
         stage.close(); // Cerrar la ventana actual
-    }
+    }*/
 
 
     @FXML

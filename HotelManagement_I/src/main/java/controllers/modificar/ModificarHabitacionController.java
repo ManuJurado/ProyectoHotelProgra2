@@ -9,6 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
+import models.Habitacion.Habitacion;
 
 public class ModificarHabitacionController extends BaseController {
 
@@ -29,7 +30,7 @@ public class ModificarHabitacionController extends BaseController {
         // Inicialización adicional si es necesario
     }
 
-    // Método para configurar la habitación y el controlador principal
+/*    // Método para configurar la habitación y el controlador principal
     public void setHabitacion(Habitacion habitacion, GestionarHabitacionesController gestionarHabitacionesController) {
         this.habitacionOriginal = habitacion;
         this.gestionarHabitacionesController = gestionarHabitacionesController;
@@ -44,7 +45,7 @@ public class ModificarHabitacionController extends BaseController {
         tipoHabitacionField.setValue(habitacion.getTipoHabitacion());
         estadoField.setValue(habitacion.getEstado());
         cantidadCamasField.setValue(habitacion.getCantidadCamas());
-    }
+    }*/
 
     @FXML
     private void cerrarVentana(ActionEvent event) {
@@ -52,7 +53,7 @@ public class ModificarHabitacionController extends BaseController {
         stage.close();
     }
 
-    @FXML
+/*    @FXML
     private void guardarCambios(ActionEvent event) {
         // Obtener los valores seleccionados en los ComboBox
         String nuevoTipo = tipoHabitacionField.getValue(); // Cambiado de getText() a getValue()
@@ -72,7 +73,7 @@ public class ModificarHabitacionController extends BaseController {
         } else {
             mostrarAlerta("Advertencia", "Por favor, completa todos los campos.");
         }
-    }
+    }*/
 
     private void mostrarAlerta(String titulo, String mensaje) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);

@@ -1,4 +1,4 @@
-package main.java.models.Habitacion;
+package models.Habitacion;
 
 public class Apartamento extends Habitacion {
     //Atributos

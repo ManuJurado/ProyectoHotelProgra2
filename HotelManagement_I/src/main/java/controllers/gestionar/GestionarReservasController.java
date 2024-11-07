@@ -56,7 +56,7 @@ public class GestionarReservasController extends BaseController {
     @FXML
     public void initialize() {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        habitacionColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getHabitacion().getId().toString()));
+        habitacionColumn.setCellValueFactory(cellData -> new SimpleStringProperty());
         fechaInicioColumn.setCellValueFactory(new PropertyValueFactory<>("fechaInicio"));
         fechaFinColumn.setCellValueFactory(new PropertyValueFactory<>("fechaFin"));
         clienteColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCliente().getNombre()));

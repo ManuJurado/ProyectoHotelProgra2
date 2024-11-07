@@ -1,6 +1,6 @@
-package main.java.services;
+package services;
 
-import main.java.models.Habitacion.Habitacion;
+import models.Habitacion.Habitacion;
 import java.util.*;
 
 public class GestionHabitaciones <H extends Habitacion> {

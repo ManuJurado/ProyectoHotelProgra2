@@ -1,6 +1,7 @@
 package services;
 
 import com.almasb.fxgl.net.Client;
+import models.Habitacion.*;
 import models.Pasajero;
 import models.Reserva;
 import models.Usuario;
@@ -14,7 +15,7 @@ public class GestionReservas {
     private List<Habitacion> habitaciones; // Lista de habitaciones
     private List<Reserva> reservas; // Lista de reservas
 
-    private GestionarHabitaciones gestionarHabitaciones; // Lista de reservas
+//    private GestionarHabitaciones gestionarHabitaciones; // Lista de reservas
     private GestionarUsuarios gestionarUsuarios; // Lista de usuarios
 
     // Constructor
@@ -22,10 +23,10 @@ public class GestionReservas {
         this.usuarios = new ArrayList<>();
         this.habitaciones = new ArrayList<>();
 
-        this.gestionarHabitaciones = new GestionarHabitaciones(); // Instanciar aquí
+//        this.gestionarHabitaciones = new GestionarHabitaciones(); // Instanciar aquí
         this.gestionarUsuarios = new GestionarUsuarios(); // Instanciar aquí
 
-        this.habitaciones = gestionarHabitaciones.getHabitaciones();
+//        this.habitaciones = gestionarHabitaciones.getHabitaciones();
         this.usuarios = gestionarUsuarios.getUsuarios();
         this.reservas = new ArrayList<>();
 
@@ -43,14 +44,14 @@ public class GestionReservas {
         reservas.add(new Reserva(2, pasajeros2, habitaciones.get(1), LocalDate.now(), LocalDate.now().plusDays(3), usuarios.get(1), "Activa"));
     }
 
-    // Método para crear una reserva
+    // Metodo para crear una reserva
     public void crearReserva(List<Pasajero> pasajeros, Habitacion habitacion, LocalDate fechaInicio, LocalDate fechaFin, Usuario cliente) {
         // Lógica de validación (por ejemplo, verificar si la habitación está disponible)
-        if (habitacion.getEstado().equalsIgnoreCase("Disponible")) {
+        if (habitacion.isDisponible()) {
             int nuevaId = reservas.size() + 1; // Generar un nuevo ID
             String estado = "Activa"; // Asumimos que la reserva es activa al crearla
             reservas.add(new Reserva(nuevaId, pasajeros, habitacion, fechaInicio, fechaFin, cliente, estado));
-            habitacion.setEstado("No Disponible"); // Cambiar el estado de la habitación
+            habitacion.setDisponible(false); // Cambiar el estado de la habitación
         } else {
             throw new IllegalArgumentException("La habitación no está disponible.");
         }
