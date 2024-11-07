@@ -30,7 +30,7 @@ public class ModificarHabitacionController extends BaseController {
         // Inicialización adicional si es necesario
     }
 
-/*    // Método para configurar la habitación y el controlador principal
+/*    // Metodo para configurar la habitación y el controlador principal
     public void setHabitacion(Habitacion habitacion, GestionarHabitacionesController gestionarHabitacionesController) {
         this.habitacionOriginal = habitacion;
         this.gestionarHabitacionesController = gestionarHabitacionesController;

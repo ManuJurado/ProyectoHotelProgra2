@@ -71,7 +71,7 @@ public class DetallesReservaController {
             // Obtener el controlador de la nueva ventana
             DetallesGeneralesController controller = loader.getController();
 
-//            // Llamar al método para mostrar detalles
+//            // Llamar al metodo para mostrar detalles
 //            if (datos instanceof Usuario) {
 //                controller.mostrarDetallesUsuario((Usuario) datos);
 //            } else if (datos instanceof Habitacion) {
