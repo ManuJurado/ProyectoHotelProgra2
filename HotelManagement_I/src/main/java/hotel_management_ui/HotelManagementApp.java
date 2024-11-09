@@ -32,7 +32,7 @@ public class HotelManagementApp extends Application {
 
     // Método para reproducir el video
     private void playIntroVideo() {
-        String videoPath = new File("video.mp4").toURI().toString();
+        String videoPath = new File("C:/Users/emili/OneDrive/Documentos/Tecnicatura Progra/2024/Programacion 2 (Java)/TP_FINAL_RAMA_HABITACIONES/ProyectoHotelProgra2/HotelManagement_I/video.mp4").toURI().toString();
         Media media = new Media(videoPath);
         MediaPlayer mediaPlayer = new MediaPlayer(media);
         MediaView mediaView = new MediaView(mediaPlayer);
