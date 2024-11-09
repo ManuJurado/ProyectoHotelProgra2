@@ -1,4 +1,3 @@
-
 /*
 package services;
 
@@ -62,7 +61,5 @@ public class GestionarHabitaciones {
     public List<Habitacion> getHabitaciones(){
         return habitaciones;
     }
-
-
 }
 */
