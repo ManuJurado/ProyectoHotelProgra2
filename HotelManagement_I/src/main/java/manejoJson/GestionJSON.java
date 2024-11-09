@@ -1,24 +1,23 @@
 package manejoJson;
 
-import main.java.enums.EstadoHabitacion;
+import enums.EstadoHabitacion;
 import models.Habitacion.*;
-import services.GestionHabitaciones;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
+
 
 //Se realiza el mapeo de los 3 Json del proyecto
 public class GestionJSON {
 
-    public static List<Habitacion> mapeoHabitaciones() {
+    public static List<Habitacion> mapeoHabitaciones(String archivoJson) {
 
         List<Habitacion> habitaciones = new ArrayList<>();
 
         try {
-            JSONArray JHabitaciones = new JSONArray(JSONUtiles.leer("habitaciones.json"));
+            JSONArray JHabitaciones = new JSONArray(JSONUtiles.leer(archivoJson));
 
             for (int i = 0; i < JHabitaciones.length(); i++) {
 
@@ -81,7 +80,7 @@ public class GestionJSON {
             habitacion.setCamas(camas);
 
             habitacion.setDisponible(JHabitacion.getBoolean("disponible"));
-            habitacion.setEstado(EstadoHabitacion.valueOf(JHabitacion.getString("estado")));
+            habitacion.setEstado(EstadoHabitacion.valueOf(JHabitacion.getString("estado").toUpperCase()));
             habitacion.setDetalleEstado(JHabitacion.getString("detalleEstado"));
 
         } catch (JSONException e) {
