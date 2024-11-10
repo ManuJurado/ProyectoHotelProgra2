@@ -1,84 +1,86 @@
 package controllers.crear;
 
 import controllers.BaseController;
-import controllers.gestionar.GestionarUsuariosController;
+import controllers.details.DatosUsuario;
+import enums.TipoUsuario;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import services.GestionUsuario; // Asegúrate de tener un servicio para gestionar usuarios
-import models.Usuarios.*; // Asegúrate de tener un modelo de Usuario
-import services.*; // Asegúrate de tener un modelo de Usuario
 
 public class CrearUsuarioController extends BaseController {
 
-    private GestionUsuario gestionarUsuarios;
-    private GestionarUsuariosController gestionarUsuariosController;
+    @FXML
+    private TextField nombreField;
+    @FXML
+    private TextField emailField;
+    @FXML
+    private ComboBox<TipoUsuario> rolChoiceBox;
+
+    private TipoUsuario tipoUsuarioSeleccionado;  // TipoUsuario en lugar de String
+    private Stage stageAnterior; // Variable para almacenar el Stage de la ventana anterior
 
 
     @FXML
-    private TextField nombreField; // Nombre del usuario
-    @FXML
-    private TextField emailField; // Email del usuario
-    @FXML
-    private ComboBox<String> rolChoiceBox; // Combo para seleccionar rol (Cliente/Conserje)
-
-    @FXML
-    private void initialize() {
-        rolChoiceBox.getItems().addAll("Cliente", "Conserje", "Administrador"); // Agregar roles disponibles
+    public void initialize() {
+        // Rellenamos el ComboBox con los valores del enum TipoUsuario
+        rolChoiceBox.getItems().addAll(TipoUsuario.CLIENTE, TipoUsuario.ADMINISTRADOR, TipoUsuario.CONSERJE);
     }
 
-    public void setGestionarUsuarios(GestionUsuario gestionarUsuarios, GestionarUsuariosController gestionarUsuariosController) {
-        this.gestionarUsuarios = gestionarUsuarios;
-        this.gestionarUsuariosController = gestionarUsuariosController;
+
+    // Metodo para pasar el Stage de la ventana anterior
+    public void setStageAnterior(Stage stage) {
+        this.stageAnterior = stage;
+    }
+    // Metodo para regresar a la ventana anterior
+    public void regresarAVentanaAnterior() {
+        if (stageAnterior != null) {
+            stageAnterior.show(); // Mostrar la ventana anterior
+        }
     }
 
+    // Metodo que se llama cuando se hace clic en el botón "Crear Usuario"
     @FXML
-    private void guardar() {
+    public void crear(ActionEvent event) {
         String nombre = nombreField.getText();
         String email = emailField.getText();
-        String rol = rolChoiceBox.getValue();
+        TipoUsuario rol = rolChoiceBox.getValue();  // TipoUsuario en lugar de String
 
-        if (nombre.isEmpty() || email.isEmpty() || rol == null) {
-            mostrarAlerta("Error", "Todos los campos deben ser completados.");
-            return;
+        if (rol != null) {
+            tipoUsuarioSeleccionado = rol;
+            // Guardar los datos en DatosUsuario
+            DatosUsuario.setTipoUsuario(rol);  // Guardamos el enum directamente
+            DatosUsuario.setNombre(nombre);
+            DatosUsuario.setEmail(email);
+            cerrarVentana();  // Cierra la ventana después de seleccionar el tipo de usuario
+        } else {
+            showAlert("Por favor, selecciona un rol.");
         }
-
-        // Actualiza la lista de usuarios en el controlador principal
-        gestionarUsuariosController.actualizarListaUsuarios();
-
-        // Cierra la ventana actual
-        ((Stage) nombreField.getScene().getWindow()).close();
     }
 
-    private void crearUsuario(ActionEvent event) {
-        String nombre = nombreField.getText();
-        String email = emailField.getText();
-        String rol = rolChoiceBox.getValue();
+    // Dentro de CrearUsuarioController
+    public void seleccionarTipoUsuario(TipoUsuario tipoUsuario) {
+        // Guardar los datos en DatosUsuario
+        DatosUsuario.setTipoUsuario(tipoUsuario);
+        DatosUsuario.setNombre(nombreField.getText());
+        DatosUsuario.setEmail(emailField.getText());
+    }
 
-        if (nombre.isEmpty() || email.isEmpty() || rol == null) {
-            mostrarAlerta("Error", "Todos los campos son obligatorios.");
-            return;
-        }
-
-        mostrarAlerta("Éxito", "Usuario creado con éxito.");
-        cerrarVentana(event); // Cerrar la ventana al finalizar
+    private void showAlert(String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
     }
 
     @FXML
-    private void cerrarVentana(ActionEvent event) {
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    public void cerrarVentana() {
+        Stage stage = (Stage) nombreField.getScene().getWindow();
         stage.close();
     }
 
-    private void mostrarAlerta(String titulo, String mensaje) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(titulo);
-        alert.setHeaderText(null);
-        alert.setContentText(mensaje);
-        alert.showAndWait();
+    public TipoUsuario getTipoUsuarioSeleccionado() {
+        return tipoUsuarioSeleccionado;
     }
 }

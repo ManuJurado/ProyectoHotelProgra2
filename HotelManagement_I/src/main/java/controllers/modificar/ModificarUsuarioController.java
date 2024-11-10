@@ -47,12 +47,6 @@ public class ModificarUsuarioController extends BaseController {
     }
 
     @FXML
-    private void volver(ActionEvent event) {/// metodo existente en caso de querer utilizar una escena en lugar de un nuevo stage para modificad un usuario.
-        volver("/views/gestion/gestionarUsuarios.fxml", "Gestión de Usuarios", (Node) event.getSource(),
-                () -> gestionarUsuariosController.actualizarListaUsuarios()); // Llama a actualizarListaUsuarios al volver
-    }
-
-    @FXML
     private void guardarCambios(ActionEvent event) {
         String nuevoNombre = nombreUsuarioField.getText();
         String nuevoEmail = emailUsuarioField.getText();

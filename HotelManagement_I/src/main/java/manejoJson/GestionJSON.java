@@ -1,6 +1,7 @@
 package manejoJson;
 
 import enums.EstadoHabitacion;
+import exceptions.AtributoFaltanteException;
 import models.Habitacion.*;
 import models.Usuarios.Administrador;
 import models.Usuarios.Cliente;
@@ -11,8 +12,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -158,9 +163,17 @@ public class GestionJSON {
             // Iterar sobre el JSONArray y mapear los objetos a usuarios
             for (int i = 0; i < jsonArrayUsuarios.length(); i++) {
                 JSONObject jsonUsuario = jsonArrayUsuarios.getJSONObject(i);
-                Usuario usuario = convertirJsonAUsuario(jsonUsuario);
+                Usuario usuario = null;
+                try {
+                    usuario = convertirJsonAUsuario(jsonUsuario, i);
+                } catch (AtributoFaltanteException e) {
+                    throw new RuntimeException(e);
+                }
                 if (usuario != null) {
                     usuarios.add(usuario);
+                }
+                else {
+                    System.err.println("Error en el índice: " + i);
                 }
             }
 
@@ -172,23 +185,47 @@ public class GestionJSON {
     }
 
     // Metodo para convertir un JSONObject a un Usuario (Cliente, Conserje o Administrador)
-    private static Usuario convertirJsonAUsuario(JSONObject jsonUsuario) throws JSONException {
+    private static Usuario convertirJsonAUsuario(JSONObject jsonUsuario,int indice) throws JSONException, AtributoFaltanteException {
+
+        // Validamos el tipo de usuario
+        if (!jsonUsuario.has("tipoUsuario")) {
+            throw new AtributoFaltanteException("El atributo 'tipoUsuario' está ausente.");
+        }
+        // Validamos si los atributos comunes existen en el JSON
+        if (!jsonUsuario.has("nombre") || !jsonUsuario.has("apellido") || !jsonUsuario.has("dni") ||
+                !jsonUsuario.has("contrasenia") || !jsonUsuario.has("correoElectronico")) {
+            throw new AtributoFaltanteException("Faltan atributos comunes en el Usuario.");
+        }
+
         String tipoUsuario = jsonUsuario.getString("tipoUsuario");
 
+        Usuario usuario = null;
         switch (tipoUsuario) {
             case "CLIENTE":
-                return convertirJsonACliente(jsonUsuario);
+                usuario = convertirJsonACliente(jsonUsuario);
+                break;
             case "CONSERJE":
-                return convertirJsonAConserje(jsonUsuario);
+                usuario = convertirJsonAConserje(jsonUsuario);
+                break;
             case "ADMINISTRADOR":
-                return convertirJsonAAdministrador(jsonUsuario);
+                usuario = convertirJsonAAdministrador(jsonUsuario);
+                break;
             default:
-                return null;
+                throw new AtributoFaltanteException("Tipo de usuario desconocido: " + tipoUsuario);
         }
+
+        return usuario;
     }
 
     // Metodo para convertir un JSONObject a un Cliente
-    private static Cliente convertirJsonACliente(JSONObject jsonUsuario) throws JSONException {
+    private static Cliente convertirJsonACliente(JSONObject jsonUsuario) throws JSONException, AtributoFaltanteException {
+
+        // Verificar que los atributos específicos de Cliente estén presentes
+        if (!jsonUsuario.has("direccion") || !jsonUsuario.has("telefono") ||
+                !jsonUsuario.has("puntosFidelidad") || !jsonUsuario.has("fechaNacimiento")) {
+            throw new AtributoFaltanteException("Faltan atributos específicos en Cliente.");
+        }
+
         String nombre = jsonUsuario.getString("nombre");
         String apellido = jsonUsuario.getString("apellido");
         String dni = jsonUsuario.getString("dni");
@@ -204,20 +241,44 @@ public class GestionJSON {
     }
 
     // Metodo para convertir un JSONObject a un Conserje
-    private static Conserje convertirJsonAConserje(JSONObject jsonUsuario) throws JSONException {
-        String nombre = jsonUsuario.getString("nombre");
-        String apellido = jsonUsuario.getString("apellido");
-        String dni = jsonUsuario.getString("dni");
-        String password = jsonUsuario.getString("contrasenia");
-        String correoElectronico = jsonUsuario.getString("correoElectronico");
-        String turno = jsonUsuario.getString("turno");
-        String numeroEmpleado = jsonUsuario.getString("numeroEmpleado");
-        String areaResponsable = jsonUsuario.getString("areaResponsable");
-        String telefono = jsonUsuario.getString("telefono");
-        String estadoTrabajo = jsonUsuario.getString("estadoTrabajo");
+    private static Conserje convertirJsonAConserje(JSONObject jsonUsuario) throws JSONException, AtributoFaltanteException {
+        // Verificar que los atributos específicos de Conserje estén presentes
+        if (!jsonUsuario.has("turno") || !jsonUsuario.has("numeroEmpleado") ||
+                !jsonUsuario.has("fechaIngreso") || !jsonUsuario.has("areaResponsable") ||
+                !jsonUsuario.has("telefono") || !jsonUsuario.has("estadoTrabajo")) {
+            throw new AtributoFaltanteException("Faltan atributos específicos en Conserje.");
+        }
 
-        // Crear y devolver un nuevo Conserje
-        return new Conserje(nombre, apellido, dni, password, correoElectronico, turno, numeroEmpleado, null, areaResponsable, telefono, estadoTrabajo);
+        // Crear y devolver el objeto Conserje
+        Conserje conserje = new Conserje();
+
+        // Asignar los atributos comunes de Usuario
+        conserje.setNombre(jsonUsuario.getString("nombre"));
+        conserje.setApellido(jsonUsuario.getString("apellido"));
+        conserje.setDni(jsonUsuario.getString("dni"));
+        conserje.setContrasenia(jsonUsuario.getString("contrasenia"));
+        conserje.setCorreoElectronico(jsonUsuario.getString("correoElectronico"));
+
+        // Asignar los atributos específicos de Conserje
+        conserje.setTurno(jsonUsuario.getString("turno"));
+        conserje.setNumeroEmpleado(jsonUsuario.getString("numeroEmpleado"));
+        conserje.setFechaIngreso(parseDate(jsonUsuario.getString("fechaIngreso")));
+        conserje.setAreaResponsable(jsonUsuario.getString("areaResponsable"));
+        conserje.setTelefono(jsonUsuario.getString("telefono"));
+        conserje.setEstadoTrabajo(jsonUsuario.getString("estadoTrabajo"));
+
+        return conserje;
+    }
+
+    // Metodo auxiliar parseDate para convertir fechas
+    private static Date parseDate(String fechaString) {
+        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            return formato.parse(fechaString);
+        } catch (ParseException e) {
+            System.err.println("Error al parsear la fecha: " + e.getMessage());
+            return null;
+        }
     }
 
     // Metodo para convertir un JSONObject a un Administrador
@@ -230,6 +291,20 @@ public class GestionJSON {
 
         // Crear y devolver un nuevo Administrador
         return new Administrador(nombre, apellido, dni, password, correoElectronico);
+    }
+
+    public static void guardarUsuariosJson(List<Usuario> usuarios, String filePath) throws JSONException, IOException {
+        // Creamos un JSONArray que contendrá todos los usuarios
+        JSONArray usuariosArray = new JSONArray();
+
+        // Convertimos cada usuario en un JSONObject y lo agregamos al JSONArray
+        for (Usuario usuario : usuarios) {
+            JSONObject jsonUsuario = convertirUsuarioAJson(usuario);
+            usuariosArray.put(jsonUsuario);
+        }
+
+        // Llamamos a la función grabar para escribir el JSONArray en el archivo JSON especificado
+        JSONUtiles.grabar(usuariosArray, filePath);
     }
 
     // Metodo para convertir Usuario a JSONObject

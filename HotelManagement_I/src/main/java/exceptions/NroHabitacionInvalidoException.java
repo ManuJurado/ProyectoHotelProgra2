@@ -1,4 +1,4 @@
-package main.java.exceptions;
+package exceptions;
 
 public class NroHabitacionInvalidoException extends RuntimeException {
     public NroHabitacionInvalidoException(String message) {

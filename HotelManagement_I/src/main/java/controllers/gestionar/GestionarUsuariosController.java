@@ -13,6 +13,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import models.Usuarios.Usuario;
@@ -31,17 +32,11 @@ public class GestionarUsuariosController extends BaseController {
     private TableColumn<Usuario, String> columnaEmail;
     @FXML
     private TableColumn<Usuario, String> columnaRol;
-    @FXML
-    private TableColumn<Usuario, String> columnaHabilitacion;
 
     @FXML
     private TextField nombreUsuarioField;
-    @FXML
-    private TextField emailUsuarioField;
 
     private GestionUsuario gestionarUsuarios;
-
-    private Usuario usuarioOriginal;
 
     // Lista que contendrá todos los usuarios
     private ObservableList<Usuario> usuariosOriginales;
@@ -50,11 +45,13 @@ public class GestionarUsuariosController extends BaseController {
     private void initialize() {
         // Configura las columnas de la tabla
         columnaNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
-        columnaEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
-        columnaRol.setCellValueFactory(new PropertyValueFactory<>("rol"));
-        columnaHabilitacion.setCellValueFactory(new PropertyValueFactory<>("habilitacion"));
+        columnaEmail.setCellValueFactory(new PropertyValueFactory<>("correoElectronico"));
+        columnaRol.setCellValueFactory(new PropertyValueFactory<>("tipoUsuario"));
 
-        cargarUsuarios(); // Carga usuarios al inicializar
+        // Obtener la instancia de GestionUsuario para cargar los usuarios
+        this.gestionarUsuarios = GestionUsuario.getInstancia("C:/Users/Manu/OneDrive/Escritorio/NuevaRamaManu/ProyectoHotelProgra2/HotelManagement_I/usuarios.json");
+
+        cargarUsuarios(); // Carga los usuarios al inicializar
 
         // Agregar un listener al campo de texto
         nombreUsuarioField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -63,24 +60,50 @@ public class GestionarUsuariosController extends BaseController {
     }
 
     @FXML
-    private void onCrearNuevoUsuarioButtonClick(ActionEvent event) {
-        // Lógica para crear un nuevo usuario
+    public void onCrearNuevoUsuarioButtonClick(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/crear/crearUsuario.fxml"));
             Parent root = loader.load();
 
-            // Asumir que tienes un controlador CrearUsuarioController
             CrearUsuarioController crearUsuarioController = loader.getController();
-            crearUsuarioController.setGestionarUsuarios(gestionarUsuarios, this);
 
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Crear Nuevo Usuario");
-            stage.show();
+            // Obtener el Stage actual (ventana principal)
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // Pasamos el Stage actual al controlador de la ventana emergente
+            crearUsuarioController.setStageAnterior(stage); // Este metodo es el que debes crear en el controlador de crearUsuario.fxml
+
+            // Crear una ventana nueva para seleccionar el tipo de usuario
+            Stage newStage = new Stage();
+            newStage.setScene(new Scene(root));
+            newStage.setTitle("Crear Nuevo Usuario");
+            newStage.initModality(Modality.APPLICATION_MODAL); // Bloquea la ventana principal hasta que se cierre esta
+            newStage.showAndWait();
+
+            // Después de cerrar la ventana emergente, obtenemos el tipo de usuario seleccionado
+            TipoUsuario tipoUsuario = crearUsuarioController.getTipoUsuarioSeleccionado();
+            if (tipoUsuario != null) {
+                // Cargar el formulario correspondiente en la ventana principal
+                switch (tipoUsuario) {
+                    case CLIENTE:
+                        cambiarEscena("/views/crear/crearCliente.fxml", "Creación de Cliente", (Node) event.getSource());
+                        break;
+                    case ADMINISTRADOR:
+                        cambiarEscena("/views/crear/crearAdministrador.fxml", "Creación de Administrador", (Node) event.getSource());
+                        break;
+                    case CONSERJE:
+                        cambiarEscena("/views/crear/crearConserje.fxml", "Creación de Conserje", (Node) event.getSource());
+                        break;
+                    default:
+                        System.out.println("Rol no válido");
+                }
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 
     @FXML
     private void onModificarUsuarioButtonClick(ActionEvent event) {
@@ -146,38 +169,22 @@ public class GestionarUsuariosController extends BaseController {
         tablaUsuarios.setItems(usuariosFiltrados);
     }
 
-    public void setGestionarUsuarios(GestionUsuario gestionarUsuarios) {
-        this.gestionarUsuarios = gestionarUsuarios;
-        configurarColumnas(); // Configura las columnas
-        cargarUsuarios(); // Cargar usuarios
-    }
-
-    private void configurarColumnas() {
-        columnaNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
-        columnaEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
-        columnaRol.setCellValueFactory(new PropertyValueFactory<>("rol"));
-    }
-
-
     private void cargarUsuarios() {
-        if (gestionarUsuarios != null) {
-            List<Usuario> usuarios = gestionarUsuarios.getUsuarios();
-            System.out.println("Usuarios cargados: " + usuarios.size()); // Depuración
+        // Obtener los usuarios desde el singleton de GestionUsuario
+        List<Usuario> usuarios = gestionarUsuarios.getUsuarios();
 
-            // Limpiar la tabla antes de agregar nuevos elementos
-            tablaUsuarios.getItems().clear();
+        // Limpiar la tabla antes de agregar nuevos elementos
+        tablaUsuarios.getItems().clear();
 
-            // Guardar la lista original de usuarios
-            usuariosOriginales = FXCollections.observableArrayList(usuarios);
+        // Guardar la lista original de usuarios
+        usuariosOriginales = FXCollections.observableArrayList(usuarios);
 
-            // Actualizar la tabla con los usuarios obtenidos
-            tablaUsuarios.setItems(usuariosOriginales); // Actualiza la tabla en la UI
-        } else {
-            System.out.println("GestionarUsuarios es nulo."); // Depuración adicional
-        }
+        // Actualizar la tabla con los usuarios obtenidos
+        tablaUsuarios.setItems(usuariosOriginales); // Actualiza la tabla en la UI
+
     }
 
-    // Método para actualizar la lista de usuarios
+    // Metodo para actualizar la lista de usuarios
     public void actualizarListaUsuarios() {
         cargarUsuarios(); // Simplemente recarga la lista de usuarios
     }
@@ -191,27 +198,9 @@ public class GestionarUsuariosController extends BaseController {
         }
     }
 
-    private void abrirFormularioModificacion(Usuario usuario) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/modificar/modificarUsuario.fxml"));
-            Parent root = loader.load();
-
-            ModificarUsuarioController modificarUsuarioController = loader.getController();
-            modificarUsuarioController.setUsuario(usuario, this);
-
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Modificar Usuario");
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void cerrarVentana(ActionEvent event) {
-        Node source = (Node) event.getSource();
-        Stage stage = (Stage) source.getScene().getWindow();
-        stage.close();
+    @FXML
+    private void volverAlMenuAdmin(ActionEvent event) {
+        cambiarEscena("/views/menu/menuAdministrador.fxml", "Menú Administrador", (Node) event.getSource()); // Llama al metodo para regresar
     }
 
     private void mostrarAlerta(String titulo, String mensaje) {
@@ -220,10 +209,5 @@ public class GestionarUsuariosController extends BaseController {
         alert.setHeaderText(null);
         alert.setContentText(mensaje);
         alert.showAndWait();
-    }
-
-    @FXML
-    private void volverAlMenuAdmin(ActionEvent event) {
-        cambiarEscena("/views/menu/menuAdministrador.fxml", "Menú Administrador", (Node) event.getSource());
     }
 }

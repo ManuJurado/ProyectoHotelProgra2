@@ -11,7 +11,7 @@ public abstract class Usuario {
     private TipoUsuario tipoUsuario;
     private String habilitacion;
 
-
+    public Usuario(){}
 
     public Usuario(String nombre, String apellido, String dni, String contrasenia, String correoElectronico, TipoUsuario tipoUsuario) {
         this.nombre = nombre;
@@ -57,13 +57,11 @@ public abstract class Usuario {
 
     @Override
     public String toString() {
-        return "Usuario{" +
-                "nombre='" + nombre + '\'' +
+        return  "nombre='" + nombre + '\'' +
                 ", apellido='" + apellido + '\'' +
                 ", dni='" + dni + '\'' +
                 ", contrasenia='" + contrasenia + '\'' +
                 ", correoElectronico='" + correoElectronico + '\'' +
-                ", tipoUsuario=" + tipoUsuario +
-                '}';
+                ", tipoUsuario=" + tipoUsuario + '\'';
     }
 }

@@ -4,12 +4,13 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.control.PasswordField?>
 <VBox alignment="CENTER" spacing="10.0" xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.LoginController">
     <Label text="Login" />
-    <TextField fx:id="usernameField" promptText="Usuario" />
-    <TextField fx:id="passwordField" promptText="Contraseña" />
+    <TextField fx:id="usernameField" promptText="Usuario" maxWidth="200.0" />
+    <PasswordField fx:id="passwordField" promptText="Contraseña" maxWidth="200.0" />
 
-    <Button text="Ingresar como Administrador" onAction="#loginAdmin"/>
+    <Button fx:id="iniciarSesionButton" text="Iniciar Sesión" onAction="#iniciarSesion"/>
     <Button text="Salir" onAction="#salir"/>
 
 </VBox>
