@@ -121,43 +121,5 @@ public class GestionHabitaciones <H extends Habitacion> {
     //eliminar
     //guardar (carga json)
 
-    /*public static JSONObject convertirUsuarioAJson(Usuario usuario) throws JSONException {
-        JSONObject jsonUsuario = new JSONObject();
-        jsonUsuario.put("nombre", usuario.getNombre());
-        jsonUsuario.put("apellido", usuario.getApellido());
-        jsonUsuario.put("dni", usuario.getDni());
-        jsonUsuario.put("correoElectronico", usuario.getCorreoElectronico());
-
-
-        if (usuario instanceof Cliente) {
-            Cliente cliente = (Cliente) usuario;
-            jsonUsuario.put("direccion", cliente.getDireccion());
-            jsonUsuario.put("telefono", cliente.getTelefono());
-            jsonUsuario.put("puntosFidelidad", cliente.getPuntosFidelidad());
-            // Verificar si la fecha de nacimiento es nula antes de convertirla a String
-            if (cliente.getFechaNacimiento() != null) {
-                jsonUsuario.put("fechaNacimiento", cliente.getFechaNacimiento().toString());
-            } else {
-                jsonUsuario.put("fechaNacimiento", "Fecha no disponible");
-            }
-        } else if (usuario instanceof Conserje) {
-            Conserje conserje = (Conserje) usuario;
-            jsonUsuario.put("turno", conserje.getTurno());
-            jsonUsuario.put("numeroEmpleado", conserje.getNumeroEmpleado());
-            jsonUsuario.put("areaResponsable", conserje.getAreaResponsable());
-            jsonUsuario.put("estadoTrabajo", conserje.getEstadoTrabajo());
-            // Verificar si la fecha de ingreso es nula antes de convertirla a String
-            if (conserje.getFechaIngreso() != null) {
-                jsonUsuario.put("fechaIngreso", conserje.getFechaIngreso().toString());
-            } else {
-                jsonUsuario.put("fechaIngreso", "Fecha no disponible");
-            }
-        } else if (usuario instanceof Administrador) {
-            // Agregar campos específicos del administrador si es necesario
-        }
-
-        return jsonUsuario;
-    }*/
-
     /**-----------------------  FIN METODOS CRUD  -----------------------*/
 }

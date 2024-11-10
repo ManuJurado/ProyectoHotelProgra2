@@ -97,6 +97,38 @@ public class GestionJSON {
             throw new RuntimeException(e);
         }
     }
+
+    //Metodo para poder guardar una habitacion pasada por parametro en el archivo Json
+    public static JSONObject guardarHabitacionEnJson(Habitacion habitacion) throws JSONException {
+        JSONObject jsonHabitacion = new JSONObject();
+        jsonHabitacion.put("tipo", habitacion.getTipo());
+        jsonHabitacion.put("numero", habitacion.getNumero());
+        jsonHabitacion.put("capacidad", habitacion.getCapacidad());
+
+        if (habitacion instanceof Apartamento) {
+            Apartamento apartamento = (Apartamento) habitacion;
+            jsonHabitacion.put("ambientes", apartamento.getAmbientes());
+            jsonHabitacion.put("cocina", apartamento.isCocina());
+        }
+        else if (habitacion instanceof Presidencial) {
+            Presidencial presidencial = (Presidencial) habitacion;
+            jsonHabitacion.put("adicionales", presidencial.getAdicionales());
+            jsonHabitacion.put("dimension", presidencial.getDimension());
+        }
+        else if (habitacion instanceof Suite) {
+            Suite suite = (Suite) habitacion;
+            jsonHabitacion.put("balcon", suite.isBalcon());
+            jsonHabitacion.put("comedor", suite.isComedor());
+        }
+
+        jsonHabitacion.put("camas", habitacion.getCamas());
+        jsonHabitacion.put("disponible", habitacion.isDisponible());
+        jsonHabitacion.put("estado", habitacion.getEstado());
+        jsonHabitacion.put("detalleEstado", habitacion.getDetalleEstado());
+
+        return jsonHabitacion;
+    }
+
     // --------------------------------- FIN HABITACIONES-----------------------------------------------------//
     // --------------------------------- FIN HABITACIONES-----------------------------------------------------//
     // --------------------------------- FIN HABITACIONES-----------------------------------------------------//
@@ -247,7 +279,5 @@ public class GestionJSON {
     // --------------------------------- FIN USUARIOS -----------------------------------------------------//
     // --------------------------------- FIN USUARIOS -----------------------------------------------------//
     // --------------------------------- FIN USUARIOS -----------------------------------------------------//
-
-
 
 }
