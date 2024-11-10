@@ -2,6 +2,7 @@ package controllers.gestionar;
 
 import controllers.BaseController;
 import controllers.crear.CrearReservaController;
+import exceptions.AtributoFaltanteException;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -92,7 +93,7 @@ public class GestionarReservasController extends BaseController {
 
             // Después de cerrar el diálogo, recargar las reservas en la tabla
             cargarReservasEnTabla();
-        } catch (IOException e) {
+        } catch (IOException | AtributoFaltanteException e) {
             e.printStackTrace();
             mostrarAlerta("Error", "No se pudo abrir la ventana de crear reserva.");
         }

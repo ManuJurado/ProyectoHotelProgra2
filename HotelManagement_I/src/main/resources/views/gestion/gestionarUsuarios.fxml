@@ -12,7 +12,6 @@
                 <TableColumn fx:id="columnaNombre" text="Nombre" />
                 <TableColumn fx:id="columnaRol" text="Rol" />
                 <TableColumn fx:id="columnaEmail" text="Email" />
-                <TableColumn fx:id="columnaHabilitacion" text="Habilitado" /> <!-- Nueva columna para estado de habilitación -->
                 <!-- Agrega más columnas según lo que necesites -->
             </columns>
         </TableView>

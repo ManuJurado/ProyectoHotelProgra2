@@ -1,4 +1,4 @@
-package main.java.exceptions;
+package exceptions;
 
 public class CapacidadInvalidaException extends RuntimeException {
     public CapacidadInvalidaException(String message) {

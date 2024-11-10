@@ -1,5 +1,6 @@
 package services;
 
+import exceptions.AtributoFaltanteException;
 import models.Habitacion.*;
 import models.Pasajero;
 import models.Reserva;
@@ -18,12 +19,12 @@ public class GestionReservas {
     private GestionUsuario gestionarUsuarios; // Lista de usuarios
 
     // Constructor
-    public GestionReservas() {
+    public GestionReservas() throws AtributoFaltanteException {
         this.usuarios = new ArrayList<>();
         this.habitaciones = new ArrayList<>();
 
 //        this.gestionarHabitaciones = new GestionarHabitaciones(); // Instanciar aquí
-        this.gestionarUsuarios = new GestionUsuario("usuarios.json"); // Instanciar aquí
+//        this.gestionarUsuarios = new GestionUsuario("usuarios.json"); // Instanciar aquí
 
 //        this.habitaciones = gestionarHabitaciones.getHabitaciones();
         this.usuarios = gestionarUsuarios.getUsuarios();

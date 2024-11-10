@@ -23,6 +23,11 @@ public class Conserje extends Usuario {
         this.estadoTrabajo = estadoTrabajo;
     }
 
+    public Conserje(){
+        super();
+        super.setTipoUsuario(TipoUsuario.CONSERJE);
+    }
+
     // Métodos getters y setters
 
     public String getTurno() { return turno; }
@@ -37,6 +42,41 @@ public class Conserje extends Usuario {
     public void setTelefono(String telefono) { this.telefono = telefono; }
     public String getEstadoTrabajo() { return estadoTrabajo; }
     public void setEstadoTrabajo(String estadoTrabajo) { this.estadoTrabajo = estadoTrabajo; }
+
+    @Override
+    public String getNombre() {
+        return super.getNombre();
+    }
+
+    @Override
+    public String getApellido() {
+        return super.getApellido();
+    }
+
+    @Override
+    public String getDni() {
+        return super.getDni();
+    }
+
+    @Override
+    public String getContrasenia() {
+        return super.getContrasenia();
+    }
+
+    @Override
+    public String getCorreoElectronico() {
+        return super.getCorreoElectronico();
+    }
+
+    @Override
+    public TipoUsuario getTipoUsuario() {
+        return super.getTipoUsuario();
+    }
+
+    @Override
+    public String getHabilitacion() {
+        return super.getHabilitacion();
+    }
 
     // Métodos específicos de Conserje
     public void gestionarCheckIn() {
@@ -64,12 +104,13 @@ public class Conserje extends Usuario {
     @Override
     public String toString() {
         return "Conserje{" +
+                super.toString() +
                 "turno='" + turno + '\'' +
                 ", numeroEmpleado='" + numeroEmpleado + '\'' +
                 ", fechaIngreso=" + fechaIngreso +
                 ", areaResponsable='" + areaResponsable + '\'' +
                 ", telefono='" + telefono + '\'' +
-                ", estadoTrabajo='" + estadoTrabajo + '\'' +
-                '}';
+                ", estadoTrabajo='" + estadoTrabajo +
+                '}'+"\n";
     }
 }
