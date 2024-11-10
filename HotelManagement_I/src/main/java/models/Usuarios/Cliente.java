@@ -37,6 +37,41 @@ public class Cliente extends Usuario {
     public Date getFechaNacimiento() { return fechaNacimiento; }
     public void setFechaNacimiento(Date fechaNacimiento) { this.fechaNacimiento = fechaNacimiento; }
 
+    @Override
+    public String getNombre() {
+        return super.getNombre();
+    }
+
+    @Override
+    public String getApellido() {
+        return super.getApellido();
+    }
+
+    @Override
+    public String getDni() {
+        return super.getDni();
+    }
+
+    @Override
+    public String getContrasenia() {
+        return super.getContrasenia();
+    }
+
+    @Override
+    public String getCorreoElectronico() {
+        return super.getCorreoElectronico();
+    }
+
+    @Override
+    public TipoUsuario getTipoUsuario() {
+        return super.getTipoUsuario();
+    }
+
+    @Override
+    public String getHabilitacion() {
+        return super.getHabilitacion();
+    }
+
     // Métodos específicos de Cliente
     public void hacerReserva() {
         // Lógica para realizar una reserva
@@ -93,11 +128,12 @@ public class Cliente extends Usuario {
     @Override
     public String toString() {
         return "Cliente{" +
+                super.toString() +
                 "direccion='" + direccion + '\'' +
                 ", telefono='" + telefono + '\'' +
                 ", historialReservas=" + historialReservas +
                 ", puntosFidelidad=" + puntosFidelidad +
                 ", fechaNacimiento=" + fechaNacimiento +
-                '}';
+                '}'+"\n";
     }
 }

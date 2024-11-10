@@ -7,6 +7,6 @@
     <TextField fx:id="nombreField" promptText="Nombre del Usuario"/>
     <TextField fx:id="emailField" promptText="Email"/>
     <ComboBox fx:id="rolChoiceBox" promptText="Selecciona Rol"/>
-    <Button text="Crear Usuario" onAction="#guardar"/>
+    <Button text="Crear Usuario" onAction="#crear"/>
     <Button text="Cerrar" onAction="#cerrarVentana"/>
 </VBox>

@@ -13,6 +13,13 @@ import java.io.IOException;
 
 public class BaseController {
 
+    private Stage stageAnterior;  // Variable para almacenar el Stage anterior
+
+    // Metodo para establecer el stage anterior
+    public void setStageAnterior(Stage stage) {
+        this.stageAnterior = stage;
+    }
+
     private void mostrarAlerta(String mensaje) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
@@ -42,12 +49,25 @@ public class BaseController {
         }
     }
 
-    protected void volver(String fxmlFileName, String title, Node someNode, Runnable postLoadAction) {
-        cambiarEscena(fxmlFileName, title, someNode);
-        if (postLoadAction != null) {
-            postLoadAction.run(); // Ejecuta la acción después de cargar la nueva escena
+    // Este metodo se llamará para volver a la ventana anterior
+    protected void volver(Node source) {
+        // Obtener el Stage (ventana actual) y cerrarlo
+        Stage currentStage = (Stage) source.getScene().getWindow();
+        currentStage.close();  // Cierra la ventana actual
+
+        // Aquí puedes agregar lógica para reabrir la ventana anterior (por ejemplo, el menú principal)
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/menuAdmin.fxml")); // Asegúrate de tener el path correcto
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Menu Administrador");
+            stage.show(); // Muestra la ventana del menú administrador
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
-
 
 }

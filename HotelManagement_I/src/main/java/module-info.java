@@ -12,7 +12,7 @@ module tu.paquete {
     requires com.almasb.fxgl.all;
     requires javafx.media;
     requires java.json;
-    requires java.desktop;
+    requires com.fasterxml.jackson.databind;
 
     opens controllers to javafx.fxml; // Permite que JavaFX acceda a los controladores en el paquete
     exports controllers; // Exporta el paquete de controladores
@@ -25,4 +25,6 @@ module tu.paquete {
     opens controllers.gestionar to javafx.fxml;
     exports controllers.details;
     opens controllers.details to javafx.fxml;
+    opens models.Usuarios to javafx.base;  // Esto permite el acceso a la clase Cliente
+    exports models;
 }

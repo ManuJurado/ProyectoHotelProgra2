@@ -28,7 +28,7 @@ public class AdministradorController extends BaseController {
     @FXML
     private void gestionarReservas(ActionEvent event) {
         cambiarEscena("/views/gestion/gestionarReservas.fxml", "Gestión de Reservas", (Node) event.getSource());
-        }
+    }
 
     @FXML
     private void gestionarServicios(ActionEvent event) {

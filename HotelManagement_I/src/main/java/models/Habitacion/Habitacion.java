@@ -1,7 +1,7 @@
 package models.Habitacion;
 
-import main.java.exceptions.CapacidadInvalidaException;
-import main.java.exceptions.NroHabitacionInvalidoException;
+import exceptions.CapacidadInvalidaException;
+import exceptions.NroHabitacionInvalidoException;
 import enums.EstadoHabitacion;
 import java.util.*;
 
