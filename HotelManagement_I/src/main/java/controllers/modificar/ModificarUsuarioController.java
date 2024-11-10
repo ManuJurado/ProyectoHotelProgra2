@@ -2,6 +2,7 @@ package controllers.modificar;
 
 import controllers.BaseController;
 import controllers.gestionar.GestionarUsuariosController;
+import enums.TipoUsuario;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
@@ -9,7 +10,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
-import models.Usuario;
+import models.Usuarios.Usuario;
 
 public class ModificarUsuarioController extends BaseController {
 
@@ -35,7 +36,7 @@ public class ModificarUsuarioController extends BaseController {
 
         // Llenar los campos con la información actual del usuario
         nombreUsuarioField.setText(usuario.getNombre());
-        emailUsuarioField.setText(usuario.getEmail());
+        emailUsuarioField.setText(usuario.getCorreoElectronico());
         rolChoiceBox.getItems().addAll("Cliente", "Conserje", "Administrador"); // Agregar roles disponibles
     }
 
@@ -55,9 +56,9 @@ public class ModificarUsuarioController extends BaseController {
     private void guardarCambios(ActionEvent event) {
         String nuevoNombre = nombreUsuarioField.getText();
         String nuevoEmail = emailUsuarioField.getText();
-        String nuevoRol = rolChoiceBox.getValue(); // Obtener el nuevo rol
+        TipoUsuario nuevoRol = TipoUsuario.valueOf(rolChoiceBox.getValue()); // TipoUsuario directamente, no necesitas .name()
 
-        if (!nuevoNombre.isEmpty() && !nuevoEmail.isEmpty() && !nuevoRol.isEmpty()) { // Comprobar que el rol no esté vacío
+        if (!nuevoNombre.isEmpty() && !nuevoEmail.isEmpty() && nuevoRol != null) { // Comprobar que el rol no esté vacío
             gestionarUsuariosController.actualizarUsuario(usuarioOriginal, nuevoNombre, nuevoEmail, nuevoRol); // Pasar el nuevo rol
             mostrarAlerta("Éxito", "Cambios guardados correctamente.");
             cerrarVentana(event);

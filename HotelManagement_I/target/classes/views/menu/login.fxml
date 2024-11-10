@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
@@ -10,6 +8,8 @@
     <Label text="Login" />
     <TextField fx:id="usernameField" promptText="Usuario" />
     <TextField fx:id="passwordField" promptText="Contraseña" />
+
     <Button text="Ingresar como Administrador" onAction="#loginAdmin"/>
     <Button text="Salir" onAction="#salir"/>
+
 </VBox>

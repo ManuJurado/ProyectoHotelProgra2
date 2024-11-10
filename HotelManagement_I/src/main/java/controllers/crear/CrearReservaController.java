@@ -1,8 +1,6 @@
 package controllers.crear;
 
 import controllers.BaseController;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -10,7 +8,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import models.Habitacion.Habitacion;
 import models.Pasajero;
-import models.Usuario;
+import models.Usuarios.Usuario;
 import services.GestionReservas;
 
 import java.time.LocalDate;
