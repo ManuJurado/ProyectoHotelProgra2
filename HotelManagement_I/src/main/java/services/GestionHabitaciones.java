@@ -116,10 +116,9 @@ public class GestionHabitaciones <H extends Habitacion> {
 
     /**-----------------------  INICIO METODOS CRUD  -----------------------*/
 
-    //agregar
-    //modificar
-    //eliminar
-    //guardar (carga json)
+    //agregar (actualizarJson)
+    //modificar (actualizarJson)
+    //eliminar (actualizarJson)
 
     /**-----------------------  FIN METODOS CRUD  -----------------------*/
 }

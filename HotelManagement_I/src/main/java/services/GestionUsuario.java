@@ -30,11 +30,7 @@ public class GestionUsuario{
     private GestionUsuario(String fileName){
         this.usuarios = new ArrayList<>();
         mostrarMensajeTemporal("Cargando lista de usuarios...");
-        try {
-            this.usuarios = GestionJSON.mapeoUsuariosJson(fileName);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        this.usuarios = GestionJSON.mapeoUsuariosJson(fileName);
     }
 
     // Metodo para obtener la instancia única de la clase (Singleton)
@@ -129,7 +125,7 @@ public class GestionUsuario{
     private void guardarUsuariosEnJson() {
         try {
             // Aquí guardamos la lista de usuarios en el archivo JSON
-            GestionJSON.guardarUsuariosJson(usuarios, "C:/Users/Manu/OneDrive/Escritorio/NuevaRamaManu/ProyectoHotelProgra2/HotelManagement_I/usuarios.json");
+            GestionJSON.guardarUsuariosJson(usuarios, "C:/Users/emili/OneDrive/Documentos/Tecnicatura Progra/2024/Programacion 2 (Java)/TP_FINAL_RAMA_HABITACIONES/ProyectoHotelProgra2/HotelManagement_I/usuarios.json");
         } catch (JSONException | IOException e) {
             e.printStackTrace();
         }

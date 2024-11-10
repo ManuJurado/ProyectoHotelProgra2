@@ -1,1 +1,206 @@
-[{"fechaNacimiento":"Fecha no disponible","apellido":"Perez","direccion":"Calle Falsa 123","tipoUsuario":"CLIENTE","contrasenia":"contrasenia123","puntosFidelidad":100,"telefono":"987654321","nombre":"Juan","correoElectronico":"juan.perez@example.com","dni":"12345678"},{"fechaIngreso":"Fecha no disponible","numeroEmpleado":"C123","apellido":"Lopez","tipoUsuario":"CONSERJE","contrasenia":"contrasenia123","turno":"Mañana","estadoTrabajo":"Activo","telefono":"912345678","nombre":"Ana","correoElectronico":"ana.lopez@example.com","dni":"23456789","areaResponsable":"Recepción"},{"apellido":"Gomez","tipoUsuario":"ADMINISTRADOR","contrasenia":"contraseniaAdmin123","nombre":"Carlos","correoElectronico":"carlos.gomez@example.com","dni":"34567890"},{"fechaNacimiento":"Fecha no disponible","apellido":"Perez","direccion":"Calle Falsa 123","tipoUsuario":"CLIENTE","contrasenia":"contrasenia123","puntosFidelidad":100,"telefono":"987654321","nombre":"Juan","correoElectronico":"juan.perez@example.com","dni":"12345678"},{"fechaIngreso":"Fecha no disponible","numeroEmpleado":"C123","apellido":"Lopez","tipoUsuario":"CONSERJE","contrasenia":"contrasenia123","turno":"Mañana","estadoTrabajo":"Activo","telefono":"912345678","nombre":"Ana","correoElectronico":"ana.lopez@example.com","dni":"23456789","areaResponsable":"Recepción"},{"apellido":"Gomez","tipoUsuario":"ADMINISTRADOR","contrasenia":"contraseniaAdmin123","nombre":"Carlos","correoElectronico":"carlos.gomez@example.com","dni":"34567890"},{"fechaNacimiento":"Fecha no disponible","apellido":"Perez","direccion":"Calle Falsa 123","tipoUsuario":"CLIENTE","contrasenia":"contrasenia123","puntosFidelidad":100,"telefono":"987654321","nombre":"Juan","correoElectronico":"juan.perez@example.com","dni":"12345678"},{"fechaIngreso":"Fecha no disponible","numeroEmpleado":"C123","apellido":"Lopez","tipoUsuario":"CONSERJE","contrasenia":"contrasenia123","turno":"Mañana","estadoTrabajo":"Activo","telefono":"912345678","nombre":"Ana","correoElectronico":"ana.lopez@example.com","dni":"23456789","areaResponsable":"Recepción"},{"apellido":"Gomez","tipoUsuario":"ADMINISTRADOR","contrasenia":"contraseniaAdmin123","nombre":"Carlos","correoElectronico":"carlos.gomez@example.com","dni":"34567890"},{"fechaNacimiento":"Fecha no disponible","apellido":"Perez","direccion":"Calle Falsa 123","tipoUsuario":"CLIENTE","contrasenia":"contrasenia123","puntosFidelidad":100,"telefono":"987654321","nombre":"Juan","correoElectronico":"juan.perez@example.com","dni":"12345678"},{"fechaIngreso":"Fecha no disponible","numeroEmpleado":"C123","apellido":"Lopez","tipoUsuario":"CONSERJE","contrasenia":"contrasenia123","turno":"Mañana","estadoTrabajo":"Activo","telefono":"912345678","nombre":"Ana","correoElectronico":"ana.lopez@example.com","dni":"23456789","areaResponsable":"Recepción"},{"apellido":"Gomez","tipoUsuario":"ADMINISTRADOR","contrasenia":"contraseniaAdmin123","nombre":"Carlos","correoElectronico":"carlos.gomez@example.com","dni":"34567890"},{"apellido":"Manuel","tipoUsuario":"ADMINISTRADOR","contrasenia":"admin","nombre":"Manuel","correoElectronico":"manu27sosa@gmail.com","dni":"admin"},{"fechaNacimiento":"Fecha no disponible","apellido":"Manolo","direccion":"Calle Falsa 123","tipoUsuario":"CLIENTE","contrasenia":"cliente","puntosFidelidad":100,"telefono":"987654321","nombre":"Sosa","correoElectronico":"juan.perez@example.com","dni":"cliente"},{"fechaNacimiento":"Fecha no disponible","apellido":"Salias","direccion":"aosmoadsm","tipoUsuario":"CLIENTE","contrasenia":"1234","puntosFidelidad":0,"telefono":"111","nombre":"emi","correoElectronico":"emi1@gmail.com","dni":"1234"},{"fechaNacimiento":"Fecha no disponible","apellido":"sosa","direccion":"catalunia 5157","tipoUsuario":"CLIENTE","contrasenia":"4khnud5a","puntosFidelidad":0,"telefono":"2236234397","nombre":"manu","correoElectronico":"manu27@gmail.com","dni":"39098906"},{"fechaNacimiento":"Fecha no disponible","apellido":"sosa","direccion":"asdas","tipoUsuario":"CLIENTE","contrasenia":"123456","puntosFidelidad":0,"telefono":"123123","nombre":"manu","correoElectronico":"s@gmail.com","dni":"123456"},{"fechaNacimiento":"Sun Nov 10 15:55:31 ART 2024","apellido":"salias","direccion":"sadasfo","tipoUsuario":"CLIENTE","contrasenia":"0000","puntosFidelidad":0,"telefono":"1234","nombre":"Emi","correoElectronico":"emi@gmail.com","dni":"0000"}]
+[
+  {
+    "fechaNacimiento": "Fecha no disponible",
+    "apellido": "Perez",
+    "direccion": "Calle Falsa 123",
+    "tipoUsuario": "CLIENTE",
+    "contrasenia": "contrasenia123",
+    "puntosFidelidad": 100,
+    "telefono": "987654321",
+    "nombre": "Juan",
+    "correoElectronico": "juan.perez@example.com",
+    "dni": "12345678"
+  },
+  {
+    "fechaIngreso": "Fecha no disponible",
+    "numeroEmpleado": "C123",
+    "apellido": "Lopez",
+    "tipoUsuario": "CONSERJE",
+    "contrasenia": "contrasenia123",
+    "turno": "Mañana",
+    "estadoTrabajo": "Activo",
+    "telefono": "912345678",
+    "nombre": "Ana",
+    "correoElectronico": "ana.lopez@example.com",
+    "dni": "23456789",
+    "areaResponsable": "Recepción"
+  },
+  {
+    "apellido": "Gomez",
+    "tipoUsuario": "ADMINISTRADOR",
+    "contrasenia": "contraseniaAdmin123",
+    "nombre": "Carlos",
+    "correoElectronico": "carlos.gomez@example.com",
+    "dni": "34567890"
+  },
+  {
+    "fechaNacimiento": "Fecha no disponible",
+    "apellido": "Perez",
+    "direccion": "Calle Falsa 123",
+    "tipoUsuario": "CLIENTE",
+    "contrasenia": "contrasenia123",
+    "puntosFidelidad": 100,
+    "telefono": "987654321",
+    "nombre": "Juan",
+    "correoElectronico": "juan.perez@example.com",
+    "dni": "12345678"
+  },
+  {
+    "fechaIngreso": "Fecha no disponible",
+    "numeroEmpleado": "C123",
+    "apellido": "Lopez",
+    "tipoUsuario": "CONSERJE",
+    "contrasenia": "contrasenia123",
+    "turno": "Mañana",
+    "estadoTrabajo": "Activo",
+    "telefono": "912345678",
+    "nombre": "Ana",
+    "correoElectronico": "ana.lopez@example.com",
+    "dni": "23456789",
+    "areaResponsable": "Recepción"
+  },
+  {
+    "apellido": "Gomez",
+    "tipoUsuario": "ADMINISTRADOR",
+    "contrasenia": "contraseniaAdmin123",
+    "nombre": "Carlos",
+    "correoElectronico": "carlos.gomez@example.com",
+    "dni": "34567890"
+  },
+  {
+    "fechaNacimiento": "Fecha no disponible",
+    "apellido": "Perez",
+    "direccion": "Calle Falsa 123",
+    "tipoUsuario": "CLIENTE",
+    "contrasenia": "contrasenia123",
+    "puntosFidelidad": 100,
+    "telefono": "987654321",
+    "nombre": "Juan",
+    "correoElectronico": "juan.perez@example.com",
+    "dni": "12345678"
+  },
+  {
+    "fechaIngreso": "Fecha no disponible",
+    "numeroEmpleado": "C123",
+    "apellido": "Lopez",
+    "tipoUsuario": "CONSERJE",
+    "contrasenia": "contrasenia123",
+    "turno": "Mañana",
+    "estadoTrabajo": "Activo",
+    "telefono": "912345678",
+    "nombre": "Ana",
+    "correoElectronico": "ana.lopez@example.com",
+    "dni": "23456789",
+    "areaResponsable": "Recepción"
+  },
+  {
+    "apellido": "Gomez",
+    "tipoUsuario": "ADMINISTRADOR",
+    "contrasenia": "contraseniaAdmin123",
+    "nombre": "Carlos",
+    "correoElectronico": "carlos.gomez@example.com",
+    "dni": "34567890"
+  },
+  {
+    "fechaNacimiento": "Fecha no disponible",
+    "apellido": "Perez",
+    "direccion": "Calle Falsa 123",
+    "tipoUsuario": "CLIENTE",
+    "contrasenia": "contrasenia123",
+    "puntosFidelidad": 100,
+    "telefono": "987654321",
+    "nombre": "Juan",
+    "correoElectronico": "juan.perez@example.com",
+    "dni": "12345678"
+  },
+  {
+    "fechaIngreso": "Fecha no disponible",
+    "numeroEmpleado": "C123",
+    "apellido": "Lopez",
+    "tipoUsuario": "CONSERJE",
+    "contrasenia": "contrasenia123",
+    "turno": "Mañana",
+    "estadoTrabajo": "Activo",
+    "telefono": "912345678",
+    "nombre": "Ana",
+    "correoElectronico": "ana.lopez@example.com",
+    "dni": "23456789",
+    "areaResponsable": "Recepción"
+  },
+  {
+    "apellido": "Gomez",
+    "tipoUsuario": "ADMINISTRADOR",
+    "contrasenia": "contraseniaAdmin123",
+    "nombre": "Carlos",
+    "correoElectronico": "carlos.gomez@example.com",
+    "dni": "34567890"
+  },
+  {
+    "apellido": "Manuel",
+    "tipoUsuario": "ADMINISTRADOR",
+    "contrasenia": "admin",
+    "nombre": "Manuel",
+    "correoElectronico": "manu27sosa@gmail.com",
+    "dni": "admin"
+  },
+  {
+    "fechaNacimiento": "Fecha no disponible",
+    "apellido": "Manolo",
+    "direccion": "Calle Falsa 123",
+    "tipoUsuario": "CLIENTE",
+    "contrasenia": "cliente",
+    "puntosFidelidad": 100,
+    "telefono": "987654321",
+    "nombre": "Sosa",
+    "correoElectronico": "juan.perez@example.com",
+    "dni": "cliente"
+  },
+  {
+    "fechaNacimiento": "Fecha no disponible",
+    "apellido": "Salias",
+    "direccion": "aosmoadsm",
+    "tipoUsuario": "CLIENTE",
+    "contrasenia": "1234",
+    "puntosFidelidad": 0,
+    "telefono": "111",
+    "nombre": "emi",
+    "correoElectronico": "emi1@gmail.com",
+    "dni": "1234"
+  },
+  {
+    "fechaNacimiento": "Fecha no disponible",
+    "apellido": "sosa",
+    "direccion": "catalunia 5157",
+    "tipoUsuario": "CLIENTE",
+    "contrasenia": "4khnud5a",
+    "puntosFidelidad": 0,
+    "telefono": "2236234397",
+    "nombre": "manu",
+    "correoElectronico": "manu27@gmail.com",
+    "dni": "39098906"
+  },
+  {
+    "fechaNacimiento": "Fecha no disponible",
+    "apellido": "sosa",
+    "direccion": "asdas",
+    "tipoUsuario": "CLIENTE",
+    "contrasenia": "123456",
+    "puntosFidelidad": 0,
+    "telefono": "123123",
+    "nombre": "manu",
+    "correoElectronico": "s@gmail.com",
+    "dni": "123456"
+  },
+  {
+    "fechaNacimiento": "Sun Nov 10 15:55:31 ART 2024",
+    "apellido": "salias",
+    "direccion": "sadasfo",
+    "tipoUsuario": "CLIENTE",
+    "contrasenia": "0000",
+    "puntosFidelidad": 0,
+    "telefono": "1234",
+    "nombre": "Emi",
+    "correoElectronico": "emi@gmail.com",
+    "dni": "0000"
+  }
+]
