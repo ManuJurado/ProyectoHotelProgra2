@@ -9,12 +9,13 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import services.GestionarUsuarios; // Asegúrate de tener un servicio para gestionar usuarios
-import models.Usuario; // Asegúrate de tener un modelo de Usuario
+import services.GestionUsuario; // Asegúrate de tener un servicio para gestionar usuarios
+import models.Usuarios.*; // Asegúrate de tener un modelo de Usuario
+import services.*; // Asegúrate de tener un modelo de Usuario
 
 public class CrearUsuarioController extends BaseController {
 
-    private GestionarUsuarios gestionarUsuarios;
+    private GestionUsuario gestionarUsuarios;
     private GestionarUsuariosController gestionarUsuariosController;
 
 
@@ -30,7 +31,7 @@ public class CrearUsuarioController extends BaseController {
         rolChoiceBox.getItems().addAll("Cliente", "Conserje", "Administrador"); // Agregar roles disponibles
     }
 
-    public void setGestionarUsuarios(GestionarUsuarios gestionarUsuarios, GestionarUsuariosController gestionarUsuariosController) {
+    public void setGestionarUsuarios(GestionUsuario gestionarUsuarios, GestionarUsuariosController gestionarUsuariosController) {
         this.gestionarUsuarios = gestionarUsuarios;
         this.gestionarUsuariosController = gestionarUsuariosController;
     }
@@ -45,9 +46,6 @@ public class CrearUsuarioController extends BaseController {
             mostrarAlerta("Error", "Todos los campos deben ser completados.");
             return;
         }
-
-        Usuario nuevoUsuario = new Usuario(nombre, email, rol); // Suponiendo que por defecto está habilitado
-        gestionarUsuarios.agregarUsuario(nuevoUsuario); // Cambié a agregarUsuario
 
         // Actualiza la lista de usuarios en el controlador principal
         gestionarUsuariosController.actualizarListaUsuarios();
@@ -65,9 +63,6 @@ public class CrearUsuarioController extends BaseController {
             mostrarAlerta("Error", "Todos los campos son obligatorios.");
             return;
         }
-
-        Usuario nuevoUsuario = new Usuario(nombre, email, rol); // Crear usuario con atributos
-        gestionarUsuarios.agregarUsuario(nuevoUsuario);
 
         mostrarAlerta("Éxito", "Usuario creado con éxito.");
         cerrarVentana(event); // Cerrar la ventana al finalizar

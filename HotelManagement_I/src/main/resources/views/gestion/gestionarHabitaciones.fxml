@@ -19,11 +19,11 @@
             </columns>
         </TableView>
 
-        <Button text="Crear Habitación" layoutX="650" layoutY="50" onAction="#onCrearHabitacion" />
-        <Button text="Modificar Habitación" layoutX="650" layoutY="100" onAction="#onModificarHabitacion" />
-        <Button text="Habilitar/Inhabilitar Habitación" layoutX="650" layoutY="150" onAction="#onHabilitarInhabilitarHabitacion" />
-        <Button text="Borrar Habitación" layoutX="650" layoutY="200" onAction="#onBorrarHabitacion" />
-        <Button text="Ver Detalle Habitación" layoutX="650" layoutY="250" onAction="#onVerDetalleHabitacion" />
-        <Button text="Volver" layoutX="650" layoutY="350" onAction="#volverAlMenuAdmin" />
+<!--        <Button text="Crear Habitación" layoutX="650" layoutY="50" onAction="#onCrearHabitacion" />-->
+<!--        <Button text="Modificar Habitación" layoutX="650" layoutY="100" onAction="#onModificarHabitacion" />-->
+<!--        <Button text="Habilitar/Inhabilitar Habitación" layoutX="650" layoutY="150" onAction="#onHabilitarInhabilitarHabitacion" />-->
+<!--        <Button text="Borrar Habitación" layoutX="650" layoutY="200" onAction="#onBorrarHabitacion" />-->
+<!--        <Button text="Ver Detalle Habitación" layoutX="650" layoutY="250" onAction="#onVerDetalleHabitacion" />-->
+<!--        <Button text="Volver" layoutX="650" layoutY="350" onAction="#volverAlMenuAdmin" />-->
     </children>
 </AnchorPane>

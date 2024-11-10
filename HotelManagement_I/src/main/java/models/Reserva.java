@@ -2,11 +2,14 @@ package models;
 
 
 import models.Habitacion.Habitacion;
+import models.Usuarios.Usuario;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Reserva {
+    private static List<Reserva> reservas = new ArrayList<>();
     private int id;
     private List<Pasajero> pasajeros;
     private Habitacion habitacion;
@@ -82,8 +85,37 @@ public class Reserva {
         this.estado = estado;
     }
 
+    public String getFechaReserva() {
+        return "Desde: " + fechaInicio.toString() + " hasta: " + fechaFin.toString();
+    }
+
     public List<Pasajero> getListaPasajeros() {
         return pasajeros;
+    }
+
+    // Métodos para obtener datos específicos
+    public String getNombreCliente() {
+        return cliente != null ? cliente.getNombre() : "Cliente no asignado";
+    }
+
+    public LocalDate getFechaInicioReserva() {
+        return fechaInicio;
+    }
+
+    public LocalDate getFechaFinReserva() {
+        return fechaFin;
+    }
+
+    // Metodo para crear una nueva reserva
+    public static void crearReserva(int id, List<Pasajero> pasajeros, Habitacion habitacion, LocalDate fechaInicio, LocalDate fechaFin, Usuario cliente, String estado) {
+        Reserva nuevaReserva = new Reserva(id, pasajeros, habitacion, fechaInicio, fechaFin, cliente, estado);
+        reservas.add(nuevaReserva);
+        System.out.println("Reserva creada para el cliente " + cliente.getNombre() + " desde " + fechaInicio + " hasta " + fechaFin);
+    }
+
+    // Metodo para obtener todas las reservas
+    public static List<Reserva> obtenerReservas() {
+        return reservas;
     }
 
 }
