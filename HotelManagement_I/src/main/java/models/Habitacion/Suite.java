@@ -1,5 +1,9 @@
 package models.Habitacion;
 
+import enums.EstadoHabitacion;
+
+import java.util.List;
+
 public class Suite extends Habitacion {
     //Atributos
     private boolean balcon;
@@ -7,6 +11,12 @@ public class Suite extends Habitacion {
 
     //Constructor
     public Suite() {
+    }
+
+    public Suite(String tipo, int numero, int capacidad, List<String> camas, boolean disponible, EstadoHabitacion estado, String detalleEstado, boolean balcon, boolean comedor) {
+        super(tipo, numero, capacidad, camas, disponible, estado, detalleEstado);
+        this.balcon = balcon;
+        this.comedor = comedor;
     }
 
     //Getters y Setters
