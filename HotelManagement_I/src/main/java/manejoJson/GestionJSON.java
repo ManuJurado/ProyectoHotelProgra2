@@ -21,12 +21,14 @@ import java.util.Date;
 import java.util.List;
 
 
-//Se realiza el mapeo de los 3 Json del proyecto
+//Clase para la manipulacion de los Json de habitaciones, clientes y reservas
 public class GestionJSON {
 
     // --------------------------------- MAPEO HABITACIONES-----------------------------------------------------//
     // --------------------------------- MAPEO HABITACIONES-----------------------------------------------------//
     // --------------------------------- MAPEO HABITACIONES-----------------------------------------------------//
+
+    //Metodo que guarda en una lista las habitaciones que se encuentran en un archivo json
     public static List<Habitacion> mapeoHabitaciones(String archivoJson) {
 
         List<Habitacion> habitaciones = new ArrayList<>();
@@ -102,6 +104,53 @@ public class GestionJSON {
             throw new RuntimeException(e);
         }
     }
+
+    //Metodo que carga un objeto Json con los datos de una habitacion
+    public static JSONObject convertirHabitacionAJson(Habitacion habitacion) throws JSONException {
+        JSONObject jsonHabitacion = new JSONObject();
+        jsonHabitacion.put("tipo", habitacion.getTipo());
+        jsonHabitacion.put("numero", habitacion.getNumero());
+        jsonHabitacion.put("capacidad", habitacion.getCapacidad());
+
+        if (habitacion instanceof Apartamento) {
+            Apartamento apartamento = (Apartamento) habitacion;
+            jsonHabitacion.put("ambientes", apartamento.getAmbientes());
+            jsonHabitacion.put("cocina", apartamento.isCocina());
+        }
+        else if (habitacion instanceof Presidencial) {
+            Presidencial presidencial = (Presidencial) habitacion;
+            jsonHabitacion.put("adicionales", presidencial.getAdicionales());
+            jsonHabitacion.put("dimension", presidencial.getDimension());
+        }
+        else if (habitacion instanceof Suite) {
+            Suite suite = (Suite) habitacion;
+            jsonHabitacion.put("balcon", suite.isBalcon());
+            jsonHabitacion.put("comedor", suite.isComedor());
+        }
+
+        jsonHabitacion.put("camas", habitacion.getCamas());
+        jsonHabitacion.put("disponible", habitacion.isDisponible());
+        jsonHabitacion.put("estado", habitacion.getEstado());
+        jsonHabitacion.put("detalleEstado", habitacion.getDetalleEstado());
+
+        return jsonHabitacion;
+    }
+
+    //Metodo que actualiza el Json de las habitaciones con la nueva información
+    public static void guardarHabitacionesJson(List<Habitacion> habitaciones, String filePath) throws JSONException, IOException {
+        //Creamos un JSONArray que contendrá todas las habitaciones
+        JSONArray habitacionesArray = new JSONArray();
+
+        //Convertimos cada habitacion en un JSONObject y lo agregamos al JSONArray
+        for (Habitacion habitacion : habitaciones) {
+            JSONObject jsonHabitacion = convertirHabitacionAJson(habitacion);
+            habitacionesArray.put(jsonHabitacion);
+        }
+
+        //Llamamos a la función grabar para escribir el JSONArray en el archivo JSON especificado
+        JSONUtiles.grabar(habitacionesArray, filePath);
+    }
+
     // --------------------------------- FIN HABITACIONES-----------------------------------------------------//
     // --------------------------------- FIN HABITACIONES-----------------------------------------------------//
     // --------------------------------- FIN HABITACIONES-----------------------------------------------------//
@@ -112,21 +161,13 @@ public class GestionJSON {
     // --------------------------------- MAPEO USUARIOS-----------------------------------------------------//
 
     // Metodo que mapea el JSON de usuarios y devuelve una lista de usuarios
-    public static List<Usuario> mapeoUsuariosJson(String fileName) throws JSONException {
+    public static List<Usuario> mapeoUsuariosJson(String archivoJson) {
         List<Usuario> usuarios = new ArrayList<>();
 
         try {
-            // Leer el archivo JSON
-            FileReader fileReader = new FileReader(fileName);
-            StringBuilder jsonContent = new StringBuilder();
-            int ch;
-            while ((ch = fileReader.read()) != -1) {
-                jsonContent.append((char) ch);
-            }
-            fileReader.close();
 
             // Convertir el contenido del archivo a un JSONArray
-            JSONArray jsonArrayUsuarios = new JSONArray(jsonContent.toString());
+            JSONArray jsonArrayUsuarios = new JSONArray(JSONUtiles.leer(archivoJson));
 
             // Iterar sobre el JSONArray y mapear los objetos a usuarios
             for (int i = 0; i < jsonArrayUsuarios.length(); i++) {
@@ -145,8 +186,8 @@ public class GestionJSON {
                 }
             }
 
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
         }
 
         return usuarios;
