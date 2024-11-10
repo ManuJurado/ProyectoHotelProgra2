@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.ClienteController">
+    <Button text="Gestionar Usuarios" onAction="#gestionarUsuarios"/>
+    <Button text="Gestionar Reservas" onAction="#gestionarReservas"/>
+    <Button text="Gestionar Servicios" onAction="#gestionarServicios"/>
+    <Button text="Crear Backup" onAction="#crearBackup"/>
+    <Button text="Cerrar Sesión" onAction="#cerrarSesion"/>
+    <Button text="Salir" onAction="#salir"/>
+</VBox>
+
