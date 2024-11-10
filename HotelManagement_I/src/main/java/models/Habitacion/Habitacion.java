@@ -20,6 +20,16 @@ public abstract class Habitacion {
         this.camas = new ArrayList<>();
     }
 
+    public Habitacion(String tipo, int numero, int capacidad, List<String> camas, boolean disponible, EstadoHabitacion estado, String detalleEstado) {
+        this.tipo = tipo;
+        this.numero = numero;
+        this.capacidad = capacidad;
+        this.camas = camas;
+        this.disponible = disponible;
+        this.estado = estado;
+        this.detalleEstado = detalleEstado;
+    }
+
     //Getters y Setters
     public String getTipo() {
         return tipo;

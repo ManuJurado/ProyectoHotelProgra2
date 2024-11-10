@@ -1,13 +1,20 @@
 package services;
 
+import enums.EstadoHabitacion;
 import exceptions.*;
+import manejoJson.GestionJSON;
 import models.Habitacion.*;
+import models.Usuarios.Usuario;
+import org.json.JSONException;
+
+import java.io.IOException;
 import java.util.*;
 import static enums.EstadoHabitacion.*;
 
-public class GestionHabitaciones <H extends Habitacion> {
+public class GestionHabitaciones {
     //Atributos
-    private List<H> habitaciones;
+    private List<Habitacion> habitaciones;
+    //private static GestionHabitaciones instancia;
 
     //Constructor
     public GestionHabitaciones() {
@@ -15,16 +22,16 @@ public class GestionHabitaciones <H extends Habitacion> {
     }
 
     //Getter
-    public List<H> getHabitaciones() {
+    public List<Habitacion> getHabitaciones() {
         return habitaciones;
     }
 
     //Setter
-    public void setHabitaciones(List<H> habitaciones) {
+    public void setHabitaciones(List<Habitacion> habitaciones) {
         this.habitaciones = habitaciones;
     }
 
-    /**-----------------------  INICIO METODOS DE FILTRADO  -----------------------*/
+    /**-----------------------  INICIO METODOS DE FILTRADO Y BÚSQUEDA  -----------------------*/
     //Metodo que devuelve todas las habitaciones que se encuentran disponibles para alquilar
     public List<Habitacion> listadoHabitacionesDisponibles() {
 
@@ -112,13 +119,87 @@ public class GestionHabitaciones <H extends Habitacion> {
         return habitacionesPorTipo;
     }
 
-    /**-----------------------  FIN METODOS DE FILTRADO  -----------------------*/
+    //Metodo para buscar una habitacion ingresando el numero
+    private Habitacion buscarHabitacionPorNumero(int numero) {
+        for (Habitacion habitacion : habitaciones) {
+            if (habitacion.getNumero() == numero) {
+                return habitacion;
+            }
+        }
+        return null; // Usuario no encontrado
+    }
 
-    /**-----------------------  INICIO METODOS CRUD  -----------------------*/
+    /*-----------------------  FIN METODOS DE FILTRADO Y BÚSQUEDA  -----------------------*/
 
-    //agregar (actualizarJson)
-    //modificar (actualizarJson)
-    //eliminar (actualizarJson)
+    /**-----------------------  INICIO METODOS ABM  -----------------------*/
 
-    /**-----------------------  FIN METODOS CRUD  -----------------------*/
+    //Metodo para crear una habitacion (Individual)
+    public Individual crearHabitacionIndividual(String tipo, int numero, int capacidad, List<String> camas, boolean disponible, EstadoHabitacion estado, String detalleEstado) {
+
+        Individual individual = new Individual(tipo, numero, capacidad, camas, disponible, estado, detalleEstado);
+        habitaciones.add(individual);
+        actualizarHabitacionesJson();
+        return individual;
+    }
+
+    //Metodo para crear una habitacion (Doble)
+    public Doble crearHabitacionDoble(String tipo, int numero, int capacidad, List<String> camas, boolean disponible, EstadoHabitacion estado, String detalleEstado) {
+
+        Doble doble = new Doble(tipo, numero, capacidad, camas, disponible, estado, detalleEstado);
+        habitaciones.add(doble);
+        actualizarHabitacionesJson();
+        return doble;
+    }
+
+    //Metodo para crear una habitacion (Apartamento)
+    public Apartamento crearHabitacionApartamento(String tipo, int numero, int capacidad, List<String> camas, boolean disponible, EstadoHabitacion estado, String detalleEstado, int ambientes, boolean cocina) {
+
+        Apartamento apartamento = new Apartamento(tipo, numero, capacidad, camas, disponible, estado, detalleEstado, ambientes, cocina);
+        habitaciones.add(apartamento);
+        actualizarHabitacionesJson();
+        return  apartamento;
+    }
+
+    //Metodo para crear una habitacion (Presidencial)
+    public Presidencial crearHabitacionPresidencial(String tipo, int numero, int capacidad, List<String> camas, boolean disponible, EstadoHabitacion estado, String detalleEstado, List<String> adicionales, double dimension) {
+
+        Presidencial presidencial = new Presidencial(tipo, numero, capacidad, camas, disponible, estado, detalleEstado, adicionales, dimension);
+        habitaciones.add(presidencial);
+        actualizarHabitacionesJson();
+        return  presidencial;
+    }
+
+    //Metodo para crear una habitacion (Suite)
+    public Suite crearHabitacionSuite(String tipo, int numero, int capacidad, List<String> camas, boolean disponible, EstadoHabitacion estado, String detalleEstado, boolean balcon, boolean comedor) {
+
+        Suite suite = new Suite(tipo, numero, capacidad, camas, disponible, estado, detalleEstado, balcon, comedor);
+        habitaciones.add(suite);
+        actualizarHabitacionesJson();
+        return  suite;
+    }
+
+    //Metodo para eliminar una habitacion por su número
+    public boolean eliminarHabitacion(int numero) {
+
+        Habitacion habitacionAEliminar = buscarHabitacionPorNumero(numero);
+
+        if (habitacionAEliminar != null) {
+            habitaciones.remove(habitacionAEliminar);
+            actualizarHabitacionesJson();
+            return true;
+        }
+
+        return false;
+    }
+
+    //Metodo para actualizar el archivo Json cuando se realice algún cambio
+    private void actualizarHabitacionesJson() {
+        try {
+            GestionJSON.guardarHabitacionesJson(habitaciones, "habitaciones.json");
+        } catch (JSONException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /*-----------------------  FIN METODOS ABM  -----------------------*/
 }

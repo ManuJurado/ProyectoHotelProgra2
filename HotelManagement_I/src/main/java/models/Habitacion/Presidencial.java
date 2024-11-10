@@ -1,5 +1,7 @@
 package models.Habitacion;
 
+import enums.EstadoHabitacion;
+
 import java.util.List;
 
 public class Presidencial extends Habitacion {
@@ -9,6 +11,12 @@ public class Presidencial extends Habitacion {
 
     //Constructor
     public Presidencial() {
+    }
+
+    public Presidencial(String tipo, int numero, int capacidad, List<String> camas, boolean disponible, EstadoHabitacion estado, String detalleEstado, List<String> adicionales, double dimension) {
+        super(tipo, numero, capacidad, camas, disponible, estado, detalleEstado);
+        this.adicionales = adicionales;
+        this.dimension = dimension;
     }
 
     //Getters y Setters
