@@ -25,9 +25,9 @@ public class MainApp extends Application {
         launch(args);
     }
 
-    // Método para reproducir el video
+    // Metodo para reproducir el video
     private void playIntroVideo() {
-        String videoPath = new File("video.mp4").toURI().toString();
+        String videoPath = new File("C:/Users/Manu/OneDrive/Escritorio/NuevaRamaManu/ProyectoHotelProgra2/HotelManagement_I/video.mp4").toURI().toString();
         Media media = new Media(videoPath);
         MediaPlayer mediaPlayer = new MediaPlayer(media);
         MediaView mediaView = new MediaView(mediaPlayer);
@@ -46,7 +46,7 @@ public class MainApp extends Application {
         mediaPlayer.play();
     }
 
-    // Método para mostrar la pantalla de inicio (login)
+    // Metodo para mostrar la pantalla de inicio (login)
     private void showLoginScreen() {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/views/menu/login.fxml")); // Carga el archivo FXML de inicio

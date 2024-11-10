@@ -1,15 +1,11 @@
 package controllers.details;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 import models.Pasajero;
-import models.Usuario;
+import models.Usuarios.Usuario;
 
 import java.util.List;
 
@@ -24,7 +20,7 @@ public class DetallesGeneralesController {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Detalles del usuario");
         agregarDetalles("Nombre: " + cliente.getNombre());
-        agregarDetalles("Email: " + cliente.getEmail());
+        agregarDetalles("Email: " + cliente.getCorreoElectronico());
     }
 
     public void mostrarDetallesHabitacion(String idHabitacion, String tipo, String estado, int metrosCuadrados, int cantidadCamas) {

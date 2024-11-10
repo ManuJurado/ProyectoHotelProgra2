@@ -6,13 +6,26 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+
 import java.io.IOException;
 
 public class BaseController {
+
+    private void mostrarAlerta(String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+    }
+
     public <T> T cambiarEscena(String fxmlFileName, String title, Node someNode) {
         try {
-            System.out.println("Cargando FXML: " + fxmlFileName); // Imprime la carga
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFileName));
+            System.out.println("Cargando FXML: " + fxmlFileName); // Imprime la carga
+            System.out.println("Ruta FXML: " + loader.getLocation());
             Parent root = loader.load();
             Scene scene = new Scene(root);
             Stage stage = (Stage) someNode.getScene().getWindow();
@@ -22,7 +35,9 @@ public class BaseController {
 
             return loader.getController();
         } catch (IOException e) {
-            e.printStackTrace();
+            // Captura la excepción y muestra un error detallado
+            System.err.println("Error al cargar el archivo FXML: " + fxmlFileName);
+            e.printStackTrace(); // Imprime el stack trace completo para depuración
             return null;
         }
     }

@@ -54,7 +54,7 @@ public class GestionarHabitacionesController extends BaseController {
         columnaCantidadCamas.setCellValueFactory(new PropertyValueFactory<>("cantidadCamas"));
     }
 
-    // Método para establecer el servicio de gestión de habitaciones
+    // Metodo para establecer el servicio de gestión de habitaciones
 /*    public void setGestionarHabitaciones(GestionHabitaciones gestionarHabitaciones) {
         this.gestionarHabitaciones = gestionarHabitaciones;
         cargarHabitaciones(); // Carga habitaciones después de configurar

@@ -8,12 +8,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
-import models.Habitacion.Habitacion;
 import models.Pasajero;
 import models.Reserva;
-import models.Usuario;
-
-import java.util.List;
 
 public class DetallesReservaController {
 

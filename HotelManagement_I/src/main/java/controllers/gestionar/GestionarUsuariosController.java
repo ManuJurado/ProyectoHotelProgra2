@@ -3,6 +3,7 @@ package controllers.gestionar;
 import controllers.BaseController;
 import controllers.crear.CrearUsuarioController;
 import controllers.modificar.ModificarUsuarioController;
+import enums.TipoUsuario;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -13,9 +14,9 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import models.Usuario;
 import javafx.scene.Scene;
-import services.GestionarUsuarios;
+import models.Usuarios.Usuario;
+import services.GestionUsuario;
 
 import java.io.IOException;
 import java.util.List;
@@ -38,7 +39,7 @@ public class GestionarUsuariosController extends BaseController {
     @FXML
     private TextField emailUsuarioField;
 
-    private GestionarUsuarios gestionarUsuarios;
+    private GestionUsuario gestionarUsuarios;
 
     private Usuario usuarioOriginal;
 
@@ -145,7 +146,7 @@ public class GestionarUsuariosController extends BaseController {
         tablaUsuarios.setItems(usuariosFiltrados);
     }
 
-    public void setGestionarUsuarios(GestionarUsuarios gestionarUsuarios) {
+    public void setGestionarUsuarios(GestionUsuario gestionarUsuarios) {
         this.gestionarUsuarios = gestionarUsuarios;
         configurarColumnas(); // Configura las columnas
         cargarUsuarios(); // Cargar usuarios
@@ -160,7 +161,7 @@ public class GestionarUsuariosController extends BaseController {
 
     private void cargarUsuarios() {
         if (gestionarUsuarios != null) {
-            List<Usuario> usuarios = gestionarUsuarios.obtenerUsuarios();
+            List<Usuario> usuarios = gestionarUsuarios.getUsuarios();
             System.out.println("Usuarios cargados: " + usuarios.size()); // Depuración
 
             // Limpiar la tabla antes de agregar nuevos elementos
@@ -181,11 +182,11 @@ public class GestionarUsuariosController extends BaseController {
         cargarUsuarios(); // Simplemente recarga la lista de usuarios
     }
 
-    public void actualizarUsuario(Usuario usuarioOriginal, String nuevoNombre, String nuevoEmail, String nuevoRol) {
+    public void actualizarUsuario(Usuario usuarioOriginal, String nuevoNombre, String nuevoEmail, TipoUsuario nuevoRol) {
         if (usuarioOriginal != null) {
             usuarioOriginal.setNombre(nuevoNombre);
-            usuarioOriginal.setEmail(nuevoEmail);
-            usuarioOriginal.setRol(nuevoRol); // También actualizar el rol
+            usuarioOriginal.setCorreoElectronico(nuevoEmail);
+            usuarioOriginal.setTipoUsuario(nuevoRol); // También actualizar el rol
             actualizarListaUsuarios(); // Recargar la lista de usuarios para reflejar los cambios
         }
     }

@@ -1,10 +1,9 @@
 package services;
 
-import com.almasb.fxgl.net.Client;
 import models.Habitacion.*;
 import models.Pasajero;
 import models.Reserva;
-import models.Usuario;
+import models.Usuarios.Usuario;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -16,7 +15,7 @@ public class GestionReservas {
     private List<Reserva> reservas; // Lista de reservas
 
 //    private GestionarHabitaciones gestionarHabitaciones; // Lista de reservas
-    private GestionarUsuarios gestionarUsuarios; // Lista de usuarios
+    private GestionUsuario gestionarUsuarios; // Lista de usuarios
 
     // Constructor
     public GestionReservas() {
@@ -24,7 +23,7 @@ public class GestionReservas {
         this.habitaciones = new ArrayList<>();
 
 //        this.gestionarHabitaciones = new GestionarHabitaciones(); // Instanciar aquí
-        this.gestionarUsuarios = new GestionarUsuarios(); // Instanciar aquí
+        this.gestionarUsuarios = new GestionUsuario("usuarios.json"); // Instanciar aquí
 
 //        this.habitaciones = gestionarHabitaciones.getHabitaciones();
         this.usuarios = gestionarUsuarios.getUsuarios();
@@ -34,7 +33,7 @@ public class GestionReservas {
         List<Pasajero> pasajeros1 = new ArrayList<>();
         pasajeros1.add(new Pasajero("Don", "Quijote", "11223344")); // Ejemplo de pasajero
         pasajeros1.add(new Pasajero("Sancho", "Panza", "235423324")); // Ejemplo de pasajero
-        reservas.add(new Reserva(1, pasajeros1, habitaciones.get(0), LocalDate.now(), LocalDate.now().plusDays(2), usuarios.get(0), "Activa"));
+        reservas.add(new Reserva(1, pasajeros1, habitaciones.getFirst(), LocalDate.now(), LocalDate.now().plusDays(2), usuarios.getFirst(), "Activa"));
 
         List<Pasajero> pasajeros2 = new ArrayList<>();
         pasajeros2.add(new Pasajero("Emi", "Salias", "34757453745")); // Otro ejemplo de pasajero

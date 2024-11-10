@@ -1,6 +1,5 @@
 package hotel_management_ui;
 
-import reservas.Reserva;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -12,6 +11,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
+import models.Reserva;
 
 import java.io.File;
 import java.util.List;
@@ -32,7 +32,7 @@ public class HotelManagementApp extends Application {
 
     // Método para reproducir el video
     private void playIntroVideo() {
-        String videoPath = new File("C:/Users/emili/OneDrive/Documentos/Tecnicatura Progra/2024/Programacion 2 (Java)/TP_FINAL_RAMA_HABITACIONES/ProyectoHotelProgra2/HotelManagement_I/video.mp4").toURI().toString();
+        String videoPath = new File("C:/Users/Manu/OneDrive/Escritorio/NuevaRamaManu/ProyectoHotelProgra2/HotelManagement_I/video.mp4").toURI().toString();
         Media media = new Media(videoPath);
         MediaPlayer mediaPlayer = new MediaPlayer(media);
         MediaView mediaView = new MediaView(mediaPlayer);
@@ -103,7 +103,7 @@ public class HotelManagementApp extends Application {
         btnSubmit.setOnAction(e -> {
             String nombreCliente = nameField.getText();
             String fechaReserva = dateField.getText();
-            Reserva.crearReserva(nombreCliente, fechaReserva); // Usar el metodo estático para crear la reserva
+//            Reserva.crearReserva(nombreCliente, fechaReserva); // Usar el metodo estático para crear la reserva
             showReservationConfirmation(nombreCliente, fechaReserva);
         });
 

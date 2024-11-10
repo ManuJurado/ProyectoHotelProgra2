@@ -15,7 +15,6 @@ module tu.paquete {
     requires java.desktop;
 
     opens controllers to javafx.fxml; // Permite que JavaFX acceda a los controladores en el paquete
-    opens models to javafx.base; // Permite que JavaFX acceda de forma reflexiva al paquete models (donde se encuentra Usuario)
     exports controllers; // Exporta el paquete de controladores
     exports hotel_management_ui;
     exports controllers.crear;
