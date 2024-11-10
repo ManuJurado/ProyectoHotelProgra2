@@ -2,8 +2,11 @@ package controllers.crear;
 
 import controllers.BaseController;
 import controllers.details.DatosUsuario;
+import controllers.gestionar.GestionarUsuariosController;
 import exceptions.AtributoFaltanteException;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import models.Usuarios.Cliente;
@@ -32,11 +35,11 @@ public class CrearClienteController extends BaseController {
     private DatePicker fechaNacimientoPicker;
 
 
-    private Stage stageAnterior;
+    private Scene previousScene;  // Cambiar a Scene en vez de Stage
 
-    // Metodo para establecer la ventana anterior (Stage)
-    public void setStageAnterior(Stage stage) {
-        this.stageAnterior = stage;
+    // Metodo para establecer la escena anterior
+    public void setPreviousScene(Scene previousScene) {
+        this.previousScene = previousScene;
     }
 
     @FXML
@@ -48,7 +51,7 @@ public class CrearClienteController extends BaseController {
 
     // Metodo que se llama al hacer clic en el botón "Guardar Cliente"
     @FXML
-    public void guardarCliente() {
+    public void guardarCliente(ActionEvent event) {
         // Obtiene los valores de los campos
         String nombre = nombreField.getText();
         String apellido = apellidoField.getText();
@@ -76,7 +79,7 @@ public class CrearClienteController extends BaseController {
                 System.out.println("Cliente guardado con éxito");
 
                 // Volver a la ventana anterior
-                regresarAVentanaAnterior();
+                volverAEscenaAnterior(event, previousScene);
 
             } catch (AtributoFaltanteException e) {
                 showAlert(e.getMessage());
@@ -84,16 +87,6 @@ public class CrearClienteController extends BaseController {
         } else {
             showAlert("Por favor, complete todos los campos obligatorios.");
         }
-    }
-
-    // Metodo para regresar a la ventana anterior
-    public void regresarAVentanaAnterior() {
-        if (stageAnterior != null) {
-            // Lógica para regresar a la ventana anterior
-            stageAnterior.show();
-            stageAnterior.toFront();  // Asegura que la ventana anterior esté al frente
-        }
-        cerrarVentana();  // Cierra la ventana actual si es necesario
     }
 
     private boolean validarDatos(String nombre, String apellido, String dni, String correoElectronico,

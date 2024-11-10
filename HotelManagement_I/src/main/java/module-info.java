@@ -13,6 +13,7 @@ module tu.paquete {
     requires javafx.media;
     requires java.json;
     requires com.fasterxml.jackson.databind;
+    requires java.desktop;
 
     opens controllers to javafx.fxml; // Permite que JavaFX acceda a los controladores en el paquete
     exports controllers; // Exporta el paquete de controladores

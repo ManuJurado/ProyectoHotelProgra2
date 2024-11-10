@@ -46,7 +46,7 @@ public class LoginController extends BaseController {
     // Constructor modificado para obtener la lista de usuarios a través del Singleton
     public LoginController() throws JSONException {
         // Usamos el Singleton de GestionUsuario para obtener la lista de usuarios
-        usuarios = GestionUsuario.getInstancia("C:/Users/emili/OneDrive/Documentos/Tecnicatura Progra/2024/Programacion 2 (Java)/TP_FINAL_RAMA_HABITACIONES/ProyectoHotelProgra2/HotelManagement_I/usuarios.json").getUsuarios();
+        usuarios = GestionUsuario.getInstancia("C:/Users/Manu/OneDrive/Escritorio/NuevaRamaManu/ProyectoHotelProgra2/HotelManagement_I/usuarios.json").getUsuarios();
         System.out.println(usuarios);
         System.out.printf("\n");
     }

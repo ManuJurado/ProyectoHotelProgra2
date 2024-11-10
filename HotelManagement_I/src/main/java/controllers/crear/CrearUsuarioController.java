@@ -5,6 +5,7 @@ import controllers.details.DatosUsuario;
 import enums.TipoUsuario;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
@@ -20,8 +21,6 @@ public class CrearUsuarioController extends BaseController {
     private ComboBox<TipoUsuario> rolChoiceBox;
 
     private TipoUsuario tipoUsuarioSeleccionado;  // TipoUsuario en lugar de String
-    private Stage stageAnterior; // Variable para almacenar el Stage de la ventana anterior
-
 
     @FXML
     public void initialize() {
@@ -29,16 +28,11 @@ public class CrearUsuarioController extends BaseController {
         rolChoiceBox.getItems().addAll(TipoUsuario.CLIENTE, TipoUsuario.ADMINISTRADOR, TipoUsuario.CONSERJE);
     }
 
+    private Scene previousScene;  // Cambiar a Scene en vez de Stage
 
-    // Metodo para pasar el Stage de la ventana anterior
-    public void setStageAnterior(Stage stage) {
-        this.stageAnterior = stage;
-    }
-    // Metodo para regresar a la ventana anterior
-    public void regresarAVentanaAnterior() {
-        if (stageAnterior != null) {
-            stageAnterior.show(); // Mostrar la ventana anterior
-        }
+    // Metodo para establecer la escena anterior
+    public void setPreviousScene(Scene previousScene) {
+        this.previousScene = previousScene;
     }
 
     // Metodo que se llama cuando se hace clic en el botón "Crear Usuario"

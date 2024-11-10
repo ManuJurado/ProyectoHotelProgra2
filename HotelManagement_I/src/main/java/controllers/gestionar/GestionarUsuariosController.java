@@ -1,6 +1,7 @@
 package controllers.gestionar;
 
 import controllers.BaseController;
+import controllers.crear.CrearClienteController;
 import controllers.crear.CrearUsuarioController;
 import controllers.modificar.ModificarUsuarioController;
 import enums.TipoUsuario;
@@ -59,6 +60,13 @@ public class GestionarUsuariosController extends BaseController {
         });
     }
 
+    private Scene previousScene;  // Cambiar a Scene en vez de Stage
+
+    // Metodo para establecer la escena anterior
+    public void setPreviousScene(Scene previousScene) {
+        this.previousScene = previousScene;
+    }
+
     @FXML
     public void onCrearNuevoUsuarioButtonClick(ActionEvent event) {
         try {
@@ -71,7 +79,7 @@ public class GestionarUsuariosController extends BaseController {
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
             // Pasamos el Stage actual al controlador de la ventana emergente
-            crearUsuarioController.setStageAnterior(stage); // Este metodo es el que debes crear en el controlador de crearUsuario.fxml
+            crearUsuarioController.setPreviousScene(previousScene); // Establecer la escena anterior
 
             // Crear una ventana nueva para seleccionar el tipo de usuario
             Stage newStage = new Stage();
@@ -86,13 +94,13 @@ public class GestionarUsuariosController extends BaseController {
                 // Cargar el formulario correspondiente en la ventana principal
                 switch (tipoUsuario) {
                     case CLIENTE:
-                        cambiarEscena("/views/crear/crearCliente.fxml", "Creación de Cliente", (Node) event.getSource());
+                        cambiarEscenaConSceneAnterior("/views/crear/crearCliente.fxml", "Creación de Cliente", (Node) event.getSource());
                         break;
                     case ADMINISTRADOR:
-                        cambiarEscena("/views/crear/crearAdministrador.fxml", "Creación de Administrador", (Node) event.getSource());
+                        cambiarEscenaConSceneAnterior("/views/crear/crearAdministrador.fxml", "Creación de Administrador", (Node) event.getSource());
                         break;
                     case CONSERJE:
-                        cambiarEscena("/views/crear/crearConserje.fxml", "Creación de Conserje", (Node) event.getSource());
+                        cambiarEscenaConSceneAnterior("/views/crear/crearConserje.fxml", "Creación de Conserje", (Node) event.getSource());
                         break;
                     default:
                         System.out.println("Rol no válido");
@@ -103,6 +111,7 @@ public class GestionarUsuariosController extends BaseController {
             e.printStackTrace();
         }
     }
+
 
 
     @FXML
@@ -181,12 +190,14 @@ public class GestionarUsuariosController extends BaseController {
 
         // Actualizar la tabla con los usuarios obtenidos
         tablaUsuarios.setItems(usuariosOriginales); // Actualiza la tabla en la UI
-
     }
 
-    // Metodo para actualizar la lista de usuarios
     public void actualizarListaUsuarios() {
-        cargarUsuarios(); // Simplemente recarga la lista de usuarios
+        // Recargar los usuarios desde el archivo JSON
+        cargarUsuarios(); // Recarga la lista de usuarios desde el archivo JSON
+
+        // Actualiza la tabla con los usuarios obtenidos
+        tablaUsuarios.setItems(usuariosOriginales); // Actualiza la tabla en la UI
     }
 
     public void actualizarUsuario(Usuario usuarioOriginal, String nuevoNombre, String nuevoEmail, TipoUsuario nuevoRol) {
@@ -198,9 +209,10 @@ public class GestionarUsuariosController extends BaseController {
         }
     }
 
+    // Metodo que se llamará al hacer clic en el botón "Volver"
     @FXML
     private void volverAlMenuAdmin(ActionEvent event) {
-        cambiarEscena("/views/menu/menuAdministrador.fxml", "Menú Administrador", (Node) event.getSource()); // Llama al metodo para regresar
+        volverAEscenaAnterior(event,previousScene);
     }
 
     private void mostrarAlerta(String titulo, String mensaje) {

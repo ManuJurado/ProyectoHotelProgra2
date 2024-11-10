@@ -19,20 +19,20 @@ import java.util.List;
 
 public class AdministradorController extends BaseController {
 
+    // Suponiendo que estás cargando la escena actual
     @FXML
     private void gestionarUsuarios(ActionEvent event) {
-        // Cambiar a la escena de gestionar usuarios
-        cambiarEscena("/views/gestion/gestionarUsuarios.fxml", "Gestión de Usuarios", (Node) event.getSource());
+        cambiarEscenaConSceneAnterior("/views/gestion/gestionarUsuarios.fxml", "Gestionar Usuarios", (Node) event.getSource());
     }
 
     @FXML
     private void gestionarReservas(ActionEvent event) {
-        cambiarEscena("/views/gestion/gestionarReservas.fxml", "Gestión de Reservas", (Node) event.getSource());
+        cambiarEscenaConSceneAnterior("/views/gestion/gestionarReservas.fxml", "Gestión de Reservas", (Node) event.getSource());
     }
 
     @FXML
     private void gestionarServicios(ActionEvent event) {
-        cambiarEscena("/views/gestion/gestionarServicios.fxml", "Gestión de Servicios", (Node) event.getSource());
+        cambiarEscenaConSceneAnterior("/views/gestion/gestionarServicios.fxml", "Gestión de Servicios", (Node) event.getSource());
     }
 
     @FXML
