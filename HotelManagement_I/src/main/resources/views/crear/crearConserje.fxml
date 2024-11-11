@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="views.crear.CrearConserje"
-            prefHeight="400.0" prefWidth="600.0">
-
-</AnchorPane>
+<VBox alignment="CENTER" xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.crear.CrearConserjeController" spacing="10" prefHeight="500.0" prefWidth="600.0">
+    <TextField fx:id="nombreField" promptText="Nombre" maxWidth="300.0"/>
+    <TextField fx:id="apellidoField" promptText="Apellido" maxWidth="300.0"/>
+    <TextField fx:id="dniField" promptText="DNI" maxWidth="300.0"/>
+    <PasswordField fx:id="contraseniaField" promptText="Contraseña" maxWidth="300.0"/>
+    <TextField fx:id="correoElectronicoField" promptText="Correo Electrónico" maxWidth="300.0"/>
+    <TextField fx:id="telefonoField" promptText="Teléfono" maxWidth="300.0"/>
+    <TextField fx:id="estadoTrabajoField" promptText="Estado de Trabajo" maxWidth="300.0"/>
+    <DatePicker fx:id="fechaIngresoPicker" promptText="Fecha de Ingreso" maxWidth="300.0"/>
+    <HBox spacing="10" alignment="CENTER">
+        <Button text="Guardar Conserje" onAction="#guardarConserje"/>
+        <Button text="Cancelar" onAction="#cerrarVentana"/>
+    </HBox>
+</VBox>

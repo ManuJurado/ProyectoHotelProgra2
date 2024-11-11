@@ -31,6 +31,10 @@ public class CrearClienteController extends BaseController {
     @FXML
     private PasswordField contraseniaField;
     @FXML
+    private TextField passwordTextField;   // El campo donde mostramos la contraseña como texto
+    @FXML
+    private Button verContraseñaButton;    // El botón para alternar la visibilidad
+    @FXML
     private TextField correoElectronicoField;
     @FXML
     private TextField direccionField;
@@ -38,6 +42,12 @@ public class CrearClienteController extends BaseController {
     private TextField telefonoField;
     @FXML
     private DatePicker fechaNacimientoPicker;
+    @FXML
+    private PasswordField confirmarContraseniaField;
+    @FXML
+    private TextField confirmarPasswordTextField;
+    @FXML
+    private Button verConfirmarContraseñaButton;
 
     private Scene previousScene;  // Cambiar a Scene en vez de Stage
 
@@ -48,9 +58,13 @@ public class CrearClienteController extends BaseController {
 
     @FXML
     public void initialize() {
+        passwordTextField.setVisible(false);  // Al inicio el TextField está oculto
+
         // Rellenar los campos con los datos guardados en DatosUsuario
         nombreField.setText(DatosUsuario.getNombre());
         correoElectronicoField.setText(DatosUsuario.getEmail());
+        apellidoField.setText(DatosUsuario.getApellido());
+        dniField.setText(DatosUsuario.getDni());
 
         // Limitar el número de caracteres en los campos de texto
         nombreField.setTextFormatter(new TextFormatter<>(change ->
@@ -69,10 +83,53 @@ public class CrearClienteController extends BaseController {
                 change.getControlNewText().length() <= 10 ? change : null));
 
         contraseniaField.setTextFormatter(new TextFormatter<>(change ->
-                change.getControlNewText().length() <= 20 ? change : null));
+                change.getControlNewText().length() <= 15 ? change : null));
+
+        passwordTextField.setTextFormatter(new TextFormatter<>(change ->
+                change.getControlNewText().length() <= 15 ? change : null));
+
+        confirmarContraseniaField.setTextFormatter(new TextFormatter<>(change ->
+                change.getControlNewText().length() <= 15 ? change : null));
+
+        confirmarPasswordTextField.setTextFormatter(new TextFormatter<>(change ->
+                change.getControlNewText().length() <= 15 ? change : null));
 
         correoElectronicoField.setTextFormatter(new TextFormatter<>(change ->
                 change.getControlNewText().length() <= 30 ? change : null));
+
+    }
+
+    // Metodo para alternar la visibilidad de la contraseña
+    @FXML
+    public void togglePasswordVisibility() {
+        // Alternar la visibilidad de los campos
+        if (contraseniaField.isVisible()) {
+            contraseniaField.setVisible(false);
+            passwordTextField.setVisible(true);
+            passwordTextField.setText(contraseniaField.getText()); // Sincronizar el texto
+            verContraseñaButton.setText("Ocultar");
+        } else {
+            passwordTextField.setVisible(false);
+            contraseniaField.setVisible(true);
+            contraseniaField.setText(passwordTextField.getText()); // Sincronizar el texto
+            verContraseñaButton.setText("Ver");
+        }
+    }
+
+    // Controlador para alternar la visibilidad de la confirmación de la contraseña
+    @FXML
+    public void toggleConfirmarPasswordVisibility() {
+        if (confirmarContraseniaField.isVisible()) {
+            confirmarContraseniaField.setVisible(false);
+            confirmarPasswordTextField.setVisible(true);
+            confirmarPasswordTextField.setText(confirmarContraseniaField.getText());
+            verConfirmarContraseñaButton.setText("Ocultar");
+        } else {
+            confirmarPasswordTextField.setVisible(false);
+            confirmarContraseniaField.setVisible(true);
+            confirmarContraseniaField.setText(confirmarPasswordTextField.getText());
+            verConfirmarContraseñaButton.setText("Ver");
+        }
     }
 
     @FXML
@@ -88,9 +145,25 @@ public class CrearClienteController extends BaseController {
             validarCampo(cliente::setApellido, apellidoField.getText(), "Apellido", errores);
             validarCampo(cliente::setDni, dniField.getText(), "DNI", errores);
             validarCampo(cliente::setContrasenia, contraseniaField.getText(), "Contraseña", errores);
+            validarCampo(cliente::setContrasenia, confirmarContraseniaField.getText(), "Confirmar Contraseña", errores);
             validarCampo(cliente::setCorreoElectronico, correoElectronicoField.getText(), "Correo Electrónico", errores);
             validarCampo(cliente::setDireccion, direccionField.getText(), "Dirección", errores);
             validarCampo(cliente::setTelefono, telefonoField.getText(), "Teléfono", errores);
+
+            // Validación de las contraseñas
+            String contrasenia = contraseniaField.getText();
+            String confirmarContrasenia = confirmarContraseniaField.getText();
+            // Comprobación de las contraseñas
+            if (contrasenia == null || confirmarContrasenia == null || !contrasenia.equals(confirmarContrasenia)) {
+                errores.add("Las contraseñas no coinciden.");
+            } else {
+                try {
+                    // Intentamos establecer la contraseña y capturamos la excepción si no cumple con el requisito de longitud
+                    cliente.setContrasenia(contrasenia);  // Llamada al setter con validación de longitud
+                } catch (IllegalArgumentException e) {
+                    errores.add(e.getMessage());  // Capturamos la excepción y añadimos el mensaje de error
+                }
+            }
 
             if (fechaNacimientoPicker.getValue() != null) {
                 LocalDate localDate = fechaNacimientoPicker.getValue();
@@ -142,6 +215,7 @@ public class CrearClienteController extends BaseController {
             showAlert(e.getMessage());
         }
     }
+
 
 
 

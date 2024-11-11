@@ -7,10 +7,7 @@ import controllers.gestionar.GestionarUsuariosController;
 import enums.TipoUsuario;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
@@ -21,7 +18,9 @@ import models.Usuarios.Usuario;
 import services.GestionUsuario;
 import services.Sesion;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class ModificarMiUsuarioController extends BaseController {
 
@@ -46,13 +45,9 @@ public class ModificarMiUsuarioController extends BaseController {
 
     // Campos específicos de Conserje
     @FXML
-    private TextField turnoField;
-    @FXML
-    private TextField numeroEmpleadoField;
-    @FXML
     private DatePicker fechaIngresoField;
     @FXML
-    private TextField areaResponsableField;
+    private TextField telefonoConserjeField;
     @FXML
     private TextField estadoTrabajoField;
 
@@ -61,6 +56,20 @@ public class ModificarMiUsuarioController extends BaseController {
 
     @FXML
     public void initialize() {
+
+        // Limitar la longitud de los campos de texto
+        nombreUsuarioField.setTextFormatter(new TextFormatter<>(change ->
+                change.getControlNewText().length() <= 30 ? change : null)); // Limitar a 50 caracteres
+        apellidoField.setTextFormatter(new TextFormatter<>(change ->
+                change.getControlNewText().length() <= 30 ? change : null)); // Limitar a 50 caracteres
+        dniField.setTextFormatter(new TextFormatter<>(change ->
+                change.getControlNewText().length() <= 10 ? change : null)); // Limitar a 10 caracteres (por ejemplo)
+        emailUsuarioField.setTextFormatter(new TextFormatter<>(change ->
+                change.getControlNewText().length() <= 50 ? change : null)); // Limitar a 100 caracteres
+        telefonoField.setTextFormatter(new TextFormatter<>(change ->
+                change.getControlNewText().length() <= 15 ? change : null)); // Limitar a 15 caracteres (por ejemplo)
+        direccionField.setTextFormatter(new TextFormatter<>(change ->
+                change.getControlNewText().length() <= 30 ? change : null)); // Limitar a 100 caracteres
         // Si el controlador GestionarUsuariosController está disponible, usamos el usuario seleccionado.
         if (gestionarUsuariosController != null && usuarioSeleccionado != null) {
             cargarDatosUsuario(usuarioSeleccionado);
@@ -104,8 +113,6 @@ public class ModificarMiUsuarioController extends BaseController {
             fechaNacimientoField.setVisible(true); // Hacer visible el campo de fechaNacimiento
         } else if (usuario instanceof Conserje) {
             Conserje conserje = (Conserje) usuario;
-            turnoField.setText(conserje.getTurno());
-            numeroEmpleadoField.setText(conserje.getNumeroEmpleado());
 
             // Conversión de java.util.Date a LocalDate para el campo de fechaIngreso
             Date fechaIngreso = conserje.getFechaIngreso(); // Obtener fecha de ingreso del conserje
@@ -115,13 +122,11 @@ public class ModificarMiUsuarioController extends BaseController {
                 fechaIngresoField.setValue(fechaIngresoLocal); // Establecer la fecha en el DatePicker
             }
 
-            areaResponsableField.setText(conserje.getAreaResponsable());
+            telefonoConserjeField.setText(conserje.getTelefono());
             estadoTrabajoField.setText(conserje.getEstadoTrabajo());
 
-            turnoField.setVisible(true);
-            numeroEmpleadoField.setVisible(true);
             fechaIngresoField.setVisible(true); // Hacer visible el campo de fechaIngreso
-            areaResponsableField.setVisible(true);
+            telefonoConserjeField.setVisible(true);
             estadoTrabajoField.setVisible(true);
         } else if (usuario instanceof Administrador) {
             // Si es administrador, no hacemos nada más ya que no tiene campos adicionales
@@ -159,56 +164,78 @@ public class ModificarMiUsuarioController extends BaseController {
         String nuevoApellido = apellidoField.getText();
         String nuevoEmail = emailUsuarioField.getText();
 
-        // Actualizar según el tipo de usuario
-        if (usuarioSeleccionado instanceof Cliente) {
-            Cliente cliente = (Cliente) usuarioSeleccionado;
-            cliente.setNombre(nuevoNombre);
-            cliente.setApellido(nuevoApellido);
-            cliente.setCorreoElectronico(nuevoEmail);
-            cliente.setDireccion(direccionField.getText());
-            cliente.setTelefono(telefonoField.getText());
+        // Iniciar lista de errores para capturar las excepciones
+        List<String> errores = new ArrayList<>();
 
-            // Conversión de LocalDate a java.util.Date para el campo de fechaNacimiento
-            if (fechaNacimientoField.getValue() != null) {
-                LocalDate localDate = fechaNacimientoField.getValue(); // Obtener la fecha seleccionada en el DatePicker
-                Date fechaNacimiento = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-                cliente.setFechaNacimiento(fechaNacimiento); // Guardamos la fecha convertida
+        try {
+            // Actualizar según el tipo de usuario
+            if (usuarioSeleccionado instanceof Cliente) {
+                Cliente cliente = (Cliente) usuarioSeleccionado;
+                cliente.setNombre(nuevoNombre);
+                cliente.setApellido(nuevoApellido);
+                cliente.setCorreoElectronico(nuevoEmail);
+                cliente.setDireccion(direccionField.getText());
+                cliente.setTelefono(telefonoField.getText());
+
+                // Conversión de LocalDate a java.util.Date para el campo de fechaNacimiento
+                if (fechaNacimientoField.getValue() != null) {
+                    LocalDate localDate = fechaNacimientoField.getValue(); // Obtener la fecha seleccionada en el DatePicker
+                    Date fechaNacimiento = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+                    cliente.setFechaNacimiento(fechaNacimiento); // Guardamos la fecha convertida
+                }
+
+            } else if (usuarioSeleccionado instanceof Conserje) {
+                Conserje conserje = (Conserje) usuarioSeleccionado;
+                conserje.setNombre(nuevoNombre);
+                conserje.setApellido(nuevoApellido);
+                conserje.setCorreoElectronico(nuevoEmail);
+                conserje.setTelefono(telefonoConserjeField.getText());
+                conserje.setEstadoTrabajo(estadoTrabajoField.getText());
+                conserje.setTelefono(telefonoField.getText());
+
+                // Conversión de LocalDate a java.util.Date para la fecha de ingreso
+                if (fechaIngresoField.getValue() != null) {
+                    LocalDate localDate = fechaIngresoField.getValue();
+                    Date fechaIngreso = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+                    conserje.setFechaIngreso(fechaIngreso); // Guardamos la fecha convertida
+                }
+
+            } else if (usuarioSeleccionado instanceof Administrador) {
+                Administrador admin = (Administrador) usuarioSeleccionado;
+                admin.setNombre(nuevoNombre);
+                admin.setApellido(nuevoApellido);
+                admin.setCorreoElectronico(nuevoEmail);
             }
 
-        } else if (usuarioSeleccionado instanceof Conserje) {
-            Conserje conserje = (Conserje) usuarioSeleccionado;
-            conserje.setNombre(nuevoNombre);
-            conserje.setApellido(nuevoApellido);
-            conserje.setCorreoElectronico(nuevoEmail);
-            conserje.setTurno(turnoField.getText());
-            conserje.setNumeroEmpleado(numeroEmpleadoField.getText());
-            conserje.setAreaResponsable(areaResponsableField.getText());
-            conserje.setEstadoTrabajo(estadoTrabajoField.getText());
-            conserje.setTelefono(telefonoField.getText());
-
-            // Conversión de LocalDate a java.util.Date para la fecha de ingreso
-            if (fechaIngresoField.getValue() != null) {
-                LocalDate localDate = fechaIngresoField.getValue();
-                Date fechaIngreso = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-                conserje.setFechaIngreso(fechaIngreso); // Guardamos la fecha convertida
+            // Llamada a la clase GestionUsuario para guardar los cambios en el archivo JSON
+            boolean exito = GestionUsuario.getInstancia("C:/path/to/usuarios.json").actualizarUsuario(usuarioSeleccionado, nuevoNombre, nuevoApellido, nuevoEmail);
+            if (!exito) {
+                throw new Exception("No se pudo actualizar el usuario.");
             }
 
-        } else if (usuarioSeleccionado instanceof Administrador) {
-            Administrador admin = (Administrador) usuarioSeleccionado;
-            admin.setNombre(nuevoNombre);
-            admin.setApellido(nuevoApellido);
-            admin.setCorreoElectronico(nuevoEmail);
-        }
-
-        // Llamada a la clase GestionUsuario para guardar los cambios en el archivo JSON
-        if (GestionUsuario.getInstancia("C:/path/to/usuarios.json").actualizarUsuario(usuarioSeleccionado, nuevoNombre, nuevoApellido, nuevoEmail)) {
+            // Si se guarda correctamente
             mostrarAlerta("Éxito", "Cambios guardados correctamente.");
-        } else {
-            mostrarAlerta("Error", "No se pudo actualizar el usuario.");
+
+        } catch (IllegalArgumentException e) {
+            // Si hay un problema con los datos de entrada (por ejemplo, contraseñas cortas)
+            errores.add("Error de datos: " + e.getMessage());
+        } catch (Exception e) {
+            // Captura cualquier otro error inesperado
+            errores.add("Error: " + e.getMessage());
         }
 
-        // Cerrar la ventana después de guardar los cambios
+        // Si hay errores, mostramos una alerta
+        if (!errores.isEmpty()) {
+            mostrarAlerta("Errores", String.join("\n", errores));
+        } else {
+            // Sietodo ha ido bien, actualizamos la tabla de usuarios
+            if (gestionarUsuariosController != null) {
+                gestionarUsuariosController.actualizarListaUsuarios();
+            }
+
+            // Cerrar la ventana después de guardar los cambios
             cerrarVentana(event);
+        }
     }
 
     @FXML

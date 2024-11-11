@@ -20,11 +20,15 @@
         <TextField fx:id="nombreUsuarioField" layoutX="20" layoutY="470" prefWidth="150" promptText="Nombre Usuario" onKeyReleased="#filtrarUsuariosPorNombre" />
         <TextField fx:id="dniUsuarioField" layoutX="200" layoutY="470" prefWidth="100" promptText="DNI Usuario" onKeyReleased="#filtrarUsuariosPorDni" />
 
-        <Button text="Crear Nuevo Usuario" layoutX="550" layoutY="150" onAction="#onCrearNuevoUsuarioButtonClick" /> <!-- Botón para crear nuevo usuario -->
-        <Button text="Modificar Datos Usuario" layoutX="550" layoutY="100" onAction="#onModificarUsuarioButtonClick" />
-        <Button text="Habilitar/ Inhabilitar Usuario" layoutX="550" layoutY="200" onAction="#onHabilitarInhabilitarUsuario" /> <!-- Botón para habilitar/inhabilitar usuario -->
+        <!-- Asignamos fx:id a los botones para vincularlos con el controlador -->
+        <Button fx:id="crearNuevoUsuarioButton" text="Crear Nuevo Usuario" layoutX="550" layoutY="100" onAction="#onCrearNuevoUsuarioButtonClick" />
+        <Button fx:id="modificarUsuarioButton" text="Modificar Datos Usuario" layoutX="550" layoutY="150" onAction="#onModificarUsuarioButtonClick" />
+        <Button fx:id="eliminarUsuarioButton" text="Eliminar Usuario" layoutX="550" layoutY="200" onAction="#onEliminarUsuarioButtonClick" />
 
-        <Button text="Eliminar Usuario" layoutX="550" layoutY="250" onAction="#onEliminarUsuarioButtonClick" />
+        <!-- Agregar los botones -->
+        <Button fx:id="verDetallesClienteButton" text="Ver Detalles de Cliente" layoutX="550" layoutY="250" onAction="#onVerDetallesClienteButtonClick" />
+<!--        <Button fx:id="verReservasClienteButton" text="Ver Reservas de Cliente" layoutX="550" layoutY="300" onAction="#onVerReservasClienteButtonClick" />-->
+
 
         <Button text="Volver" layoutX="550" layoutY="350" onAction="#volverAlMenuAdmin" />
     </children>

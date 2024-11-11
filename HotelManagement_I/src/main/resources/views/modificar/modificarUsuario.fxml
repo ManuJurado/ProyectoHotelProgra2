@@ -5,24 +5,21 @@
 
 <ScrollPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.modificar.ModificarMiUsuarioController">
     <VBox spacing="20" alignment="CENTER" prefWidth="800">
-        <!-- Campos comunes para todos los usuarios -->
-        <TextField fx:id="nombreUsuarioField" promptText="Nombre" />
-        <TextField fx:id="apellidoField" promptText="Apellido" />
-        <TextField fx:id="dniField" promptText="DNI" editable="false" />
-        <PasswordField fx:id="contraseniaField" promptText="Contraseña" />
-        <TextField fx:id="emailUsuarioField" promptText="Correo Electrónico" />
+        <TextField fx:id="nombreUsuarioField" promptText="Nombre" maxWidth="200.0" />
+        <TextField fx:id="apellidoField" promptText="Apellido" maxWidth="200.0" />
+        <TextField fx:id="dniField" promptText="DNI" editable="false" maxWidth="200.0" />
+        <PasswordField fx:id="contraseniaField" promptText="Contraseña" maxWidth="200.0" />
+        <TextField fx:id="emailUsuarioField" promptText="Correo Electrónico" maxWidth="200.0" />
 
         <!-- Campos específicos para Cliente -->
-        <TextField fx:id="direccionField" promptText="Dirección" visible="false"/>
-        <TextField fx:id="telefonoField" promptText="Teléfono" visible="false"/>
-        <DatePicker fx:id="fechaNacimientoField" promptText="Fecha de Nacimiento" visible="false"/>
+        <TextField fx:id="direccionField" promptText="Dirección" visible="false" maxWidth="200.0"/>
+        <TextField fx:id="telefonoField" promptText="Teléfono" visible="false" maxWidth="200.0"/>
+        <DatePicker fx:id="fechaNacimientoField" promptText="Fecha de Nacimiento" visible="false" maxWidth="200.0"/>
 
         <!-- Campos específicos para Conserje -->
-        <TextField fx:id="turnoField" promptText="Turno" visible="false"/>
-        <TextField fx:id="numeroEmpleadoField" promptText="Número de Empleado" visible="false"/>
-        <DatePicker fx:id="fechaIngresoField" promptText="Fecha de Ingreso" visible="false"/>
-        <TextField fx:id="areaResponsableField" promptText="Área Responsable" visible="false"/>
-        <TextField fx:id="estadoTrabajoField" promptText="Estado de Trabajo" visible="false"/>
+        <DatePicker fx:id="fechaIngresoField" promptText="Fecha de Ingreso" visible="false" maxWidth="200.0"/>
+        <TextField fx:id="telefonoConserjeField" promptText="Teléfono" visible="false" maxWidth="200.0"/>
+        <TextField fx:id="estadoTrabajoField" promptText="Estado de Trabajo" visible="false" maxWidth="200.0"/>
 
         <!-- Botones -->
         <HBox spacing="10" alignment="CENTER">

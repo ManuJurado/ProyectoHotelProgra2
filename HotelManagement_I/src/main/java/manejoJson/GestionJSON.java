@@ -266,9 +266,7 @@ public class GestionJSON {
     // Metodo para convertir un JSONObject a un Conserje
     private static Conserje convertirJsonAConserje(JSONObject jsonUsuario) throws JSONException, AtributoFaltanteException {
         // Verificar que los atributos específicos de Conserje estén presentes
-        if (!jsonUsuario.has("turno") || !jsonUsuario.has("numeroEmpleado") ||
-                !jsonUsuario.has("fechaIngreso") || !jsonUsuario.has("areaResponsable") ||
-                !jsonUsuario.has("telefono") || !jsonUsuario.has("estadoTrabajo")) {
+        if (!jsonUsuario.has("fechaIngreso") || !jsonUsuario.has("telefono") || !jsonUsuario.has("estadoTrabajo")) {
             throw new AtributoFaltanteException("Faltan atributos específicos en Conserje.");
         }
 
@@ -283,10 +281,7 @@ public class GestionJSON {
         conserje.setCorreoElectronico(jsonUsuario.getString("correoElectronico"));
 
         // Asignar los atributos específicos de Conserje
-        conserje.setTurno(jsonUsuario.getString("turno"));
-        conserje.setNumeroEmpleado(jsonUsuario.getString("numeroEmpleado"));
         conserje.setFechaIngreso(parseDate(jsonUsuario.getString("fechaIngreso")));
-        conserje.setAreaResponsable(jsonUsuario.getString("areaResponsable"));
         conserje.setTelefono(jsonUsuario.getString("telefono"));
         conserje.setEstadoTrabajo(jsonUsuario.getString("estadoTrabajo"));
 
@@ -355,9 +350,6 @@ public class GestionJSON {
             }
         } else if (usuario instanceof Conserje) {
             Conserje conserje = (Conserje) usuario;
-            jsonUsuario.put("turno", conserje.getTurno());
-            jsonUsuario.put("numeroEmpleado", conserje.getNumeroEmpleado());
-            jsonUsuario.put("areaResponsable", conserje.getAreaResponsable());
             jsonUsuario.put("estadoTrabajo", conserje.getEstadoTrabajo());
             jsonUsuario.put("telefono", conserje.getTelefono());
             // Formatear la fecha a "yyyy-MM-dd" antes de guardarla

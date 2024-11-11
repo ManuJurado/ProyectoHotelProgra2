@@ -1,29 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.gestionar.GestionarHabitacionesController">
-    <children>
-        <Label text="Gestión de Habitaciones" layoutX="20" layoutY="20" />
+<VBox spacing="20" alignment="CENTER" xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controllers.gestionar.GestionarServiciosController">
 
-        <TableView fx:id="tablaHabitaciones" layoutX="20" layoutY="50" prefHeight="400" prefWidth="600">
-            <columns>
-                <TableColumn fx:id="nroHabitacion" text="Id habitacion" prefWidth="25"/>
-                <TableColumn fx:id="columnaTipo" text="Tipo" />
-                <TableColumn fx:id="columnaEstado" text="Estado" />
-                <TableColumn fx:id="columnaMetrosCuadrados" text="Metros Cuadrados" />
-                <TableColumn fx:id="columnaCantidadCamas" text="Cantidad de Camas" />
-                <TableColumn fx:id="columnaCapacidad" text="Capacidad" />
-                <!-- Agrega más columnas según lo que necesites -->
-            </columns>
-        </TableView>
+    <Label text="Gestión de Servicios" style="-fx-font-size: 18px;"/>
 
-<!--        <Button text="Crear Habitación" layoutX="650" layoutY="50" onAction="#onCrearHabitacion" />-->
-<!--        <Button text="Modificar Habitación" layoutX="650" layoutY="100" onAction="#onModificarHabitacion" />-->
-<!--        <Button text="Habilitar/Inhabilitar Habitación" layoutX="650" layoutY="150" onAction="#onHabilitarInhabilitarHabitacion" />-->
-<!--        <Button text="Borrar Habitación" layoutX="650" layoutY="200" onAction="#onBorrarHabitacion" />-->
-<!--        <Button text="Ver Detalle Habitación" layoutX="650" layoutY="250" onAction="#onVerDetalleHabitacion" />-->
-<!--        <Button text="Volver" layoutX="650" layoutY="350" onAction="#volverAlMenuAdmin" />-->
-    </children>
-</AnchorPane>
+    <!-- Aquí podrías agregar más componentes para la gestión de servicios -->
+
+    <Button text="Volver" onAction="#volverAlMenuAdmin"/>
+</VBox>

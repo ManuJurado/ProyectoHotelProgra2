@@ -10,7 +10,6 @@ import models.Usuarios.*;
 import org.json.JSONException;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
@@ -75,9 +74,6 @@ public class GestionUsuario implements Gestionable_I<Usuario> {
             else if (usuarioAActualizar instanceof Conserje) {
                 Conserje conserje = (Conserje) usuarioAActualizar;
                 // Actualizamos los campos de Conserje
-                conserje.setTurno(((Conserje) usuario).getTurno());
-                conserje.setNumeroEmpleado(((Conserje) usuario).getNumeroEmpleado());
-                conserje.setAreaResponsable(((Conserje) usuario).getAreaResponsable());
                 conserje.setTelefono(((Conserje) usuario).getTelefono());
                 conserje.setEstadoTrabajo(((Conserje) usuario).getEstadoTrabajo());
 
@@ -98,9 +94,9 @@ public class GestionUsuario implements Gestionable_I<Usuario> {
 
     // Metodo para crear un nuevo conserje
     public Conserje crearConserje(String nombre, String apellido, String dni, String password, String correoElectronico,
-                                  String turno, String numeroEmpleado, String areaResponsable, String telefono, String estadoTrabajo) {
-        Conserje conserje = new Conserje(nombre, apellido, dni, password, correoElectronico, turno, numeroEmpleado, new Date(), areaResponsable, telefono, estadoTrabajo);
-        usuarios.add(conserje);
+                                  Date fechaIngreso, String telefono, String estadoTrabajo) {
+        Conserje conserje = new Conserje(nombre, apellido, dni, password, correoElectronico, fechaIngreso, telefono, estadoTrabajo);
+        guardar(conserje);
         return conserje;
     }
 

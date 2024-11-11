@@ -2,16 +2,16 @@ package services;
 
 import enums.EstadoHabitacion;
 import exceptions.*;
+import interfaces.Gestionable_I;
 import manejoJson.GestionJSON;
 import models.Habitacion.*;
-import models.Usuarios.Usuario;
 import org.json.JSONException;
 
 import java.io.IOException;
 import java.util.*;
 import static enums.EstadoHabitacion.*;
 
-public class GestionHabitaciones {
+public class GestionHabitaciones implements Gestionable_I<Habitacion> {
     //Atributos
     private List<Habitacion> habitaciones;
     //private static GestionHabitaciones instancia;
@@ -120,7 +120,7 @@ public class GestionHabitaciones {
     }
 
     //Metodo para buscar una habitacion ingresando el numero
-    private Habitacion buscarHabitacionPorNumero(int numero) {
+    public Habitacion buscarPorId(int numero) {
         for (Habitacion habitacion : habitaciones) {
             if (habitacion.getNumero() == numero) {
                 return habitacion;
@@ -180,8 +180,7 @@ public class GestionHabitaciones {
 
     //Metodo para eliminar una habitacion por su número
     public boolean eliminarHabitacion(int numero) {
-
-        Habitacion habitacionAEliminar = buscarHabitacionPorNumero(numero);
+        Habitacion habitacionAEliminar = buscarPorId(numero);
 
         if (habitacionAEliminar != null) {
             habitaciones.remove(habitacionAEliminar);
@@ -192,7 +191,32 @@ public class GestionHabitaciones {
         return false;
     }
 
-    //Metodo para actualizar el archivo Json cuando se realice algún cambio
+    // Metodo para eliminar una habitación por su número (como int)
+    @Override
+    public boolean eliminar(String id) {
+        try {
+            int numero = Integer.parseInt(id);  // Convertimos el id String a int
+            Habitacion habitacionAEliminar = buscarPorId(numero);
+            if (habitacionAEliminar != null) {
+                habitaciones.remove(habitacionAEliminar);
+                actualizarHabitacionesJson();
+                return true;
+            }
+        } catch (NumberFormatException e) {
+            // Si no se puede convertir el id a int, lanzamos una excepción o manejamos el error
+            System.out.println("El ID no es válido: " + id);
+        }
+        return false;
+    }
+
+    // Metodo para guardar una habitación
+    @Override
+    public void guardar(Habitacion objeto) {
+        habitaciones.add(objeto);  // Agrega la habitación a la lista
+        actualizarHabitacionesJson();  // Guarda los cambios en el archivo JSON
+    }
+
+    // Metodo para actualizar el archivo JSON cuando se realice algún cambio
     private void actualizarHabitacionesJson() {
         try {
             GestionJSON.guardarHabitacionesJson(habitaciones, "habitaciones.json");
@@ -200,6 +224,22 @@ public class GestionHabitaciones {
             e.printStackTrace();
         }
     }
+
+    // Metodo para buscar una habitación por su identificador (implementación con String)
+    @Override
+    public Habitacion buscarPorId(String id) {
+        try {
+            int numero = Integer.parseInt(id);  // Convertimos el id String a int
+            return buscarPorId(numero);  // Usamos el metodo que ya tenías para buscar por número
+        } catch (NumberFormatException e) {
+            // Si no se puede convertir el id a int, manejamos el error
+            System.out.println("El ID no es válido: " + id);
+        }
+        return null;
+    }
+
+
+
 
     /*-----------------------  FIN METODOS ABM  -----------------------*/
 }

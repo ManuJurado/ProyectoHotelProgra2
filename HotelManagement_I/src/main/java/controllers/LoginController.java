@@ -102,7 +102,7 @@ public class LoginController extends BaseController {
                 break;
             case CONSERJE:
                 System.out.println("Abriendo menú de Conserje...");
-                // Cargar el menú de conserje
+                cambiarEscena("/views/menu/menuConserje.fxml", "Menú Cliente", (Node) event.getSource());
                 break;
         }
     }

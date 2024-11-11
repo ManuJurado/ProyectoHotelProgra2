@@ -5,20 +5,15 @@ import enums.TipoUsuario;
 import java.util.Date;
 
 public class Conserje extends Usuario {
-    private String turno;
-    private String numeroEmpleado;
+
     private Date fechaIngreso;
-    private String areaResponsable;
     private String telefono;
     private String estadoTrabajo;
 
     public Conserje(String nombre, String apellido, String dni, String contrasenia, String correoElectronico,
-                    String turno, String numeroEmpleado, Date fechaIngreso, String areaResponsable, String telefono, String estadoTrabajo) {
+                    Date fechaIngreso, String telefono, String estadoTrabajo) {
         super(nombre, apellido, dni, contrasenia, correoElectronico, TipoUsuario.CONSERJE);
-        this.turno = turno;
-        this.numeroEmpleado = numeroEmpleado;
         this.fechaIngreso = fechaIngreso;
-        this.areaResponsable = areaResponsable;
         this.telefono = telefono;
         this.estadoTrabajo = estadoTrabajo;
     }
@@ -28,20 +23,70 @@ public class Conserje extends Usuario {
         super.setTipoUsuario(TipoUsuario.CONSERJE);
     }
 
-    // Métodos getters y setters
+    public void setFechaIngreso(Date fechaIngreso) {
+        if (fechaIngreso == null) {
+            throw new IllegalArgumentException("La fecha de ingreso no puede ser nula.");
+        }
+        this.fechaIngreso = fechaIngreso;
+    }
 
-    public String getTurno() { return turno; }
-    public void setTurno(String turno) { this.turno = turno; }
-    public String getNumeroEmpleado() { return numeroEmpleado; }
-    public void setNumeroEmpleado(String numeroEmpleado) { this.numeroEmpleado = numeroEmpleado; }
+    public void setTelefono(String telefono) {
+        if (telefono == null || !telefono.matches("^\\+?\\d{10,15}$")) {
+            throw new IllegalArgumentException("Número de teléfono no válido.");
+        }
+        this.telefono = telefono;
+    }
+
+    public void setEstadoTrabajo(String estadoTrabajo) {
+        if (estadoTrabajo == null || estadoTrabajo.trim().isEmpty()) {
+            throw new IllegalArgumentException("El estado de trabajo no puede estar vacío.");
+        }
+        this.estadoTrabajo = estadoTrabajo;
+    }
+
+    @Override
+    public void setNombre(String nombre) {
+        if (nombre == null || nombre.trim().isEmpty()) {
+            throw new IllegalArgumentException("El nombre no puede estar vacío.");
+        }
+        super.setNombre(nombre);
+    }
+
+    @Override
+    public void setApellido(String apellido) {
+        if (apellido == null || apellido.trim().isEmpty()) {
+            throw new IllegalArgumentException("El apellido no puede estar vacío.");
+        }
+        super.setApellido(apellido);
+    }
+
+    @Override
+    public void setDni(String dni) {
+        if (dni == null || !dni.matches("\\d{8,10}")) {  // Validación para 8-10 dígitos numéricos
+            throw new IllegalArgumentException("El DNI debe contener entre 8 y 10 dígitos numéricos.");
+        }
+        super.setDni(dni);
+    }
+
+    @Override
+    public void setContrasenia(String contrasenia) {
+        if (contrasenia == null || contrasenia.length() < 6) {  // Longitud mínima de 6 caracteres
+            throw new IllegalArgumentException("La contraseña debe tener al menos 6 caracteres.");
+        }
+        super.setContrasenia(contrasenia);
+    }
+
+    @Override
+    public void setCorreoElectronico(String correoElectronico) {
+        if (correoElectronico == null || !correoElectronico.matches("^[\\w-\\.]+@[\\w-]+(\\.[\\w-]+)+$")) {
+            throw new IllegalArgumentException("Correo electrónico no válido.");
+        }
+        super.setCorreoElectronico(correoElectronico);
+    }
+
     public Date getFechaIngreso() { return fechaIngreso; }
-    public void setFechaIngreso(Date fechaIngreso) { this.fechaIngreso = fechaIngreso; }
-    public String getAreaResponsable() { return areaResponsable; }
-    public void setAreaResponsable(String areaResponsable) { this.areaResponsable = areaResponsable; }
     public String getTelefono() { return telefono; }
-    public void setTelefono(String telefono) { this.telefono = telefono; }
     public String getEstadoTrabajo() { return estadoTrabajo; }
-    public void setEstadoTrabajo(String estadoTrabajo) { this.estadoTrabajo = estadoTrabajo; }
 
     @Override
     public String getNombre() {
@@ -105,10 +150,7 @@ public class Conserje extends Usuario {
     public String toString() {
         return "Conserje{" +
                 super.toString() +
-                "turno='" + turno + '\'' +
-                ", numeroEmpleado='" + numeroEmpleado + '\'' +
                 ", fechaIngreso=" + fechaIngreso +
-                ", areaResponsable='" + areaResponsable + '\'' +
                 ", telefono='" + telefono + '\'' +
                 ", estadoTrabajo='" + estadoTrabajo +
                 '}'+"\n";
