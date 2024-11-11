@@ -6,8 +6,8 @@ public abstract class Usuario {
     private String nombre;
     private String apellido;
     private String dni;
-    private String contrasenia;
     private String correoElectronico;
+    private String contrasenia;
     private TipoUsuario tipoUsuario;
     private String habilitacion;
 

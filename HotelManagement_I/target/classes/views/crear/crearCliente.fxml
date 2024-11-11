@@ -10,7 +10,33 @@
     <TextField fx:id="direccionField" promptText="Dirección" maxWidth="300.0"/>
     <TextField fx:id="telefonoField" promptText="Teléfono" maxWidth="300.0"/>
     <TextField fx:id="dniField" promptText="DNI" maxWidth="300.0"/>
-    <PasswordField fx:id="contraseniaField" promptText="Contraseña" maxWidth="300.0"/>
+
+    <!-- Contenedor HBox para el campo de contraseña y el botón -->
+    <HBox spacing="10" alignment="CENTER">
+        <!-- Contenedor StackPane para apilar los campos de contraseña -->
+        <StackPane alignment="CENTER">
+            <!-- Campo de Contraseña Oculta -->
+            <PasswordField fx:id="contraseniaField" promptText="Contraseña" maxWidth="250" visible="true" />
+
+            <!-- Campo de Contraseña Visible (inicialmente oculto) -->
+            <TextField fx:id="passwordTextField" promptText="Contraseña" maxWidth="250" visible="false" />
+        </StackPane>
+
+        <!-- Botón para alternar visibilidad -->
+        <Button fx:id="verContraseñaButton" text="Ver" onAction="#togglePasswordVisibility" />
+    </HBox>
+
+    <!-- Nuevo campo Confirmar Contraseña -->
+    <HBox spacing="10" alignment="CENTER">
+        <StackPane alignment="CENTER">
+            <!-- Campo de Confirmar Contraseña Oculta -->
+            <PasswordField fx:id="confirmarContraseniaField" promptText="Confirmar Contraseña" maxWidth="200" visible="true" />
+            <!-- Campo de Confirmar Contraseña Visible (inicialmente oculto) -->
+            <TextField fx:id="confirmarPasswordTextField" promptText="Confirmar Contraseña" maxWidth="200" visible="false" />
+        </StackPane>
+        <!-- Botón para alternar visibilidad -->
+        <Button fx:id="verConfirmarContraseñaButton" text="Ver" onAction="#toggleConfirmarPasswordVisibility" />
+    </HBox>
 
     <!-- Selector de fecha para la fecha de nacimiento -->
     <DatePicker fx:id="fechaNacimientoPicker" promptText="Fecha de Nacimiento" maxWidth="300.0"/>

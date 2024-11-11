@@ -9,7 +9,7 @@
     <VBox alignment="CENTER" spacing="20.0">
         <Button text="Gestionar Usuarios" onAction="#gestionarUsuarios"/>
         <Button text="Gestionar Reservas" onAction="#gestionarReservas"/>
-        <Button text="Gestionar Servicios" onAction="#gestionarServicios"/>
+        <Button text="Gestionar Habitaciones" onAction="#gestionarHabitaciones"/>
         <Button text="Crear Backup" onAction="#crearBackup"/>
         <Button text="Modificar Mi Usuario" onAction="#modificarMiUsuario"/>
         <Button text="Cerrar Sesión" onAction="#cerrarSesion"/>
