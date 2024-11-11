@@ -4,16 +4,16 @@
 <?import javafx.scene.layout.*?>
 
 <VBox alignment="CENTER" xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.crear.CrearClienteController" spacing="10" prefHeight="500.0" prefWidth="600.0">
-    <TextField fx:id="correoElectronicoField" promptText="Correo Electrónico"/>
-    <TextField fx:id="nombreField" promptText="Nombre"/>
-    <TextField fx:id="apellidoField" promptText="Apellido"/>
-    <TextField fx:id="direccionField" promptText="Dirección"/>
-    <TextField fx:id="telefonoField" promptText="Teléfono"/>
-    <TextField fx:id="dniField" promptText="DNI"/>
-    <PasswordField fx:id="contraseniaField" promptText="Contraseña"/>
+    <TextField fx:id="correoElectronicoField" promptText="Correo Electrónico" maxWidth="300.0"/>
+    <TextField fx:id="nombreField" promptText="Nombre" maxWidth="300.0"/>
+    <TextField fx:id="apellidoField" promptText="Apellido" maxWidth="300.0"/>
+    <TextField fx:id="direccionField" promptText="Dirección" maxWidth="300.0"/>
+    <TextField fx:id="telefonoField" promptText="Teléfono" maxWidth="300.0"/>
+    <TextField fx:id="dniField" promptText="DNI" maxWidth="300.0"/>
+    <PasswordField fx:id="contraseniaField" promptText="Contraseña" maxWidth="300.0"/>
 
     <!-- Selector de fecha para la fecha de nacimiento -->
-    <DatePicker fx:id="fechaNacimientoPicker" promptText="Fecha de Nacimiento"/>
+    <DatePicker fx:id="fechaNacimientoPicker" promptText="Fecha de Nacimiento" maxWidth="300.0"/>
 
     <Button text="Guardar Cliente" onAction="#guardarCliente"/>
     <Button text="Cancelar" onAction="#cerrarVentana"/>

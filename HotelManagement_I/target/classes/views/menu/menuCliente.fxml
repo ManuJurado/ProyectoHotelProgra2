@@ -7,11 +7,12 @@
 <?import javafx.scene.layout.*?>
 
 <VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.ClienteController">
-    <Button text="Gestionar Usuarios" onAction="#gestionarUsuarios"/>
-    <Button text="Gestionar Reservas" onAction="#gestionarReservas"/>
-    <Button text="Gestionar Servicios" onAction="#gestionarServicios"/>
-    <Button text="Crear Backup" onAction="#crearBackup"/>
-    <Button text="Cerrar Sesión" onAction="#cerrarSesion"/>
-    <Button text="Salir" onAction="#salir"/>
-</VBox>
+    <Button text="Modificar mi usuario" onAction="#modificarMiUsuario"/>
+    <Button text="Borrar mi usuario" onAction="#borrarMiUsuario"/>
 
+    <Button text="Gestionar mis reservas" onAction="#gestionarMisReservas"/>
+    <Button text="Ver habitaciones disponibles" onAction="#verHabitacionesDisponibles"/>
+
+    <Button text="Cerrar sesión" onAction="#cerrarSesion"/>
+    <Button text="Salir de la aplicación" onAction="#salir"/>
+</VBox>

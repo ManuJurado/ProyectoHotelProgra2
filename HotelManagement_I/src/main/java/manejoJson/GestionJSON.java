@@ -242,12 +242,26 @@ public class GestionJSON {
         String correoElectronico = jsonUsuario.getString("correoElectronico");
         String direccion = jsonUsuario.getString("direccion");
         String telefono = jsonUsuario.getString("telefono");
-
         int puntosFidelidad = jsonUsuario.getInt("puntosFidelidad");
 
-        // Crear y devolver un nuevo Cliente
-        return new Cliente(nombre, apellido, dni, password, correoElectronico, direccion, telefono, new ArrayList<>(), puntosFidelidad, null);
+        // Obtener la fecha de nacimiento como String desde el JSON
+        String fechaNacimientoString = jsonUsuario.getString("fechaNacimiento");
+
+        Date fechaNacimiento = null;
+        if (fechaNacimientoString != null && !fechaNacimientoString.equalsIgnoreCase("Fecha no disponible")) {
+            try {
+                // Intentar parsear la fecha usando el formato adecuado
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); // Formato de la fecha en el JSON
+                fechaNacimiento = dateFormat.parse(fechaNacimientoString); // Convertir el String a Date
+            } catch (ParseException e) {
+                e.printStackTrace(); // Si ocurre un error al parsear la fecha
+            }
+        }
+
+        // Crear y devolver un nuevo Cliente con la fecha de nacimiento convertida
+        return new Cliente(nombre, apellido, dni, password, correoElectronico, direccion, telefono, new ArrayList<>(), puntosFidelidad, fechaNacimiento);
     }
+
 
     // Metodo para convertir un JSONObject a un Conserje
     private static Conserje convertirJsonAConserje(JSONObject jsonUsuario) throws JSONException, AtributoFaltanteException {
@@ -303,16 +317,13 @@ public class GestionJSON {
     }
 
     public static void guardarUsuariosJson(List<Usuario> usuarios, String filePath) throws JSONException, IOException {
-        // Creamos un JSONArray que contendrá todos los usuarios
         JSONArray usuariosArray = new JSONArray();
 
-        // Convertimos cada usuario en un JSONObject y lo agregamos al JSONArray
         for (Usuario usuario : usuarios) {
             JSONObject jsonUsuario = convertirUsuarioAJson(usuario);
             usuariosArray.put(jsonUsuario);
         }
 
-        // Llamamos a la función grabar para escribir el JSONArray en el archivo JSON especificado
         JSONUtiles.grabar(usuariosArray, filePath);
     }
 
@@ -334,9 +345,11 @@ public class GestionJSON {
             jsonUsuario.put("direccion", cliente.getDireccion());
             jsonUsuario.put("telefono", cliente.getTelefono());
             jsonUsuario.put("puntosFidelidad", cliente.getPuntosFidelidad());
-            // Verificar si la fecha de nacimiento es nula antes de convertirla a String
+            // Formatear la fecha a "yyyy-MM-dd" antes de guardarla
             if (cliente.getFechaNacimiento() != null) {
-                jsonUsuario.put("fechaNacimiento", cliente.getFechaNacimiento().toString());
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                String fechaNacimientoString = dateFormat.format(cliente.getFechaNacimiento());
+                jsonUsuario.put("fechaNacimiento", fechaNacimientoString);
             } else {
                 jsonUsuario.put("fechaNacimiento", "Fecha no disponible");
             }
@@ -347,9 +360,11 @@ public class GestionJSON {
             jsonUsuario.put("areaResponsable", conserje.getAreaResponsable());
             jsonUsuario.put("estadoTrabajo", conserje.getEstadoTrabajo());
             jsonUsuario.put("telefono", conserje.getTelefono());
-            // Verificar si la fecha de ingreso es nula antes de convertirla a String
+            // Formatear la fecha a "yyyy-MM-dd" antes de guardarla
             if (conserje.getFechaIngreso() != null) {
-                jsonUsuario.put("fechaIngreso", conserje.getFechaIngreso().toString());
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                String fechaNacimientoString = dateFormat.format(conserje.getFechaIngreso());
+                jsonUsuario.put("fechaIngreso", fechaNacimientoString);
             } else {
                 jsonUsuario.put("fechaIngreso", "Fecha no disponible");
             }

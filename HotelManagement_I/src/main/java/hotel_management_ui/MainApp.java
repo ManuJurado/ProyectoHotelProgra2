@@ -53,10 +53,6 @@ public class MainApp extends Application {
             Scene scene = new Scene(root);
 
             primaryStage.setScene(scene);
-            primaryStage.setTitle("Tu Aplicación");
-            primaryStage.setResizable(false); // Esto impide que la ventana se pueda redimensionar
-            primaryStage.setWidth(800); // Establece el ancho de la ventana
-            primaryStage.setHeight(600); // Establece la altura de la ventana
             primaryStage.show();
         } catch (Exception e) {
             e.printStackTrace(); // Manejo básico de errores
