@@ -1,11 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.Pos?>
 
-<VBox alignment="CENTER" xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.modificar.ModificarUsuarioController" spacing="10">
-    <TextField fx:id="nombreUsuarioField" promptText="Ingresa el nuevo nombre"/>
-    <TextField fx:id="emailUsuarioField" promptText="Ingresa el nuevo email"/>
-    <ComboBox fx:id="rolChoiceBox" promptText="Selecciona Rol"/>
-    <Button text="Guardar Cambios" onAction="#guardarCambios"/>
-    <Button text="Cerrar" onAction="#cerrarVentana"/>
-</VBox>
+<ScrollPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.modificar.ModificarMiUsuarioController">
+    <VBox spacing="20" alignment="CENTER" prefWidth="800">
+        <!-- Campos comunes para todos los usuarios -->
+        <TextField fx:id="nombreUsuarioField" promptText="Nombre" />
+        <TextField fx:id="apellidoField" promptText="Apellido" />
+        <TextField fx:id="dniField" promptText="DNI" editable="false" />
+        <PasswordField fx:id="contraseniaField" promptText="Contraseña" />
+        <TextField fx:id="emailUsuarioField" promptText="Correo Electrónico" />
+
+        <!-- Campos específicos para Cliente -->
+        <TextField fx:id="direccionField" promptText="Dirección" visible="false"/>
+        <TextField fx:id="telefonoField" promptText="Teléfono" visible="false"/>
+        <DatePicker fx:id="fechaNacimientoField" promptText="Fecha de Nacimiento" visible="false"/>
+
+        <!-- Campos específicos para Conserje -->
+        <TextField fx:id="turnoField" promptText="Turno" visible="false"/>
+        <TextField fx:id="numeroEmpleadoField" promptText="Número de Empleado" visible="false"/>
+        <DatePicker fx:id="fechaIngresoField" promptText="Fecha de Ingreso" visible="false"/>
+        <TextField fx:id="areaResponsableField" promptText="Área Responsable" visible="false"/>
+        <TextField fx:id="estadoTrabajoField" promptText="Estado de Trabajo" visible="false"/>
+
+        <!-- Botones -->
+        <HBox spacing="10" alignment="CENTER">
+            <Button text="Guardar Cambios" onAction="#guardarCambios" />
+            <Button text="Cancelar" onAction="#cerrarVentana" />
+        </HBox>
+    </VBox>
+</ScrollPane>

@@ -19,6 +19,11 @@ import java.util.List;
 
 public class AdministradorController extends BaseController {
 
+    @FXML
+    private void modificarMiUsuario(ActionEvent event) {
+        cambiarEscenaConSceneAnterior("/views/modificar/modificarUsuario.fxml", "Modificar Mi Usuario", (Node) event.getSource());
+    }
+
     // Suponiendo que estás cargando la escena actual
     @FXML
     private void gestionarUsuarios(ActionEvent event) {

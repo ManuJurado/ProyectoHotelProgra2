@@ -15,6 +15,10 @@ public class Cliente extends Usuario {
     private int puntosFidelidad;
     private Date fechaNacimiento;
 
+    public Cliente(){
+        super.setTipoUsuario(TipoUsuario.CLIENTE);
+    }
+
     public Cliente(String nombre, String apellido, String dni, String contrasenia, String correoElectronico,
                    String direccion, String telefono, List<Reserva> historialReservas, int puntosFidelidad, Date fechaNacimiento) {
         super(nombre, apellido, dni, contrasenia, correoElectronico, TipoUsuario.CLIENTE);
@@ -27,15 +31,74 @@ public class Cliente extends Usuario {
 
     // Métodos getters y setters para los atributos
     public String getDireccion() { return direccion; }
-    public void setDireccion(String direccion) { this.direccion = direccion; }
     public String getTelefono() { return telefono; }
-    public void setTelefono(String telefono) { this.telefono = telefono; }
-    public List<Reserva> getHistorialReservas() { return historialReservas; }
-    public void setHistorialReservas(List<Reserva> historialReservas) { this.historialReservas = historialReservas; }
     public int getPuntosFidelidad() { return puntosFidelidad; }
-    public void setPuntosFidelidad(int puntosFidelidad) { this.puntosFidelidad = puntosFidelidad; }
     public Date getFechaNacimiento() { return fechaNacimiento; }
-    public void setFechaNacimiento(Date fechaNacimiento) { this.fechaNacimiento = fechaNacimiento; }
+    public List<Reserva> getHistorialReservas() { return historialReservas; }
+
+    //setters
+    public void setHistorialReservas(List<Reserva> historialReservas) { this.historialReservas = historialReservas; }
+    public void setPuntosFidelidad(int puntosFidelidad) { this.puntosFidelidad = puntosFidelidad; }
+
+    public void setDireccion(String direccion) {
+        if (direccion == null || direccion.trim().isEmpty()) {
+            throw new IllegalArgumentException("La dirección no puede estar vacía.");
+        }
+        this.direccion = direccion;
+    }
+    public void setTelefono(String telefono) {
+        if (telefono == null || !telefono.matches("^\\+?\\d{10,15}$")) {
+            throw new IllegalArgumentException("Número de teléfono no válido.");
+        }
+        this.telefono = telefono;
+    }
+
+    public void setFechaNacimiento(Date fechaNacimiento) {
+        if (fechaNacimiento == null || fechaNacimiento.after(new Date())) {
+            throw new IllegalArgumentException("Fecha de nacimiento no válida.");
+        }
+        this.fechaNacimiento = fechaNacimiento;
+    }
+
+    @Override
+    public void setNombre(String nombre) {
+        if (nombre == null || nombre.trim().isEmpty()) {
+            throw new IllegalArgumentException("El nombre no puede estar vacío.");
+        }
+        super.setNombre(nombre);
+    }
+
+    @Override
+    public void setApellido(String apellido) {
+        if (apellido == null || apellido.trim().isEmpty()) {
+            throw new IllegalArgumentException("El apellido no puede estar vacío.");
+        }
+        super.setApellido(apellido);
+    }
+
+    @Override
+    public void setDni(String dni) {
+        if (dni == null || !dni.matches("\\d{8,10}")) { // Ejemplo: DNI debe ser de 8 a 10 dígitos
+            throw new IllegalArgumentException("El DNI debe contener entre 8 y 10 dígitos numéricos.");
+        }
+        super.setDni(dni);
+    }
+
+    @Override
+    public void setContrasenia(String contrasenia) {
+        if (contrasenia == null || contrasenia.length() < 6) { // Ejemplo: longitud mínima de 6 caracteres
+            throw new IllegalArgumentException("La contraseña debe tener al menos 6 caracteres.");
+        }
+        super.setContrasenia(contrasenia);
+    }
+
+    @Override
+    public void setCorreoElectronico(String correoElectronico) {
+        if (correoElectronico == null || !correoElectronico.matches("^[\\w-\\.]+@[\\w-]+(\\.[\\w-]+)+$")) {
+            throw new IllegalArgumentException("Correo electrónico no válido.");
+        }
+        super.setCorreoElectronico(correoElectronico);
+    }
 
     @Override
     public String getNombre() {

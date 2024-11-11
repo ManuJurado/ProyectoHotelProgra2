@@ -1,6 +1,7 @@
 package controllers;
 
 import enums.TipoUsuario;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -8,7 +9,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
-import manejoJson.GestionJSON;
+import javafx.stage.Stage;
 import models.Usuarios.Usuario;
 import org.json.JSONException;
 import services.GestionUsuario;
@@ -39,6 +40,15 @@ public class LoginController extends BaseController {
         passwordField.setTextFormatter(new TextFormatter<>(change ->
                 change.getControlNewText().length() <= 20 ? change : null));
         iniciarSesionButton.setDefaultButton(true); // Configura el botón como predeterminado
+
+        // Usamos Platform.runLater() para garantizar que la escena esté completamente cargada antes de modificar el Stage
+        Platform.runLater(() -> {
+            Stage stage = (Stage) usernameField.getScene().getWindow(); // Cambié usuarioField por usernameField
+            stage.setTitle("Inicio de sesión"); // Título de la ventana
+            stage.setWidth(800);  // Ancho
+            stage.setHeight(600); // Alto
+            stage.setResizable(false); // Hacemos que la ventana no sea redimensionable
+        });
     }
 
     private List<Usuario> usuarios = new ArrayList<>();
@@ -73,6 +83,11 @@ public class LoginController extends BaseController {
         }
         // Si no se encontró el usuario o las credenciales son incorrectas
         mostrarAlerta("Error de autenticación", "Credenciales incorrectas, inténtelo nuevamente.");
+    }
+
+    @FXML
+    private void crearCliente(ActionEvent event) throws IOException {
+        cambiarEscenaConSceneAnterior("/views/crear/crearCliente.fxml", "Creación de Cliente", (Node) event.getSource());
     }
 
     private void abrirMenuPorTipo(TipoUsuario tipoUsuario, ActionEvent event) {

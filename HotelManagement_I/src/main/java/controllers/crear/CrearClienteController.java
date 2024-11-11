@@ -12,8 +12,13 @@ import javafx.stage.Stage;
 import models.Usuarios.Cliente;
 import services.GestionUsuario;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.function.Consumer;
 
 public class CrearClienteController extends BaseController {
 
@@ -34,7 +39,6 @@ public class CrearClienteController extends BaseController {
     @FXML
     private DatePicker fechaNacimientoPicker;
 
-
     private Scene previousScene;  // Cambiar a Scene en vez de Stage
 
     // Metodo para establecer la escena anterior
@@ -47,74 +51,122 @@ public class CrearClienteController extends BaseController {
         // Rellenar los campos con los datos guardados en DatosUsuario
         nombreField.setText(DatosUsuario.getNombre());
         correoElectronicoField.setText(DatosUsuario.getEmail());
+
+        // Limitar el número de caracteres en los campos de texto
+        nombreField.setTextFormatter(new TextFormatter<>(change ->
+                change.getControlNewText().length() <= 30 ? change : null));
+
+        apellidoField.setTextFormatter(new TextFormatter<>(change ->
+                change.getControlNewText().length() <= 30 ? change : null));
+
+        direccionField.setTextFormatter(new TextFormatter<>(change ->
+                change.getControlNewText().length() <= 30 ? change : null));
+
+        telefonoField.setTextFormatter(new TextFormatter<>(change ->
+                change.getControlNewText().length() <= 15 ? change : null));
+
+        dniField.setTextFormatter(new TextFormatter<>(change ->
+                change.getControlNewText().length() <= 10 ? change : null));
+
+        contraseniaField.setTextFormatter(new TextFormatter<>(change ->
+                change.getControlNewText().length() <= 20 ? change : null));
+
+        correoElectronicoField.setTextFormatter(new TextFormatter<>(change ->
+                change.getControlNewText().length() <= 30 ? change : null));
     }
 
-    // Metodo que se llama al hacer clic en el botón "Guardar Cliente"
     @FXML
     public void guardarCliente(ActionEvent event) {
-        // Obtiene los valores de los campos
-        String nombre = nombreField.getText();
-        String apellido = apellidoField.getText();
-        String dni = dniField.getText();
-        String contrasenia = contraseniaField.getText();
-        String correoElectronico = correoElectronicoField.getText();
-        String direccion = direccionField.getText();
-        String telefono = telefonoField.getText();
-        LocalDate fechaNacimiento = fechaNacimientoPicker.getValue();
+        List<String> errores = new ArrayList<>();  // Lista para acumular mensajes de error
 
-        // Valida los datos antes de intentar guardar
-        if (validarDatos(nombre, apellido, dni, correoElectronico, contrasenia, direccion, telefono, fechaNacimiento)) {
-            try {
-                // Verificamos si el dni o el correo electrónico ya existen usando la instancia de GestionUsuario
+        try {
+            // Crear instancia de Cliente y asignar valores
+            Cliente cliente = new Cliente();
+
+            // Validaciones
+            validarCampo(cliente::setNombre, nombreField.getText(), "Nombre", errores);
+            validarCampo(cliente::setApellido, apellidoField.getText(), "Apellido", errores);
+            validarCampo(cliente::setDni, dniField.getText(), "DNI", errores);
+            validarCampo(cliente::setContrasenia, contraseniaField.getText(), "Contraseña", errores);
+            validarCampo(cliente::setCorreoElectronico, correoElectronicoField.getText(), "Correo Electrónico", errores);
+            validarCampo(cliente::setDireccion, direccionField.getText(), "Dirección", errores);
+            validarCampo(cliente::setTelefono, telefonoField.getText(), "Teléfono", errores);
+
+            if (fechaNacimientoPicker.getValue() != null) {
+                LocalDate localDate = fechaNacimientoPicker.getValue();
+                // Convertir LocalDate a Date con la zona horaria correcta
+                ZoneId zoneId = ZoneId.systemDefault();
+                Date fechaNacimiento = Date.from(localDate.atStartOfDay(zoneId).toInstant());
+                cliente.setFechaNacimiento(fechaNacimiento);
+            } else {
+                errores.add("La fecha de nacimiento es obligatoria.");
+            }
+
+            // Verificar si hay errores acumulados y mostrarlos en una sola alerta
+            if (!errores.isEmpty()) {
+                showAlert(String.join("\n", errores));
+            } else {
+                // Obtener la instancia de GestionUsuario y verificar duplicados
                 GestionUsuario gestionUsuario = GestionUsuario.getInstancia("usuarios.json");
-                if (gestionUsuario.existeUsuarioConDni(dni) || gestionUsuario.existeUsuarioConCorreo(correoElectronico)) {
-                    throw new AtributoFaltanteException("El DNI o correo electrónico ya están registrados.");
+                if (gestionUsuario.existeUsuarioConDni(cliente.getDni())) {
+                    throw new AtributoFaltanteException("El DNI ya está registrado.");
+                }
+                if (gestionUsuario.existeUsuarioConCorreo(cliente.getCorreoElectronico())) {
+                    throw new AtributoFaltanteException("El correo electrónico ya está registrado.");
                 }
 
-                // Si no existe ningún usuario con esos datos, creamos el nuevo cliente
-                Cliente cliente = gestionUsuario.crearCliente(nombre, apellido, dni, contrasenia, correoElectronico,
-                        direccion, telefono, new ArrayList<>(), 0);
+                // Ahora, cuando vayas a guardar, formateas la fecha a "yyyy-MM-dd" solo para el almacenamiento
+                SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+                String fechaNacimientoString = null;
+                if (cliente.getFechaNacimiento() != null) {
+                    fechaNacimientoString = formato.format(cliente.getFechaNacimiento());
+                }
 
-                // Si la creación es exitosa, mostramos un mensaje de éxito
+                // Guardar el cliente en el JSON, manteniendo la fecha como Date en la clase Cliente
+                gestionUsuario.crearCliente(
+                        cliente.getNombre(),
+                        cliente.getApellido(),
+                        cliente.getDni(),
+                        cliente.getContrasenia(),
+                        cliente.getCorreoElectronico(),
+                        cliente.getDireccion(),
+                        cliente.getTelefono(),
+                        new ArrayList<>(), // Historial de reservas vacío
+                        0, // Puntos de fidelidad inicial
+                        cliente.getFechaNacimiento() // Se pasa la fecha como Date
+                );
                 System.out.println("Cliente guardado con éxito");
-
-                // Volver a la ventana anterior
                 volverAEscenaAnterior(event, previousScene);
-
-            } catch (AtributoFaltanteException e) {
-                showAlert(e.getMessage());
             }
-        } else {
-            showAlert("Por favor, complete todos los campos obligatorios.");
+        } catch (AtributoFaltanteException e) {
+            showAlert(e.getMessage());
         }
     }
 
-    private boolean validarDatos(String nombre, String apellido, String dni, String correoElectronico,
-                                 String contrasenia, String direccion, String telefono, LocalDate fechaNacimiento) {
-        // Validación del correo electrónico con expresión regular
-        String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
-        boolean esCorreoValido = correoElectronico != null && !correoElectronico.isEmpty() && correoElectronico.matches(emailRegex);
 
-        // Validación de otros campos
-        return nombre != null && !nombre.isEmpty()
-                && apellido != null && !apellido.isEmpty()
-                && dni != null && !dni.isEmpty()
-                && esCorreoValido // Validamos que el correo sea válido
-                && contrasenia != null && !contrasenia.isEmpty()
-                && direccion != null && !direccion.isEmpty()
-                && telefono != null && !telefono.isEmpty()
-                && fechaNacimiento != null; // Asegurándonos de que la fecha no sea nula
+
+
+    // Metodo de validación general para los campos
+    private void validarCampo(Consumer<String> setter, String value, String campo, List<String> errores) {
+        try {
+            setter.accept(value);
+        } catch (IllegalArgumentException e) {
+            errores.add(campo + ": " + e.getMessage());
+        }
     }
 
+    // Metodo para mostrar una alerta con los errores acumulados
     private void showAlert(String mensaje) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error en los datos");
+        alert.setHeaderText("Se encontraron los siguientes errores:");
         alert.setContentText(mensaje);
         alert.showAndWait();
     }
 
     @FXML
-    public void cerrarVentana() {
-        Stage stage = (Stage) nombreField.getScene().getWindow();
-        stage.close();
+    public void cerrarVentana(ActionEvent event) {
+        DatosUsuario.limpiarDatos();
+        volverAEscenaAnterior(event, previousScene);
     }
 }
