@@ -1,11 +1,9 @@
 package JSON;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONTokener;
 
 public class JSONUtiles {
@@ -18,6 +16,45 @@ public class JSONUtiles {
             file.close();
         } catch (IOException e) {
 
+            e.printStackTrace();
+        }
+    }
+
+    public static void grabarR(JSONArray array, String nombreArchivo) {
+        try {
+
+            // Leer el archivo actual si existe, para no sobrescribirlo
+            JSONArray reservasExistentes = new JSONArray();
+            File file = new File(nombreArchivo);
+
+            if (file.exists()) {
+                // Si el archivo existe, leer su contenido
+                FileReader fileReader = new FileReader(nombreArchivo);
+                JSONTokener tokener = new JSONTokener(fileReader);
+                try {
+                    reservasExistentes = new JSONArray(tokener);
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+                fileReader.close();
+            }
+
+            // Añadir las nuevas reservas al array existente
+            for (int i = 0; i < array.length(); i++) {
+                try {
+                    reservasExistentes.put(array.get(i));
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+            // Escribir el array combinado (existente y nuevo)
+            FileWriter file2 = new FileWriter(nombreArchivo);
+            file2.write(reservasExistentes.toString());
+            file2.flush();
+            file2.close();
+
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

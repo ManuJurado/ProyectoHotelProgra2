@@ -1,138 +1,186 @@
-package Clases;
+    package Clases;
 
-import Clases.Habitaciones.Habitacion;
-import Clases.Usuario.Usuario;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.json.JSONException;
+    import Clases.Habitaciones.Habitacion;
+    import Clases.Usuario.Cliente;
+    import Clases.Usuario.Usuario;
+    import org.json.JSONArray;
+    import org.json.JSONObject;
+    import org.json.JSONException;
 
-import java.util.List;
+    import java.util.List;
 
-import Exepcion.HabitacionOcupadaException;
-import Exepcion.HabitacionNoEncontradaException;
-import Exepcion.UsuarioNoEncontradoException;
-import JSON.JSONUtiles;
-
-
-public class Reserva {
-
-    private listaUsuarios<Usuario> listaUsuarios;
-    private listaHabitaciones<Habitacion> listaHabitaciones;
-    private String fechaReserva;
-    private String estadoReserva;
-    private boolean estado;
-    private List<Usuario> pasajeros;
+    import Exepcion.HabitacionOcupadaException;
+    import Exepcion.HabitacionNoEncontradaException;
+    import Exepcion.UsuarioNoEncontradoException;
+    import JSON.JSONUtiles;
 
 
-    public Reserva(listaUsuarios<Usuario> listaUsuarios, listaHabitaciones<Habitacion> listaHabitaciones) {
-        this.listaUsuarios = listaUsuarios;
-        this.listaHabitaciones = listaHabitaciones;
-    }
+    public class Reserva {
 
-    public Reserva(Usuario usuarioEncontrado, Habitacion habitacionEncontrada) {
-    }
+        private static int contadorReservas = 1;
+        private int id;
+        private listaUsuarios<Usuario> listaUsuarios;
+        private listaHabitaciones<Habitacion> listaHabitaciones;
+        private String fechaReserva;
+        private String estadoReserva;
+        private boolean estado;
+        private List<Cliente> pasajeros;
+        private Usuario usuario;
+        private Habitacion habitacion;
 
-    public void añadirReserva(String nombreUsuario, String habitacionId) throws UsuarioNoEncontradoException, HabitacionNoEncontradaException, HabitacionOcupadaException {
-        Usuario usuarioEncontrado = null;
-        Habitacion habitacionEncontrada = null;
 
-        // Buscar el usuario en la lista por nombre
-        for (Usuario usuario : listaUsuarios.getListaUsuariso()) {
-            if (usuario.getNombre().equalsIgnoreCase(nombreUsuario)) {
-                usuarioEncontrado = usuario;
-                break;
+        public Reserva(listaUsuarios<Usuario> listaUsuarios, listaHabitaciones<Habitacion> listaHabitaciones) {
+            this.listaUsuarios = listaUsuarios;
+            this.listaHabitaciones = listaHabitaciones;
+            this.id = contadorReservas++;
+        }
+
+        public Reserva(Usuario usuarioEncontrado, Habitacion habitacionEncontrada) {
+            this.usuario = usuarioEncontrado;
+            this.habitacion = habitacionEncontrada;
+        }
+
+        public Reserva(int id, String usuarioNombre, String habitacionId, String fechaReserva, String estadoReserva) {
+        }
+
+        public void añadirReserva(String nombreUsuario, String habitacionId) throws UsuarioNoEncontradoException, HabitacionNoEncontradaException, HabitacionOcupadaException {
+            Usuario usuarioEncontrado = null;
+            Habitacion habitacionEncontrada = null;
+
+            // Buscar el usuario en la lista por nombre
+            for (Usuario usuario : listaUsuarios.getListaUsuariso()) {
+                if (usuario.getNombre().equalsIgnoreCase(nombreUsuario)) {
+                    usuarioEncontrado = usuario;
+                    break;
+                }
             }
-        }
 
-        if (usuarioEncontrado == null) {
-            throw new UsuarioNoEncontradoException("El usuario con nombre " + nombreUsuario + " no se encuentra en la lista.");
-        }
-
-        // Buscar la habitación en la lista
-        for (Habitacion habitacion : listaHabitaciones.getListaHabitaciones()) {
-            if (String.valueOf(habitacion.getNumero()).equals(habitacionId)) { // Convertir int a String para comparar
-                habitacionEncontrada = habitacion;
-                break;
+            if (usuarioEncontrado == null) {
+                throw new UsuarioNoEncontradoException("El usuario con nombre " + nombreUsuario + " no se encuentra en la lista.");
             }
+
+            // Buscar la habitación en la lista
+            for (Habitacion habitacion : listaHabitaciones.getListaHabitaciones()) {
+                if (String.valueOf(habitacion.getNumero()).equals(habitacionId)) { // Convertir int a String para comparar
+                    habitacionEncontrada = habitacion;
+                    break;
+                }
+            }
+
+            // Si no se encuentra la habitación
+            if (habitacionEncontrada == null) {
+                throw new HabitacionNoEncontradaException("La habitación con ID " + habitacionId + " no se encuentra en la lista.");
+            }
+
+            // Verificar si la habitación está disponible
+            if (!habitacionEncontrada.isDisponible()) {
+                throw new HabitacionOcupadaException("La habitación con ID " + habitacionId + " ya está ocupada.");
+            }
+
+            habitacionEncontrada.setEstado("ocupado");
+            this.usuario = usuarioEncontrado;
+            this.habitacion = habitacionEncontrada;
+            this.fechaReserva = obtenerFechaActual();
+            this.estadoReserva = "Confirmada";
+
+
+            Reserva nuevaReserva = new Reserva(usuarioEncontrado, habitacionEncontrada);
+            System.out.println("Reserva agregada con éxito:");
+            System.out.println("Usuario: " + usuarioEncontrado.getNombre() + " - Habitacion: " + habitacionEncontrada.getNumero());
+            System.out.println("Fecha de reserva: " + this.fechaReserva);
         }
 
-        // Si no se encuentra la habitación
-        if (habitacionEncontrada == null) {
-            throw new HabitacionNoEncontradaException("La habitación con ID " + habitacionId + " no se encuentra en la lista.");
+        private String obtenerFechaActual() {
+
+            return java.time.LocalDate.now().toString();
         }
 
-        // Verificar si la habitación está disponible
-        if (!habitacionEncontrada.isDisponible()) {
-            throw new HabitacionOcupadaException("La habitación con ID " + habitacionId + " ya está ocupada.");
+        public listaHabitaciones<Habitacion> getListaHabitaciones() {
+            return listaHabitaciones;
         }
 
-        habitacionEncontrada.setEstado("ocupado");
-
-        Reserva nuevaReserva = new Reserva(usuarioEncontrado, habitacionEncontrada);
-        System.out.println("Reserva agregada con éxito:");
-        System.out.println("Usuario: " + usuarioEncontrado.getNombre() + " - Habitacion: " + habitacionEncontrada.getNumero());
-        System.out.println("Fecha de reserva: " + this.fechaReserva);
-
-        grabarReservaJSON(usuarioEncontrado, habitacionEncontrada, this.fechaReserva, this.estadoReserva);
-    }
-
-    public void grabarReservaJSON(Usuario usuario, Habitacion habitacion, String fechaReserva, String estadoReserva) {
-        // Crear un JSONObject para la reserva
-        JSONObject reservaJSON = new JSONObject();
-        try {
-            reservaJSON.put("usuario", usuario.getNombre());
-            reservaJSON.put("habitacionId", habitacion.getNumero());
-            reservaJSON.put("fechaReserva", fechaReserva);
-            reservaJSON.put("estadoReserva", estadoReserva);
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
+        public void setListaHabitaciones(listaHabitaciones<Habitacion> listaHabitaciones) {
+            this.listaHabitaciones = listaHabitaciones;
         }
-        // Crear un JSONArray y agregar la nueva reserva
-        JSONArray reservasArray = new JSONArray();
-        reservasArray.put(reservaJSON);
 
-        // Grabar el JSON en el archivo
-        JSONUtiles.grabar(reservasArray, "reservas.json");
-    }
+        public String getFechaReserva() {
+            return fechaReserva;
+        }
 
-    public listaUsuarios<Usuario> getListaUsuarios() {
-        return listaUsuarios;
-    }
+        public void setFechaReserva(String fechaReserva) {
+            this.fechaReserva = fechaReserva;
+        }
 
-    public void setListaUsuarios(listaUsuarios<Usuario> listaUsuarios) {
-        this.listaUsuarios = listaUsuarios;
-    }
+        public String getEstadoReserva() {
+            return estadoReserva;
+        }
 
-    public listaHabitaciones<Habitacion> getListaHabitaciones() {
-        return listaHabitaciones;
-    }
+        public void setEstadoReserva(String estadoReserva) {
+            this.estadoReserva = estadoReserva;
+        }
 
-    public void setListaHabitaciones(listaHabitaciones<Habitacion> listaHabitaciones) {
-        this.listaHabitaciones = listaHabitaciones;
-    }
+        public static int getContadorReservas() {
+            return contadorReservas;
+        }
 
-    public String getFechaReserva() {
-        return fechaReserva;
-    }
+        public static void setContadorReservas(int contadorReservas) {
+            Reserva.contadorReservas = contadorReservas;
+        }
 
-    public void setFechaReserva(String fechaReserva) {
-        this.fechaReserva = fechaReserva;
-    }
+        public int getId() {
+            return id;
+        }
 
-    public String getEstadoReserva() {
-        return estadoReserva;
-    }
+        public void setId(int id) {
+            this.id = id;
+        }
 
-    public void setEstadoReserva(String estadoReserva) {
-        this.estadoReserva = estadoReserva;
-    }
+        public boolean isEstado() {
+            return estado;
+        }
 
-    @Override
-    public String toString() {
-        return "Reserva{" +
-                "fechaReserva='" + fechaReserva + '\'' +
-                ", estadoReserva='" + estadoReserva + '\'' +
-                '}';
+        public void setEstado(boolean estado) {
+            this.estado = estado;
+        }
+
+        public List<Cliente> getPasajeros() {
+            return pasajeros;
+        }
+
+        public void setPasajeros(List<Cliente> pasajeros) {
+            this.pasajeros = pasajeros;
+        }
+
+        public Clases.listaUsuarios<Usuario> getListaUsuarios() {
+            return listaUsuarios;
+        }
+
+        public void setListaUsuarios(Clases.listaUsuarios<Usuario> listaUsuarios) {
+            this.listaUsuarios = listaUsuarios;
+        }
+
+        public Usuario getUsuario() {
+            return usuario;
+        }
+
+        public void setUsuario(Usuario usuario) {
+            this.usuario = usuario;
+        }
+
+        public Habitacion getHabitacion() {
+            return habitacion;
+        }
+
+        public void setHabitacion(Habitacion habitacion) {
+            this.habitacion = habitacion;
+        }
+
+        @Override
+        public String toString() {
+            return "Reserva{" +
+                    "fechaReserva='" + fechaReserva + '\'' +
+                    ", estadoReserva='" + estadoReserva + '\'' +
+                    '}';
+        }
     }
-}
 

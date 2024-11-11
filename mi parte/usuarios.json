@@ -1,1 +1,103 @@
-[{"fechaNacimiento":"Fecha no disponible","apellido":"Perez","direccion":"Calle Falsa 123","tipoUsuario":"CLIENTE","contrasenia":"contrasenia123","puntosFidelidad":100,"telefono":"987654321","nombre":"Juan","correoElectronico":"juan.perez@example.com","dni":"12345678"},{"fechaIngreso":"Fecha no disponible","numeroEmpleado":"C123","apellido":"Lopez","tipoUsuario":"CONSERJE","contrasenia":"contrasenia123","turno":"Mañana","estadoTrabajo":"Activo","telefono":"912345678","nombre":"Ana","correoElectronico":"ana.lopez@example.com","dni":"23456789","areaResponsable":"Recepción"},{"apellido":"Gomez","tipoUsuario":"ADMINISTRADOR","contrasenia":"contraseniaAdmin123","nombre":"Carlos","correoElectronico":"carlos.gomez@example.com","dni":"34567890"},{"fechaNacimiento":"Fecha no disponible","apellido":"Perez","direccion":"Calle Falsa 123","tipoUsuario":"CLIENTE","contrasenia":"contrasenia123","puntosFidelidad":100,"telefono":"987654321","nombre":"Juan","correoElectronico":"juan.perez@example.com","dni":"12345678"},{"fechaIngreso":"Fecha no disponible","numeroEmpleado":"C123","apellido":"Lopez","tipoUsuario":"CONSERJE","contrasenia":"contrasenia123","turno":"Mañana","estadoTrabajo":"Activo","telefono":"912345678","nombre":"Ana","correoElectronico":"ana.lopez@example.com","dni":"23456789","areaResponsable":"Recepción"},{"apellido":"Gomez","tipoUsuario":"ADMINISTRADOR","contrasenia":"contraseniaAdmin123","nombre":"Carlos","correoElectronico":"carlos.gomez@example.com","dni":"34567890"},{"fechaNacimiento":"Fecha no disponible","apellido":"Perez","direccion":"Calle Falsa 123","tipoUsuario":"CLIENTE","contrasenia":"contrasenia123","puntosFidelidad":100,"telefono":"987654321","nombre":"Juan","correoElectronico":"juan.perez@example.com","dni":"12345678"},{"fechaIngreso":"Fecha no disponible","numeroEmpleado":"C123","apellido":"Lopez","tipoUsuario":"CONSERJE","contrasenia":"contrasenia123","turno":"Mañana","estadoTrabajo":"Activo","telefono":"912345678","nombre":"Ana","correoElectronico":"ana.lopez@example.com","dni":"23456789","areaResponsable":"Recepción"},{"apellido":"Gomez","tipoUsuario":"ADMINISTRADOR","contrasenia":"contraseniaAdmin123","nombre":"Carlos","correoElectronico":"carlos.gomez@example.com","dni":"34567890"},{"fechaNacimiento":"Fecha no disponible","apellido":"Perez","direccion":"Calle Falsa 123","tipoUsuario":"CLIENTE","contrasenia":"contrasenia123","puntosFidelidad":100,"telefono":"987654321","nombre":"Juan","correoElectronico":"juan.perez@example.com","dni":"12345678"},{"fechaIngreso":"Fecha no disponible","numeroEmpleado":"C123","apellido":"Lopez","tipoUsuario":"CONSERJE","contrasenia":"contrasenia123","turno":"Mañana","estadoTrabajo":"Activo","telefono":"912345678","nombre":"Ana","correoElectronico":"ana.lopez@example.com","dni":"23456789","areaResponsable":"Recepción"},{"apellido":"Gomez","tipoUsuario":"ADMINISTRADOR","contrasenia":"contraseniaAdmin123","nombre":"Carlos","correoElectronico":"carlos.gomez@example.com","dni":"34567890"}]
+ [
+    {
+      "fechaNacimiento": "1985-06-15",
+      "apellido": "Fernandez",
+      "direccion": "Avenida Siempre Viva 742",
+      "tipoUsuario": "CLIENTE",
+      "contrasenia": "password123",
+      "puntosFidelidad": 200,
+      "telefono": "354987654",
+      "nombre": "Lucia",
+      "correoElectronico": "lucia.fernandez@example.com",
+      "dni": "87654321"
+    },
+    {
+      "fechaNacimiento": "1990-12-01",
+      "apellido": "Gonzalez",
+      "direccion": "Calle Mayor 14",
+      "tipoUsuario": "CLIENTE",
+      "contrasenia": "securePass90",
+      "puntosFidelidad": 300,
+      "telefono": "465132789",
+      "nombre": "Pedro",
+      "correoElectronico": "pedro.gonzalez@example.com",
+      "dni": "90876543"
+    },
+    {
+      "fechaIngreso": "2022-05-12",
+      "numeroEmpleado": "C235",
+      "apellido": "Martinez",
+      "tipoUsuario": "CONSERJE",
+      "contrasenia": "passMartinez22",
+      "turno": "Tarde",
+      "estadoTrabajo": "Activo",
+      "telefono": "123789456",
+      "nombre": "Sofia",
+      "correoElectronico": "sofia.martinez@example.com",
+      "dni": "54321987",
+      "areaResponsable": "Recepción"
+    },
+    {
+      "fechaIngreso": "2021-07-15",
+      "numeroEmpleado": "C876",
+      "apellido": "Rodriguez",
+      "tipoUsuario": "CONSERJE",
+      "contrasenia": "turnoMatutino",
+      "turno": "Mañana",
+      "estadoTrabajo": "Vacaciones",
+      "telefono": "897456123",
+      "nombre": "Marco",
+      "correoElectronico": "marco.rodriguez@example.com",
+      "dni": "67345289",
+      "areaResponsable": "Limpieza"
+    },
+    {
+      "apellido": "Lopez",
+      "tipoUsuario": "ADMINISTRADOR",
+      "contrasenia": "adminSecure456",
+      "nombre": "Gabriela",
+      "correoElectronico": "gabriela.lopez@example.com",
+      "dni": "45612378",
+      "fechaIngreso": "2018-04-23",
+      "telefono": "789321654",
+      "departamento": "Finanzas"
+    },
+    {
+      "apellido": "Moreno",
+      "tipoUsuario": "ADMINISTRADOR",
+      "contrasenia": "MorenoAdmin89",
+      "nombre": "Julian",
+      "correoElectronico": "julian.moreno@example.com",
+      "dni": "32145698",
+      "fechaIngreso": "2019-03-12",
+      "telefono": "658741236",
+      "departamento": "Recursos Humanos"
+    },
+    {
+      "fechaNacimiento": "2002-10-11",
+      "apellido": "Navarro",
+      "direccion": "Calle Solitaria 23",
+      "tipoUsuario": "CLIENTE",
+      "contrasenia": "sunnyday202",
+      "puntosFidelidad": 150,
+      "telefono": "321987654",
+      "nombre": "Natalia",
+      "correoElectronico": "natalia.navarro@example.com",
+      "dni": "10293847"
+    },
+    {
+      "fechaIngreso": "2023-02-10",
+      "numeroEmpleado": "C435",
+      "apellido": "Sanchez",
+      "tipoUsuario": "CONSERJE",
+      "contrasenia": "shiftNight",
+      "turno": "Noche",
+      "estadoTrabajo": "Activo",
+      "telefono": "874596321",
+      "nombre": "Diego",
+      "correoElectronico": "diego.sanchez@example.com",
+      "dni": "20938475",
+      "areaResponsable": "Seguridad"
+    }
+  ]
+

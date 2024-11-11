@@ -1,1 +1,1 @@
-[{"usuario":"Juan","habitacionId":102}]
+[{"usuario":"Pedro","id":1,"estadoReserva":"Confirmada","habitacionId":106,"fechaReserva":"2024-11-11"},{"usuario":"Natalia","id":1,"estadoReserva":"Confirmada","habitacionId":202,"fechaReserva":"2024-11-11"},{"usuario":"Pedro","id":1,"estadoReserva":"Confirmada","habitacionId":106,"fechaReserva":"2024-11-11"}]
