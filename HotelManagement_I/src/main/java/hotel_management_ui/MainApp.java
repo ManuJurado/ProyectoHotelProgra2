@@ -27,7 +27,7 @@ public class MainApp extends Application {
 
     // Metodo para reproducir el video
     private void playIntroVideo() {
-        String videoPath = new File("ProyectoHotelProgra2/HotelManagement_I/video.mp4").toURI().toString();
+        String videoPath = new File("HotelManagement_I/video.mp4").toURI().toString();
         Media media = new Media(videoPath);
         MediaPlayer mediaPlayer = new MediaPlayer(media);
         MediaView mediaView = new MediaView(mediaPlayer);
