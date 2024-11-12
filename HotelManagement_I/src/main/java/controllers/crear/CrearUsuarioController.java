@@ -39,16 +39,6 @@ public class CrearUsuarioController extends BaseController {
         rolChoiceBox.getItems().addAll(TipoUsuario.CLIENTE, TipoUsuario.ADMINISTRADOR, TipoUsuario.CONSERJE);
     }
 
-    // Metodo para limitar la cantidad de caracteres permitidos en un TextField
-    private void setTextFieldLimit(TextField textField, int maxLength) {
-        TextFormatter<String> formatter = new TextFormatter<>(change -> {
-            if (change.getControlNewText().length() > maxLength) {
-                return null;  // No permite el cambio si el texto supera el límite
-            }
-            return change;
-        });
-        textField.setTextFormatter(formatter);
-    }
 
 
     private Scene previousScene;  // Cambiar a Scene en vez de Stage

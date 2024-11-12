@@ -4,6 +4,8 @@ import enums.TipoUsuario;
 
 public class Administrador extends Usuario {
 
+    public Administrador(){}
+
     public Administrador(String nombre, String apellido, String dni, String contrasenia, String correoElectronico) {
         super(nombre, apellido, dni, contrasenia, correoElectronico, TipoUsuario.ADMINISTRADOR);
     }

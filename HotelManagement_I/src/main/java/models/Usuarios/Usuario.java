@@ -39,11 +39,39 @@ public abstract class Usuario {
         this.habilitacion = habilitacion;
     }
 
-    public void setNombre(String nombre) { this.nombre = nombre; }
-    public void setApellido(String apellido) { this.apellido = apellido; }
-    public void setDni(String dni) { this.dni = dni; }
-    public void setContrasenia(String contrasenia) { this.contrasenia = contrasenia; }
-    public void setCorreoElectronico(String correoElectronico) { this.correoElectronico = correoElectronico; }
+    public void setNombre(String nombre) {
+        if (nombre == null || nombre.trim().isEmpty()) {
+            throw new IllegalArgumentException("El nombre no puede estar vacío.");
+        }
+        this.nombre = nombre;
+    }
+
+    public void setApellido(String apellido) {
+        if (apellido == null || apellido.trim().isEmpty()) {
+            throw new IllegalArgumentException("El apellido no puede estar vacío.");
+        }
+        this.apellido = apellido;
+    }
+
+    public void setDni(String dni) {
+        if (dni == null || !dni.matches("\\d{8,10}")) { // Ejemplo: DNI debe ser de 8 a 10 dígitos
+            throw new IllegalArgumentException("El DNI debe contener entre 8 y 10 dígitos numéricos.");
+        }
+        this.dni = dni;
+    }
+
+    public void setContrasenia(String contrasenia) {
+        if (contrasenia == null || contrasenia.length() < 6) { // Ejemplo: longitud mínima de 6 caracteres
+            throw new IllegalArgumentException("La contraseña debe tener al menos 6 caracteres.");
+        }
+        this.contrasenia = contrasenia;
+    }
+    public void setCorreoElectronico(String correoElectronico) {
+        if (correoElectronico == null || !correoElectronico.matches("^[\\w-\\.]+@[\\w-]+(\\.[\\w-]+)+$")) {
+            throw new IllegalArgumentException("Correo electrónico no válido.");
+        }
+        this.correoElectronico = correoElectronico;
+    }
 
     // Metodo setter para tipoUsuario
     public void setTipoUsuario(TipoUsuario tipoUsuario) {

@@ -4,6 +4,7 @@ import controllers.BaseController;
 import controllers.details.DatosUsuario;
 import controllers.gestionar.GestionarUsuariosController;
 import exceptions.AtributoFaltanteException;
+import exceptions.FechaInvalidaException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
@@ -67,35 +68,16 @@ public class CrearClienteController extends BaseController {
         dniField.setText(DatosUsuario.getDni());
 
         // Limitar el número de caracteres en los campos de texto
-        nombreField.setTextFormatter(new TextFormatter<>(change ->
-                change.getControlNewText().length() <= 30 ? change : null));
-
-        apellidoField.setTextFormatter(new TextFormatter<>(change ->
-                change.getControlNewText().length() <= 30 ? change : null));
-
-        direccionField.setTextFormatter(new TextFormatter<>(change ->
-                change.getControlNewText().length() <= 30 ? change : null));
-
-        telefonoField.setTextFormatter(new TextFormatter<>(change ->
-                change.getControlNewText().length() <= 15 ? change : null));
-
-        dniField.setTextFormatter(new TextFormatter<>(change ->
-                change.getControlNewText().length() <= 10 ? change : null));
-
-        contraseniaField.setTextFormatter(new TextFormatter<>(change ->
-                change.getControlNewText().length() <= 15 ? change : null));
-
-        passwordTextField.setTextFormatter(new TextFormatter<>(change ->
-                change.getControlNewText().length() <= 15 ? change : null));
-
-        confirmarContraseniaField.setTextFormatter(new TextFormatter<>(change ->
-                change.getControlNewText().length() <= 15 ? change : null));
-
-        confirmarPasswordTextField.setTextFormatter(new TextFormatter<>(change ->
-                change.getControlNewText().length() <= 15 ? change : null));
-
-        correoElectronicoField.setTextFormatter(new TextFormatter<>(change ->
-                change.getControlNewText().length() <= 30 ? change : null));
+        setTextFieldLimit(nombreField, 30);
+        setTextFieldLimit(apellidoField, 30);
+        setTextFieldLimit(direccionField, 30);
+        setTextFieldLimit(telefonoField, 15);
+        setTextFieldLimit(dniField, 10);
+        setTextFieldLimit(contraseniaField, 15);
+        setTextFieldLimit(passwordTextField, 15);
+        setTextFieldLimit(confirmarContraseniaField, 15);
+        setTextFieldLimit(confirmarPasswordTextField, 15);
+        setTextFieldLimit(correoElectronicoField, 30);
 
     }
 
@@ -170,7 +152,11 @@ public class CrearClienteController extends BaseController {
                 // Convertir LocalDate a Date con la zona horaria correcta
                 ZoneId zoneId = ZoneId.systemDefault();
                 Date fechaNacimiento = Date.from(localDate.atStartOfDay(zoneId).toInstant());
-                cliente.setFechaNacimiento(fechaNacimiento);
+                try {
+                    cliente.setFechaNacimiento(fechaNacimiento);
+                } catch (FechaInvalidaException e) {
+                    errores.add(e.getMessage());
+                }
             } else {
                 errores.add("La fecha de nacimiento es obligatoria.");
             }
@@ -180,7 +166,7 @@ public class CrearClienteController extends BaseController {
                 showAlert(String.join("\n", errores));
             } else {
                 // Obtener la instancia de GestionUsuario y verificar duplicados
-                GestionUsuario gestionUsuario = GestionUsuario.getInstancia("ProyectoHotelProgra2/HotelManagement_I/usuarios.json");
+                GestionUsuario gestionUsuario = GestionUsuario.getInstancia("HotelManagement_I/usuarios.json");
                 if (gestionUsuario.existeUsuarioConDni(cliente.getDni())) {
                     throw new AtributoFaltanteException("El DNI ya está registrado.");
                 }
@@ -209,6 +195,13 @@ public class CrearClienteController extends BaseController {
                         cliente.getFechaNacimiento() // Se pasa la fecha como Date
                 );
                 System.out.println("Cliente guardado con éxito");
+
+                // Llamar a actualizarListaUsuarios() en el controlador de la escena anterior, si aplica
+                if (previousScene != null && previousScene.getUserData() instanceof GestionarUsuariosController) {
+                    GestionarUsuariosController gestionarUsuariosController = (GestionarUsuariosController) previousScene.getUserData();
+                    gestionarUsuariosController.actualizarListaUsuarios();
+                }
+
                 volverAEscenaAnterior(event, previousScene);
             }
         } catch (AtributoFaltanteException e) {

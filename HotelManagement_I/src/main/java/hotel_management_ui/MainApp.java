@@ -18,6 +18,9 @@ public class MainApp extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage; // Guardar la referencia al escenario
+        primaryStage.setWidth(900);
+        primaryStage.setHeight(700);
+        primaryStage.setResizable(false);
         playIntroVideo(); // Reproducir el video al iniciar
     }
 
@@ -31,8 +34,8 @@ public class MainApp extends Application {
         Media media = new Media(videoPath);
         MediaPlayer mediaPlayer = new MediaPlayer(media);
         MediaView mediaView = new MediaView(mediaPlayer);
-        mediaView.setFitWidth(800);
-        mediaView.setFitHeight(600);
+        mediaView.setFitWidth(900);
+        mediaView.setFitHeight(700);
         mediaView.setPreserveRatio(false);
 
         mediaPlayer.setOnEndOfMedia(() -> {
@@ -40,7 +43,7 @@ public class MainApp extends Application {
             showLoginScreen(); // Mostrar la pantalla de login al finalizar el video
         });
 
-        Scene videoScene = new Scene(new VBox(mediaView), 800, 600);
+        Scene videoScene = new Scene(new VBox(mediaView));
         primaryStage.setScene(videoScene);
         primaryStage.show();
         mediaPlayer.play();
@@ -52,6 +55,8 @@ public class MainApp extends Application {
             Parent root = FXMLLoader.load(getClass().getResource("/views/menu/login.fxml")); // Carga el archivo FXML de inicio
             Scene scene = new Scene(root);
 
+            primaryStage.setWidth(900);
+            primaryStage.setHeight(700);
             primaryStage.setScene(scene);
             primaryStage.show();
         } catch (Exception e) {
