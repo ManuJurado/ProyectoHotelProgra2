@@ -98,10 +98,9 @@ public class CrearHabitacionController extends BaseController {
         stage.close();
     }
 
-    private void mostrarAlerta(String titulo, String mensaje) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(titulo);
-        alert.setHeaderText(null);
+    // Metodo para mostrar una alerta con los errores
+    private void showAlert(String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setContentText(mensaje);
         alert.showAndWait();
     }

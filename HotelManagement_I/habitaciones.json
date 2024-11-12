@@ -16,7 +16,7 @@
     "cocina": true,
     "camas": ["Matrimonial", "Individual", "Individual", "Individual"],
     "disponible": true,
-    "estado": "",
+    "estado": "disponible",
     "detalleEstado": ""
   },
   {
@@ -47,7 +47,7 @@
     "comedor": true,
     "camas": ["Queen"],
     "disponible": true,
-    "estado": "",
+    "estado": "disponible",
     "detalleEstado": ""
   }
 ]
