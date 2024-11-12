@@ -70,7 +70,7 @@ public class ConserjeController extends BaseController{
     @FXML
     private void modificarDatosUsuario(ActionEvent event) {
         // Lógica para modificar los datos del usuario
-        mostrarAlerta("Modificar Datos", "Modificando datos de usuario.");
+        cambiarEscenaConSceneAnterior("/views/modificar/modificarUsuario.fxml","Modificar Conserje", (Node) event.getSource());
         // Lógica para modificar datos de usuario aquí
     }
 

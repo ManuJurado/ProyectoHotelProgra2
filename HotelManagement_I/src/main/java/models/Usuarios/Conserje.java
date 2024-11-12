@@ -44,46 +44,6 @@ public class Conserje extends Usuario {
         this.estadoTrabajo = estadoTrabajo;
     }
 
-    @Override
-    public void setNombre(String nombre) {
-        if (nombre == null || nombre.trim().isEmpty()) {
-            throw new IllegalArgumentException("El nombre no puede estar vacío.");
-        }
-        super.setNombre(nombre);
-    }
-
-    @Override
-    public void setApellido(String apellido) {
-        if (apellido == null || apellido.trim().isEmpty()) {
-            throw new IllegalArgumentException("El apellido no puede estar vacío.");
-        }
-        super.setApellido(apellido);
-    }
-
-    @Override
-    public void setDni(String dni) {
-        if (dni == null || !dni.matches("\\d{8,10}")) {  // Validación para 8-10 dígitos numéricos
-            throw new IllegalArgumentException("El DNI debe contener entre 8 y 10 dígitos numéricos.");
-        }
-        super.setDni(dni);
-    }
-
-    @Override
-    public void setContrasenia(String contrasenia) {
-        if (contrasenia == null || contrasenia.length() < 6) {  // Longitud mínima de 6 caracteres
-            throw new IllegalArgumentException("La contraseña debe tener al menos 6 caracteres.");
-        }
-        super.setContrasenia(contrasenia);
-    }
-
-    @Override
-    public void setCorreoElectronico(String correoElectronico) {
-        if (correoElectronico == null || !correoElectronico.matches("^[\\w-\\.]+@[\\w-]+(\\.[\\w-]+)+$")) {
-            throw new IllegalArgumentException("Correo electrónico no válido.");
-        }
-        super.setCorreoElectronico(correoElectronico);
-    }
-
     public Date getFechaIngreso() { return fechaIngreso; }
     public String getTelefono() { return telefono; }
     public String getEstadoTrabajo() { return estadoTrabajo; }

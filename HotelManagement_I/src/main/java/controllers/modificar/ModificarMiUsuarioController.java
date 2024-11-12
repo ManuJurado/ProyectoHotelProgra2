@@ -1,11 +1,14 @@
 package controllers.modificar;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import controllers.BaseController;
 import controllers.gestionar.GestionarUsuariosController;
-import enums.TipoUsuario;
+import exceptions.UsuarioDuplicadoException;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
@@ -25,7 +28,7 @@ import java.util.List;
 public class ModificarMiUsuarioController extends BaseController {
 
     @FXML
-    private TextField nombreUsuarioField; // Campo para el nombre del usuario
+    private TextField nombreUsuarioField;
     @FXML
     private TextField apellidoField; // Campo para el apellido del usuario
     @FXML
@@ -33,23 +36,39 @@ public class ModificarMiUsuarioController extends BaseController {
     @FXML
     private PasswordField contraseniaField; // Campo para la contraseña
     @FXML
+    private TextField passwordTextField; // Campo para la contraseña
+    @FXML
     private TextField emailUsuarioField;  // Campo para el email del usuario
+    @FXML
+    private Button verContraseñaButton; // Botón para alternar la visibilidad de la contraseña
 
     // Campos específicos de Cliente
     @FXML
     private TextField direccionField;
     @FXML
+    private Label direccionLabel;
+    @FXML
     private TextField telefonoField;
     @FXML
+    private Label telefonoLabel;
+    @FXML
     private DatePicker fechaNacimientoField;
+    @FXML
+    private Label fechaNacimientoLabel;
 
     // Campos específicos de Conserje
     @FXML
     private DatePicker fechaIngresoField;
     @FXML
+    private Label fechaIngresoLabel;
+    @FXML
     private TextField telefonoConserjeField;
     @FXML
+    private Label telefonoConserjeLabel;
+    @FXML
     private TextField estadoTrabajoField;
+    @FXML
+    private Label estadoTrabajoLabel;
 
     private GestionarUsuariosController gestionarUsuariosController;
     private Usuario usuarioSeleccionado;
@@ -57,19 +76,25 @@ public class ModificarMiUsuarioController extends BaseController {
     @FXML
     public void initialize() {
 
+        direccionField.setVisible(false);
+        telefonoField.setVisible(false);
+        fechaNacimientoField.setVisible(false);
+        fechaIngresoField.setVisible(false);
+        telefonoConserjeField.setVisible(false);
+        estadoTrabajoField.setVisible(false);
+
         // Limitar la longitud de los campos de texto
-        nombreUsuarioField.setTextFormatter(new TextFormatter<>(change ->
-                change.getControlNewText().length() <= 30 ? change : null)); // Limitar a 50 caracteres
-        apellidoField.setTextFormatter(new TextFormatter<>(change ->
-                change.getControlNewText().length() <= 30 ? change : null)); // Limitar a 50 caracteres
-        dniField.setTextFormatter(new TextFormatter<>(change ->
-                change.getControlNewText().length() <= 10 ? change : null)); // Limitar a 10 caracteres (por ejemplo)
-        emailUsuarioField.setTextFormatter(new TextFormatter<>(change ->
-                change.getControlNewText().length() <= 50 ? change : null)); // Limitar a 100 caracteres
-        telefonoField.setTextFormatter(new TextFormatter<>(change ->
-                change.getControlNewText().length() <= 15 ? change : null)); // Limitar a 15 caracteres (por ejemplo)
-        direccionField.setTextFormatter(new TextFormatter<>(change ->
-                change.getControlNewText().length() <= 30 ? change : null)); // Limitar a 100 caracteres
+        nombreUsuarioField.setTextFormatter(new TextFormatter<>(change -> change.getControlNewText().length() <= 30 ? change : null)); // Limitar a 50 caracteres
+        apellidoField.setTextFormatter(new TextFormatter<>(change -> change.getControlNewText().length() <= 30 ? change : null)); // Limitar a 50 caracteres
+        dniField.setTextFormatter(new TextFormatter<>(change -> change.getControlNewText().length() <= 10 ? change : null)); // Limitar a 10 caracteres (por ejemplo)
+        contraseniaField.setTextFormatter(new TextFormatter<>(change -> change.getControlNewText().length() <= 30 ? change : null));
+        passwordTextField.setTextFormatter(new TextFormatter<>(change -> change.getControlNewText().length() <= 30 ? change : null));
+        emailUsuarioField.setTextFormatter(new TextFormatter<>(change -> change.getControlNewText().length() <= 50 ? change : null)); // Limitar a 100 caracteres
+        telefonoField.setTextFormatter(new TextFormatter<>(change -> change.getControlNewText().length() <= 15 ? change : null)); // Limitar a 15 caracteres (por ejemplo)
+        direccionField.setTextFormatter(new TextFormatter<>(change -> change.getControlNewText().length() <= 30 ? change : null)); // Limitar a 100 caracteres
+        telefonoConserjeField.setTextFormatter(new TextFormatter<>(change -> change.getControlNewText().length() <= 20 ? change : null)); // Limitar a 100 caracteres
+        telefonoField.setTextFormatter(new TextFormatter<>(change -> change.getControlNewText().length() <= 20 ? change : null)); // Limitar a 100 caracteres
+
         // Si el controlador GestionarUsuariosController está disponible, usamos el usuario seleccionado.
         if (gestionarUsuariosController != null && usuarioSeleccionado != null) {
             cargarDatosUsuario(usuarioSeleccionado);
@@ -83,6 +108,23 @@ public class ModificarMiUsuarioController extends BaseController {
                 }
             }
             cargarDatosUsuario(usuarioSeleccionado);
+        }
+    }
+
+    // Metodo para alternar la visibilidad de la contraseña
+    @FXML
+    public void togglePasswordVisibility() {
+        // Alternar la visibilidad de los campos
+        if (contraseniaField.isVisible()) {
+            contraseniaField.setVisible(false);
+            passwordTextField.setVisible(true);
+            passwordTextField.setText(contraseniaField.getText()); // Sincronizar el texto
+            verContraseñaButton.setText("Ocultar");
+        } else {
+            passwordTextField.setVisible(false);
+            contraseniaField.setVisible(true);
+            contraseniaField.setText(passwordTextField.getText()); // Sincronizar el texto
+            verContraseñaButton.setText("Ver");
         }
     }
 
@@ -109,8 +151,11 @@ public class ModificarMiUsuarioController extends BaseController {
             }
 
             direccionField.setVisible(true);
+            direccionLabel.setVisible(true);
             telefonoField.setVisible(true);
+            telefonoLabel.setVisible(true);
             fechaNacimientoField.setVisible(true); // Hacer visible el campo de fechaNacimiento
+            fechaNacimientoLabel.setVisible(true); // Hacer visible el campo de fechaNacimiento
         } else if (usuario instanceof Conserje) {
             Conserje conserje = (Conserje) usuario;
 
@@ -126,8 +171,11 @@ public class ModificarMiUsuarioController extends BaseController {
             estadoTrabajoField.setText(conserje.getEstadoTrabajo());
 
             fechaIngresoField.setVisible(true); // Hacer visible el campo de fechaIngreso
+            fechaIngresoLabel.setVisible(true); // Hacer visible el campo de fechaIngreso
             telefonoConserjeField.setVisible(true);
+            telefonoConserjeLabel.setVisible(true);
             estadoTrabajoField.setVisible(true);
+            estadoTrabajoLabel.setVisible(true);
         } else if (usuario instanceof Administrador) {
             // Si es administrador, no hacemos nada más ya que no tiene campos adicionales
         }
@@ -152,6 +200,29 @@ public class ModificarMiUsuarioController extends BaseController {
     }
 
     @FXML
+    private void abrirVentanaModificarContrasenia() throws IOException {
+        // Cargar el FXML de la ventana de cambiar contraseña
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/modificar/modificarContrasenia.fxml"));
+        Parent root = loader.load();
+
+        // Obtener el controlador de la nueva ventana
+        ModificarContraseniaController controller = loader.getController();
+
+        // Pasar el usuario actual al nuevo controlador
+        controller.setUsuario(usuarioSeleccionado);
+
+        // Pasar el controlador actual (ModificarMiUsuarioController) al nuevo controlador
+        controller.setControllerAnterior(this);
+
+        // Crear una nueva ventana (Stage) para mostrar la interfaz de modificar contraseña
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.setTitle("Modificar Contraseña");
+        stage.show();
+    }
+
+
+    @FXML
     private void guardarCambios(ActionEvent event) {
         // Asegúrate de que haya un usuario seleccionado
         if (usuarioSeleccionado == null) {
@@ -168,54 +239,51 @@ public class ModificarMiUsuarioController extends BaseController {
         List<String> errores = new ArrayList<>();
 
         try {
-            // Actualizar según el tipo de usuario
+            // Actualizar los campos comunes del usuario
+            usuarioSeleccionado.setNombre(nuevoNombre);
+            usuarioSeleccionado.setApellido(nuevoApellido);
+            usuarioSeleccionado.setCorreoElectronico(nuevoEmail);
+
+            // Si es Cliente, actualizamos los datos específicos
             if (usuarioSeleccionado instanceof Cliente) {
                 Cliente cliente = (Cliente) usuarioSeleccionado;
-                cliente.setNombre(nuevoNombre);
-                cliente.setApellido(nuevoApellido);
-                cliente.setCorreoElectronico(nuevoEmail);
                 cliente.setDireccion(direccionField.getText());
                 cliente.setTelefono(telefonoField.getText());
 
-                // Conversión de LocalDate a java.util.Date para el campo de fechaNacimiento
+                // Conversión de LocalDate a java.util.Date para el campo fechaNacimiento
                 if (fechaNacimientoField.getValue() != null) {
-                    LocalDate localDate = fechaNacimientoField.getValue(); // Obtener la fecha seleccionada en el DatePicker
+                    LocalDate localDate = fechaNacimientoField.getValue();
                     Date fechaNacimiento = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-                    cliente.setFechaNacimiento(fechaNacimiento); // Guardamos la fecha convertida
+                    cliente.setFechaNacimiento(fechaNacimiento);
                 }
-
-            } else if (usuarioSeleccionado instanceof Conserje) {
+            }
+            // Si es Conserje, actualizamos los datos específicos de Conserje
+            else if (usuarioSeleccionado instanceof Conserje) {
                 Conserje conserje = (Conserje) usuarioSeleccionado;
-                conserje.setNombre(nuevoNombre);
-                conserje.setApellido(nuevoApellido);
-                conserje.setCorreoElectronico(nuevoEmail);
                 conserje.setTelefono(telefonoConserjeField.getText());
                 conserje.setEstadoTrabajo(estadoTrabajoField.getText());
-                conserje.setTelefono(telefonoField.getText());
 
                 // Conversión de LocalDate a java.util.Date para la fecha de ingreso
                 if (fechaIngresoField.getValue() != null) {
                     LocalDate localDate = fechaIngresoField.getValue();
                     Date fechaIngreso = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-                    conserje.setFechaIngreso(fechaIngreso); // Guardamos la fecha convertida
+                    conserje.setFechaIngreso(fechaIngreso);
                 }
-
-            } else if (usuarioSeleccionado instanceof Administrador) {
-                Administrador admin = (Administrador) usuarioSeleccionado;
-                admin.setNombre(nuevoNombre);
-                admin.setApellido(nuevoApellido);
-                admin.setCorreoElectronico(nuevoEmail);
             }
 
-            // Llamada a la clase GestionUsuario para guardar los cambios en el archivo JSON
-            boolean exito = GestionUsuario.getInstancia("C:/path/to/usuarios.json").actualizarUsuario(usuarioSeleccionado, nuevoNombre, nuevoApellido, nuevoEmail);
+            // Llamar a `actualizarUsuario` para actualizar y guardar el usuario en JSON
+            boolean exito = GestionUsuario.getInstancia("HotelManagement_I/usuarios.json").actualizarUsuario(usuarioSeleccionado);
+
             if (!exito) {
                 throw new Exception("No se pudo actualizar el usuario.");
             }
 
-            // Si se guarda correctamente
+            // Mostrar éxito si se guarda correctamente
             mostrarAlerta("Éxito", "Cambios guardados correctamente.");
 
+        } catch (UsuarioDuplicadoException e) {
+            // Manejar duplicados específicamente
+            errores.add(e.getMessage());
         } catch (IllegalArgumentException e) {
             // Si hay un problema con los datos de entrada (por ejemplo, contraseñas cortas)
             errores.add("Error de datos: " + e.getMessage());
@@ -228,7 +296,7 @@ public class ModificarMiUsuarioController extends BaseController {
         if (!errores.isEmpty()) {
             mostrarAlerta("Errores", String.join("\n", errores));
         } else {
-            // Sietodo ha ido bien, actualizamos la tabla de usuarios
+            // Si ttodo ha ido bien, actualizamos la tabla de usuarios
             if (gestionarUsuariosController != null) {
                 gestionarUsuariosController.actualizarListaUsuarios();
             }
@@ -248,6 +316,13 @@ public class ModificarMiUsuarioController extends BaseController {
         }
 
     }
+
+    public void actualizarContrasenia(String nuevaContrasenia) {
+        // Actualizar ambos campos de contraseña
+        contraseniaField.setText(nuevaContrasenia);
+        passwordTextField.setText(nuevaContrasenia);  // También se actualiza el campo visible
+    }
+
 
     private void mostrarAlerta(String titulo, String mensaje) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);

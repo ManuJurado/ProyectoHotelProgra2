@@ -1,27 +1,22 @@
 package controllers.crear;
 
 import controllers.BaseController;
+import controllers.gestionar.GestionarUsuariosController; // Asegúrate de importar este controlador
 import controllers.details.DatosUsuario;
-import controllers.gestionar.GestionarUsuariosController;
 import exceptions.AtributoFaltanteException;
-import exceptions.FechaInvalidaException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.stage.Stage;
-import models.Usuarios.Cliente;
+import models.Usuarios.Administrador;
 import services.GestionUsuario;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class CrearClienteController extends BaseController {
+public class CrearNuevoAdministradorController extends BaseController {
 
     @FXML
     private TextField nombreField;
@@ -32,17 +27,11 @@ public class CrearClienteController extends BaseController {
     @FXML
     private PasswordField contraseniaField;
     @FXML
-    private TextField passwordTextField;   // El campo donde mostramos la contraseña como texto
+    private TextField passwordTextField;
     @FXML
-    private Button verContraseñaButton;    // El botón para alternar la visibilidad
+    private Button verContraseñaButton;
     @FXML
     private TextField correoElectronicoField;
-    @FXML
-    private TextField direccionField;
-    @FXML
-    private TextField telefonoField;
-    @FXML
-    private DatePicker fechaNacimientoPicker;
     @FXML
     private PasswordField confirmarContraseniaField;
     @FXML
@@ -50,16 +39,22 @@ public class CrearClienteController extends BaseController {
     @FXML
     private Button verConfirmarContraseñaButton;
 
-    private Scene previousScene;  // Cambiar a Scene en vez de Stage
+    private Scene previousScene;
 
     // Metodo para establecer la escena anterior
     public void setPreviousScene(Scene previousScene) {
         this.previousScene = previousScene;
     }
 
+    private GestionarUsuariosController gestionarUsuariosController;
+
+    public void setGestionarUsuariosController(GestionarUsuariosController gestionarUsuariosController) {
+        this.gestionarUsuariosController = gestionarUsuariosController;
+    }
+
     @FXML
     public void initialize() {
-        passwordTextField.setVisible(false);  // Al inicio el TextField está oculto
+        passwordTextField.setVisible(false);
 
         // Rellenar los campos con los datos guardados en DatosUsuario
         nombreField.setText(DatosUsuario.getNombre());
@@ -70,8 +65,6 @@ public class CrearClienteController extends BaseController {
         // Limitar el número de caracteres en los campos de texto
         setTextFieldLimit(nombreField, 30);
         setTextFieldLimit(apellidoField, 30);
-        setTextFieldLimit(direccionField, 30);
-        setTextFieldLimit(telefonoField, 15);
         setTextFieldLimit(dniField, 10);
         setTextFieldLimit(contraseniaField, 15);
         setTextFieldLimit(passwordTextField, 15);
@@ -84,7 +77,6 @@ public class CrearClienteController extends BaseController {
     // Metodo para alternar la visibilidad de la contraseña
     @FXML
     public void togglePasswordVisibility() {
-        // Alternar la visibilidad de los campos
         if (contraseniaField.isVisible()) {
             contraseniaField.setVisible(false);
             passwordTextField.setVisible(true);
@@ -115,86 +107,55 @@ public class CrearClienteController extends BaseController {
     }
 
     @FXML
-    public void guardarCliente(ActionEvent event) {
-        List<String> errores = new ArrayList<>();  // Lista para acumular mensajes de error
+    public void guardarAdministrador(ActionEvent event) {
+        List<String> errores = new ArrayList<>();
 
         try {
-            // Crear instancia de Cliente y asignar valores
-            Cliente cliente = new Cliente();
+            // Crear instancia de Administrador y asignar valores
+            Administrador administrador = new Administrador();
 
             // Validaciones
-            validarCampo(cliente::setNombre, nombreField.getText(), "Nombre", errores);
-            validarCampo(cliente::setApellido, apellidoField.getText(), "Apellido", errores);
-            validarCampo(cliente::setDni, dniField.getText(), "DNI", errores);
-            validarCampo(cliente::setContrasenia, contraseniaField.getText(), "Contraseña", errores);
-            validarCampo(cliente::setContrasenia, confirmarContraseniaField.getText(), "Confirmar Contraseña", errores);
-            validarCampo(cliente::setCorreoElectronico, correoElectronicoField.getText(), "Correo Electrónico", errores);
-            validarCampo(cliente::setDireccion, direccionField.getText(), "Dirección", errores);
-            validarCampo(cliente::setTelefono, telefonoField.getText(), "Teléfono", errores);
+            validarCampo(administrador::setNombre, nombreField.getText(), "Nombre", errores);
+            validarCampo(administrador::setApellido, apellidoField.getText(), "Apellido", errores);
+            validarCampo(administrador::setDni, dniField.getText(), "DNI", errores);
+            validarCampo(administrador::setContrasenia, contraseniaField.getText(), "Contraseña", errores);
+            validarCampo(administrador::setContrasenia, confirmarContraseniaField.getText(), "Confirmar Contraseña", errores);
+            validarCampo(administrador::setCorreoElectronico, correoElectronicoField.getText(), "Correo Electrónico", errores);
 
             // Validación de las contraseñas
             String contrasenia = contraseniaField.getText();
             String confirmarContrasenia = confirmarContraseniaField.getText();
-            // Comprobación de las contraseñas
             if (contrasenia == null || confirmarContrasenia == null || !contrasenia.equals(confirmarContrasenia)) {
                 errores.add("Las contraseñas no coinciden.");
             } else {
                 try {
-                    // Intentamos establecer la contraseña y capturamos la excepción si no cumple con el requisito de longitud
-                    cliente.setContrasenia(contrasenia);  // Llamada al setter con validación de longitud
+                    administrador.setContrasenia(contrasenia);
                 } catch (IllegalArgumentException e) {
-                    errores.add(e.getMessage());  // Capturamos la excepción y añadimos el mensaje de error
-                }
-            }
-
-            if (fechaNacimientoPicker.getValue() != null) {
-                LocalDate localDate = fechaNacimientoPicker.getValue();
-                // Convertir LocalDate a Date con la zona horaria correcta
-                ZoneId zoneId = ZoneId.systemDefault();
-                Date fechaNacimiento = Date.from(localDate.atStartOfDay(zoneId).toInstant());
-                try {
-                    cliente.setFechaNacimiento(fechaNacimiento);
-                } catch (FechaInvalidaException e) {
                     errores.add(e.getMessage());
                 }
-            } else {
-                errores.add("La fecha de nacimiento es obligatoria.");
             }
 
-            // Verificar si hay errores acumulados y mostrarlos en una sola alerta
             if (!errores.isEmpty()) {
                 showAlert(String.join("\n", errores));
             } else {
-                // Obtener la instancia de GestionUsuario y verificar duplicados
-                GestionUsuario gestionUsuario = GestionUsuario.getInstancia("HotelManagement_I/usuarios.json");
-                if (gestionUsuario.existeUsuarioConDni(cliente.getDni())) {
+                GestionUsuario gestionUsuario = GestionUsuario.getInstancia("usuarios.json");
+                if (gestionUsuario.existeUsuarioConDni(administrador.getDni())) {
                     throw new AtributoFaltanteException("El DNI ya está registrado.");
                 }
-                if (gestionUsuario.existeUsuarioConCorreo(cliente.getCorreoElectronico())) {
+                if (gestionUsuario.existeUsuarioConCorreo(administrador.getCorreoElectronico())) {
                     throw new AtributoFaltanteException("El correo electrónico ya está registrado.");
                 }
 
-                // Ahora, cuando vayas a guardar, formateas la fecha a "yyyy-MM-dd" solo para el almacenamiento
                 SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
                 String fechaNacimientoString = null;
-                if (cliente.getFechaNacimiento() != null) {
-                    fechaNacimientoString = formato.format(cliente.getFechaNacimiento());
-                }
 
-                // Guardar el cliente en el JSON, manteniendo la fecha como Date en la clase Cliente
-                gestionUsuario.crearCliente(
-                        cliente.getNombre(),
-                        cliente.getApellido(),
-                        cliente.getDni(),
-                        cliente.getContrasenia(),
-                        cliente.getCorreoElectronico(),
-                        cliente.getDireccion(),
-                        cliente.getTelefono(),
-                        new ArrayList<>(), // Historial de reservas vacío
-                        0, // Puntos de fidelidad inicial
-                        cliente.getFechaNacimiento() // Se pasa la fecha como Date
+                gestionUsuario.crearAdministrador(
+                        administrador.getNombre(),
+                        administrador.getApellido(),
+                        administrador.getDni(),
+                        administrador.getContrasenia(),
+                        administrador.getCorreoElectronico()
                 );
-                System.out.println("Cliente guardado con éxito");
 
                 // Llamar a actualizarListaUsuarios() en el controlador de la escena anterior, si aplica
                 if (previousScene != null && previousScene.getUserData() instanceof GestionarUsuariosController) {
@@ -202,6 +163,7 @@ public class CrearClienteController extends BaseController {
                     gestionarUsuariosController.actualizarListaUsuarios();
                 }
 
+                System.out.println("Administrador guardado con éxito");
                 volverAEscenaAnterior(event, previousScene);
             }
         } catch (AtributoFaltanteException e) {
@@ -210,10 +172,6 @@ public class CrearClienteController extends BaseController {
     }
 
 
-
-
-
-    // Metodo de validación general para los campos
     private void validarCampo(Consumer<String> setter, String value, String campo, List<String> errores) {
         try {
             setter.accept(value);
@@ -222,7 +180,6 @@ public class CrearClienteController extends BaseController {
         }
     }
 
-    // Metodo para mostrar una alerta con los errores acumulados
     private void showAlert(String mensaje) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error en los datos");

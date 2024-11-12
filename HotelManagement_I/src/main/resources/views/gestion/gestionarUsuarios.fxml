@@ -3,6 +3,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.gestionar.GestionarUsuariosController">
     <children>
         <Label text="Gestión de Usuarios" layoutX="20" layoutY="20" />
@@ -19,6 +21,17 @@
 
         <TextField fx:id="nombreUsuarioField" layoutX="20" layoutY="470" prefWidth="150" promptText="Nombre Usuario" onKeyReleased="#filtrarUsuariosPorNombre" />
         <TextField fx:id="dniUsuarioField" layoutX="200" layoutY="470" prefWidth="100" promptText="DNI Usuario" onKeyReleased="#filtrarUsuariosPorDni" />
+        <!-- ComboBox para filtrar por tipo de usuario -->
+        <ComboBox fx:id="rolComboBox" layoutX="320" layoutY="470" prefWidth="130" onAction="#filtrarUsuariosPorRol">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="Todos" />
+                    <String fx:value="Cliente" />
+                    <String fx:value="Administrador" />
+                    <String fx:value="Conserje" />
+                </FXCollections>
+            </items>
+        </ComboBox>
 
         <!-- Asignamos fx:id a los botones para vincularlos con el controlador -->
         <Button fx:id="crearNuevoUsuarioButton" text="Crear Nuevo Usuario" layoutX="550" layoutY="100" onAction="#onCrearNuevoUsuarioButtonClick" />
