@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Pos?>
+
+<VBox alignment="CENTER" spacing="20" prefWidth="400" xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.modificar.ModificarContraseniaController">
+    <PasswordField fx:id="contraseniaActualField" promptText="Contraseña Actual" maxWidth="300.0"/>
+    <PasswordField fx:id="nuevaContraseniaField" promptText="Nueva Contraseña" maxWidth="300.0"/>
+    <PasswordField fx:id="confirmarContraseniaField" promptText="Confirmar Nueva Contraseña" maxWidth="300.0"/>
+
+    <HBox spacing="10" alignment="CENTER">
+        <Button text="Guardar" onAction="#guardarNuevaContrasenia"/>
+        <Button text="Cancelar" onAction="#cancelarCambioContrasenia"/>
+    </HBox>
+</VBox>

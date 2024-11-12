@@ -1,5 +1,7 @@
 package services;
 
+import exceptions.FechaInvalidaException;
+import exceptions.UsuarioDuplicadoException;
 import interfaces.Gestionable_I;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -46,44 +48,64 @@ public class GestionUsuario implements Gestionable_I<Usuario> {
         Cliente cliente = new Cliente(nombre, apellido, dni, password, correoElectronico, direccion, telefono, historialReservas, puntosFidelidad, fechaNacimiento);
 
         // Guardar el cliente en el almacenamiento (por ejemplo, archivo JSON)
-        guardar(cliente);
-        mostrarMensajeTemporal("Guardando nuevo usuario en archivo json");
+        try {
+            guardar(cliente);
+        } catch (UsuarioDuplicadoException e) {
+            throw new RuntimeException("El usuario se encuentra duplicado...");
+        }
+        mostrarMensajeTemporal("Guardando nuevo cliente en archivo json");
 
         return cliente;
     }
 
-    public boolean actualizarUsuario(Usuario usuario, String nuevoNombre, String nuevoApellido, String nuevoEmail) {
+    public boolean actualizarUsuario(Usuario usuario) throws UsuarioDuplicadoException {
+        // Verificar si el nuevo correo electrónico ya está en uso por otro usuario
+        for (Usuario u : usuarios) {
+            if (!u.getDni().equals(usuario.getDni()) && u.getCorreoElectronico().equalsIgnoreCase(usuario.getCorreoElectronico())) {
+                throw new UsuarioDuplicadoException("El correo electrónico '" + usuario.getCorreoElectronico() + "' ya está en uso.");
+            }
+        }
+
         // Buscar al usuario en la lista
         Usuario usuarioAActualizar = buscarPorId(usuario.getDni());
 
         if (usuarioAActualizar != null) {
-            // Actualizar los campos comunes del usuario
-            usuarioAActualizar.setNombre(nuevoNombre);
-            usuarioAActualizar.setApellido(nuevoApellido);
-            usuarioAActualizar.setCorreoElectronico(nuevoEmail);
+            // Actualizar los campos comunes
+            usuarioAActualizar.setNombre(usuario.getNombre());
+            usuarioAActualizar.setApellido(usuario.getApellido());
+            usuarioAActualizar.setCorreoElectronico(usuario.getCorreoElectronico());
 
-            // Si es cliente, actualizamos también los datos específicos
+            // Si la contraseña fue modificada, actualizarla
+            if (usuario.getContrasenia() != null && !usuario.getContrasenia().isEmpty()) {
+                usuarioAActualizar.setContrasenia(usuario.getContrasenia());
+            }
+
+            // Actualizar campos específicos dependiendo del tipo de usuario
             if (usuarioAActualizar instanceof Cliente) {
-                Cliente cliente = (Cliente) usuarioAActualizar;
-                cliente.setDireccion(((Cliente) usuario).getDireccion());
-                cliente.setTelefono(((Cliente) usuario).getTelefono());
-                cliente.setFechaNacimiento(((Cliente) usuario).getFechaNacimiento());
-            }
+                Cliente clienteAActualizar = (Cliente) usuarioAActualizar;
+                Cliente clienteNuevo = (Cliente) usuario;
 
-            // Si es Conserje, actualizamos los datos específicos de Conserje
-            else if (usuarioAActualizar instanceof Conserje) {
-                Conserje conserje = (Conserje) usuarioAActualizar;
-                // Actualizamos los campos de Conserje
-                conserje.setTelefono(((Conserje) usuario).getTelefono());
-                conserje.setEstadoTrabajo(((Conserje) usuario).getEstadoTrabajo());
-
-                // Convertir la fecha de ingreso de LocalDate a Date
-                if (((Conserje) usuario).getFechaIngreso() != null) {
-                    conserje.setFechaIngreso(((Conserje) usuario).getFechaIngreso());
+                // Actualizar atributos específicos de Cliente
+                clienteAActualizar.setDireccion(clienteNuevo.getDireccion());
+                clienteAActualizar.setTelefono(clienteNuevo.getTelefono());
+                try {
+                    clienteAActualizar.setFechaNacimiento(clienteNuevo.getFechaNacimiento());
+                } catch (FechaInvalidaException e) {
+                    throw new RuntimeException(e);
                 }
+            } else if (usuarioAActualizar instanceof Conserje) {
+                Conserje conserjeAActualizar = (Conserje) usuarioAActualizar;
+                Conserje conserjeNuevo = (Conserje) usuario;
+
+                // Actualizar atributos específicos de Conserje
+                conserjeAActualizar.setFechaIngreso(conserjeNuevo.getFechaIngreso());
+                conserjeAActualizar.setTelefono(conserjeNuevo.getTelefono());
+                conserjeAActualizar.setEstadoTrabajo(conserjeNuevo.getEstadoTrabajo());
             }
 
-            // Guardamos los cambios en el archivo JSON
+            // Si es un Administrador, no es necesario hacer cambios adicionales porque los atributos comunes ya se actualizan.
+
+            // Guardar los cambios en el archivo JSON
             guardarUsuariosEnJson();
             return true; // Se actualizó correctamente
         }
@@ -96,14 +118,23 @@ public class GestionUsuario implements Gestionable_I<Usuario> {
     public Conserje crearConserje(String nombre, String apellido, String dni, String password, String correoElectronico,
                                   Date fechaIngreso, String telefono, String estadoTrabajo) {
         Conserje conserje = new Conserje(nombre, apellido, dni, password, correoElectronico, fechaIngreso, telefono, estadoTrabajo);
-        guardar(conserje);
+        try {
+            guardar(conserje);
+        } catch (UsuarioDuplicadoException e) {
+            throw new RuntimeException("El usuario se encuentra duplicado...");
+        }
         return conserje;
     }
 
     // Metodo para crear un nuevo administrador
     public Administrador crearAdministrador(String nombre, String apellido, String dni, String password, String correoElectronico) {
         Administrador administrador = new Administrador(nombre, apellido, dni, password, correoElectronico);
-        usuarios.add(administrador);
+        try {
+            guardar(administrador);
+        }catch (UsuarioDuplicadoException e){
+            throw new RuntimeException("El usuario se encuentra duplicado...");
+        }
+        mostrarMensajeTemporal("Guardando nuevo administrador en archivo json");
         return administrador;
     }
 
@@ -135,10 +166,20 @@ public class GestionUsuario implements Gestionable_I<Usuario> {
     }
 
     @Override
-    public void guardar(Usuario usuario) {
+    public void guardar(Usuario usuario) throws UsuarioDuplicadoException {
+        // Verificar si el DNI ya existe
+        if (existeUsuarioConDni(usuario.getDni())) {
+            throw new UsuarioDuplicadoException("Ya existe un usuario con el DNI: " + usuario.getDni());
+        }
+        // Verificar si el correo electrónico ya existe
+        if (existeUsuarioConCorreo(usuario.getCorreoElectronico())) {
+            throw new UsuarioDuplicadoException("Ya existe un usuario con el correo electrónico: " + usuario.getCorreoElectronico());
+        }
+        // Si no existen duplicados, añadimos el usuario y guardamos en el JSON
         usuarios.add(usuario);
         guardarUsuariosEnJson();
     }
+
 
     @Override
     public boolean eliminar(String dni) {
@@ -155,7 +196,7 @@ public class GestionUsuario implements Gestionable_I<Usuario> {
     private void guardarUsuariosEnJson() {
         try {
             // Aquí guardamos la lista de usuarios en el archivo JSON
-            GestionJSON.guardarUsuariosJson(usuarios, "ProyectoHotelProgra2/HotelManagement_I/usuarios.json");
+            GestionJSON.guardarUsuariosJson(usuarios, "HotelManagement_I/usuarios.json");
         } catch (JSONException | IOException e) {
             e.printStackTrace();
         }

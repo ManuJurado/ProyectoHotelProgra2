@@ -1,6 +1,7 @@
 package controllers.gestionar;
 
 import controllers.BaseController;
+import controllers.crear.CrearNuevoAdministradorController;
 import controllers.crear.CrearUsuarioController;
 import controllers.modificar.ModificarMiUsuarioController;
 import enums.TipoUsuario;
@@ -48,6 +49,9 @@ public class GestionarUsuariosController extends BaseController {
     private Button eliminarUsuarioButton;
 
     @FXML
+    private ComboBox<String> rolComboBox;
+
+    @FXML
     private TextField nombreUsuarioField;
     @FXML
     private TextField dniUsuarioField; // Campo para el DNI
@@ -65,9 +69,12 @@ public class GestionarUsuariosController extends BaseController {
         columnaRol.setCellValueFactory(new PropertyValueFactory<>("tipoUsuario"));
         columnaDni.setCellValueFactory(new PropertyValueFactory<>("dni"));  // Aquí agregamos la columna DNI
 
+        setTextFieldLimit(nombreUsuarioField, 20);
+        setTextFieldLimit(dniUsuarioField, 10);
+
 
         // Obtener la instancia de GestionUsuario para cargar los usuarios
-        this.gestionarUsuarios = GestionUsuario.getInstancia("ProyectoHotelProgra2/HotelManagement_I/usuarios.json");
+        this.gestionarUsuarios = GestionUsuario.getInstancia("HotelManagement_I/usuarios.json");
 
         cargarUsuarios(); // Carga los usuarios al inicializar
 
@@ -83,6 +90,7 @@ public class GestionarUsuariosController extends BaseController {
             crearNuevoUsuarioButton.setVisible(false);
             modificarUsuarioButton.setVisible(false);
             eliminarUsuarioButton.setVisible(false);
+            rolComboBox.setVisible(false);
         }
     }
 
@@ -235,7 +243,7 @@ public class GestionarUsuariosController extends BaseController {
                     mostrarAlerta("Error","No puede eliminar a otro Administrador.");
                 } else {
                     // Si no es el usuario logueado ni un administrador, procedemos a eliminarlo
-                    GestionUsuario gestionUsuario = GestionUsuario.getInstancia("ProyectoHotelProgra2/HotelManagement_I/usuarios.json");
+                    GestionUsuario gestionUsuario = GestionUsuario.getInstancia("HotelManagement_I/usuarios.json");
                     boolean eliminado = gestionUsuario.eliminarUsuario(usuarioSeleccionado.getDni());
 
                     if (eliminado) {
@@ -253,46 +261,77 @@ public class GestionarUsuariosController extends BaseController {
         });
     }
 
-
     @FXML
     private void filtrarUsuariosPorNombre() {
-        String filtro = nombreUsuarioField.getText().toLowerCase(); // Obtener el texto y pasarlo a minúsculas
-
-        // Si el filtro está vacío, cargar todos los usuarios
-        if (filtro.isEmpty()) {
-            tablaUsuarios.setItems(usuariosOriginales); // Mostrar todos los usuarios
-            return; // Salir del metodo para evitar la siguiente lógica
-        }
+        String filtroNombre = nombreUsuarioField.getText().toLowerCase(); // Obtener el texto del filtro y convertir a minúsculas
+        String filtroRol = rolComboBox.getValue(); // Obtener el valor seleccionado en el ComboBox de rol
 
         // Filtrar la lista original de usuarios
         ObservableList<Usuario> usuariosFiltrados = FXCollections.observableArrayList();
 
-        // Recorrer la lista original de usuarios y agregar a la lista filtrada si coincide
         for (Usuario usuario : usuariosOriginales) {
-            if (usuario.getNombre().toLowerCase().contains(filtro)) {
+            // Filtrar primero por rol, si es "Todos", mostrar todos los roles
+            boolean coincideConRol = "Todos".equals(filtroRol) || usuario.getTipoUsuario().toString().equalsIgnoreCase(filtroRol);
+
+            // Filtrar por nombre
+            boolean coincideConNombre = usuario.getNombre().toLowerCase().contains(filtroNombre);
+
+            // Si el usuario cumple ambas condiciones (coincide con rol y nombre), lo agregamos a la lista filtrada
+            if (coincideConRol && coincideConNombre) {
                 usuariosFiltrados.add(usuario);
             }
         }
+
+        // Actualizar la tabla con los usuarios filtrados
+        tablaUsuarios.setItems(usuariosFiltrados);
+    }
+
+    @FXML
+    private void filtrarUsuariosPorRol() {
+        String filtroRol = rolComboBox.getValue(); // Obtener el valor seleccionado en el ComboBox de rol
+        String filtroNombre = nombreUsuarioField.getText().toLowerCase(); // Obtener el texto del filtro de nombre
+
+        // Filtrar la lista original de usuarios
+        ObservableList<Usuario> usuariosFiltrados = FXCollections.observableArrayList();
+
+        for (Usuario usuario : usuariosOriginales) {
+            // Filtrar primero por rol, si es "Todos", mostrar todos los roles
+            boolean coincideConRol = "Todos".equals(filtroRol) || usuario.getTipoUsuario().toString().equalsIgnoreCase(filtroRol);
+
+            // Filtrar por nombre
+            boolean coincideConNombre = usuario.getNombre().toLowerCase().contains(filtroNombre);
+
+            // Si el usuario cumple ambas condiciones (coincide con rol y nombre), lo agregamos a la lista filtrada
+            if (coincideConRol && coincideConNombre) {
+                usuariosFiltrados.add(usuario);
+            }
+        }
+
         // Actualizar la tabla con los usuarios filtrados
         tablaUsuarios.setItems(usuariosFiltrados);
     }
 
     @FXML
     private void filtrarUsuariosPorDni() {
-        String filtro = dniUsuarioField.getText().toLowerCase(); // Obtener el texto del DNI en minúsculas
-
-        // Si el filtro está vacío, cargar todos los usuarios
-        if (filtro.isEmpty()) {
-            tablaUsuarios.setItems(usuariosOriginales); // Mostrar todos los usuarios
-            return; // Salir del metodo si el filtro está vacío
-        }
+        String filtroDni = dniUsuarioField.getText().toLowerCase(); // Obtener el texto del filtro de DNI y convertir a minúsculas
+        String filtroRol = rolComboBox.getValue(); // Obtener el valor seleccionado en el ComboBox de rol
+        String filtroNombre = nombreUsuarioField.getText().toLowerCase(); // Obtener el texto del filtro de nombre
 
         // Filtrar la lista original de usuarios
         ObservableList<Usuario> usuariosFiltrados = FXCollections.observableArrayList();
 
-        // Recorrer la lista original de usuarios y agregar a la lista filtrada si el DNI coincide
         for (Usuario usuario : usuariosOriginales) {
-            if (usuario.getDni().toLowerCase().contains(filtro)) { // Filtrar por DNI
+            // Filtrar primero por rol, si es "Todos", mostrar todos los roles
+            boolean coincideConRol = "Todos".equals(filtroRol) || usuario.getTipoUsuario().toString().equalsIgnoreCase(filtroRol);
+
+            // Filtrar por nombre
+            boolean coincideConNombre = usuario.getNombre().toLowerCase().contains(filtroNombre);
+
+            // Filtrar por DNI
+            boolean coincideConDni = usuario.getDni().toLowerCase().contains(filtroDni);
+
+            // Si el usuario cumple con todas las condiciones (coincide con rol, nombre y DNI), lo agregamos a la lista filtrada
+            if (coincideConRol && coincideConNombre && coincideConDni) {
                 usuariosFiltrados.add(usuario);
             }
         }
@@ -301,7 +340,12 @@ public class GestionarUsuariosController extends BaseController {
         tablaUsuarios.setItems(usuariosFiltrados);
     }
 
+
     private void cargarUsuarios() {
+
+        // Obtener la instancia de GestionUsuario para cargar los usuarios
+        this.gestionarUsuarios = GestionUsuario.getInstancia("HotelManagement_I/usuarios.json");
+
         // Obtener el usuario logueado
         Usuario usuarioLogueado = Sesion.getUsuarioLogueado();
 

@@ -50,7 +50,7 @@ public class ClienteController extends BaseController {
         // Lógica para borrar el usuario después de la confirmación de la contraseña
         boolean confirmado = confirmarAccion("¿Estás seguro que deseas borrar tu cuenta?");
         if (confirmado) {
-            GestionUsuario gestionUsuario = GestionUsuario.getInstancia("ProyectoHotelProgra2/HotelManagement_I/usuarios.json");
+            GestionUsuario gestionUsuario = GestionUsuario.getInstancia("HotelManagement_I/usuarios.json");
             boolean eliminado = gestionUsuario.eliminar(usuarioLogueado.getDni()); // Elimina el usuario por DNI
             if (eliminado) {
                 mostrarAlerta("Éxito", "Tu cuenta ha sido eliminada.");

@@ -2,6 +2,7 @@ package controllers.crear;
 
 import controllers.BaseController;
 import controllers.details.DatosUsuario;
+import controllers.gestionar.GestionarUsuariosController;
 import exceptions.AtributoFaltanteException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -53,26 +54,14 @@ public class CrearConserjeController extends BaseController {
         apellidoField.setText(DatosUsuario.getApellido());
         dniField.setText(DatosUsuario.getDni());
         // Limitar el número de caracteres en los campos de texto
-        nombreField.setTextFormatter(new TextFormatter<>(change ->
-                change.getControlNewText().length() <= 30 ? change : null));
+        setTextFieldLimit(nombreField, 30);
+        setTextFieldLimit(apellidoField, 30);
+        setTextFieldLimit(telefonoField, 15);
+        setTextFieldLimit(dniField, 10);
+        setTextFieldLimit(contraseniaField, 20);
+        setTextFieldLimit(correoElectronicoField, 30);
+        setTextFieldLimit(estadoTrabajoField, 30);
 
-        apellidoField.setTextFormatter(new TextFormatter<>(change ->
-                change.getControlNewText().length() <= 30 ? change : null));
-
-        telefonoField.setTextFormatter(new TextFormatter<>(change ->
-                change.getControlNewText().length() <= 15 ? change : null));
-
-        dniField.setTextFormatter(new TextFormatter<>(change ->
-                change.getControlNewText().length() <= 10 ? change : null));
-
-        contraseniaField.setTextFormatter(new TextFormatter<>(change ->
-                change.getControlNewText().length() <= 20 ? change : null));
-
-        correoElectronicoField.setTextFormatter(new TextFormatter<>(change ->
-                change.getControlNewText().length() <= 30 ? change : null));
-
-        estadoTrabajoField.setTextFormatter(new TextFormatter<>(change ->
-                change.getControlNewText().length() <= 30 ? change : null));
     }
 
     @FXML
@@ -107,7 +96,7 @@ public class CrearConserjeController extends BaseController {
                 showAlert(String.join("\n", errores));
             } else {
                 // Obtener la instancia de GestionUsuario y verificar duplicados
-                GestionUsuario gestionUsuario = GestionUsuario.getInstancia("ProyectoHotelProgra2/HotelManagement_I/usuarios.json");
+                GestionUsuario gestionUsuario = GestionUsuario.getInstancia("HotelManagement_I/usuarios.json");
                 if (gestionUsuario.existeUsuarioConDni(conserje.getDni())) {
                     throw new AtributoFaltanteException("El DNI ya está registrado.");
                 }
@@ -133,6 +122,13 @@ public class CrearConserjeController extends BaseController {
                         conserje.getTelefono(),
                         conserje.getEstadoTrabajo()
                 );
+
+                // Llamar a actualizarListaUsuarios() en el controlador de la escena anterior, si aplica
+                if (previousScene != null && previousScene.getUserData() instanceof GestionarUsuariosController) {
+                    GestionarUsuariosController gestionarUsuariosController = (GestionarUsuariosController) previousScene.getUserData();
+                    gestionarUsuariosController.actualizarListaUsuarios();
+                }
+
                 System.out.println("Conserje guardado con éxito");
                 volverAEscenaAnterior(event, previousScene);
             }
