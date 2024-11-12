@@ -155,7 +155,7 @@ public class GestionUsuario implements Gestionable_I<Usuario> {
     private void guardarUsuariosEnJson() {
         try {
             // Aquí guardamos la lista de usuarios en el archivo JSON
-            GestionJSON.guardarUsuariosJson(usuarios, "C:/Users/Manu/OneDrive/Escritorio/NuevaRamaManu/ProyectoHotelProgra2/HotelManagement_I/usuarios.json");
+            GestionJSON.guardarUsuariosJson(usuarios, "ProyectoHotelProgra2/HotelManagement_I/usuarios.json");
         } catch (JSONException | IOException e) {
             e.printStackTrace();
         }
