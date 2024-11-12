@@ -67,7 +67,7 @@ public class GestionarUsuariosController extends BaseController {
 
 
         // Obtener la instancia de GestionUsuario para cargar los usuarios
-        this.gestionarUsuarios = GestionUsuario.getInstancia("C:/Users/Manu/OneDrive/Escritorio/NuevaRamaManu/ProyectoHotelProgra2/HotelManagement_I/usuarios.json");
+        this.gestionarUsuarios = GestionUsuario.getInstancia("ProyectoHotelProgra2/HotelManagement_I/usuarios.json");
 
         cargarUsuarios(); // Carga los usuarios al inicializar
 
@@ -235,7 +235,7 @@ public class GestionarUsuariosController extends BaseController {
                     mostrarAlerta("Error","No puede eliminar a otro Administrador.");
                 } else {
                     // Si no es el usuario logueado ni un administrador, procedemos a eliminarlo
-                    GestionUsuario gestionUsuario = GestionUsuario.getInstancia("usuarios.json");
+                    GestionUsuario gestionUsuario = GestionUsuario.getInstancia("ProyectoHotelProgra2/HotelManagement_I/usuarios.json");
                     boolean eliminado = gestionUsuario.eliminarUsuario(usuarioSeleccionado.getDni());
 
                     if (eliminado) {

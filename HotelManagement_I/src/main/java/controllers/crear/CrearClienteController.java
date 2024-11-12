@@ -180,7 +180,7 @@ public class CrearClienteController extends BaseController {
                 showAlert(String.join("\n", errores));
             } else {
                 // Obtener la instancia de GestionUsuario y verificar duplicados
-                GestionUsuario gestionUsuario = GestionUsuario.getInstancia("usuarios.json");
+                GestionUsuario gestionUsuario = GestionUsuario.getInstancia("ProyectoHotelProgra2/HotelManagement_I/usuarios.json");
                 if (gestionUsuario.existeUsuarioConDni(cliente.getDni())) {
                     throw new AtributoFaltanteException("El DNI ya está registrado.");
                 }

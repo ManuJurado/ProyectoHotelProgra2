@@ -219,7 +219,7 @@ public class GestionHabitaciones implements Gestionable_I<Habitacion> {
     // Metodo para actualizar el archivo JSON cuando se realice algún cambio
     private void actualizarHabitacionesJson() {
         try {
-            GestionJSON.guardarHabitacionesJson(habitaciones, "habitaciones.json");
+            GestionJSON.guardarHabitacionesJson(habitaciones, "ProyectoHotelProgra2/HotelManagement_I/habitaciones.json");
         } catch (JSONException | IOException e) {
             e.printStackTrace();
         }
