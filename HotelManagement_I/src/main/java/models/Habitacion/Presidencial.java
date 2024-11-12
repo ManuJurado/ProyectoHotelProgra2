@@ -32,7 +32,10 @@ public class Presidencial extends Habitacion {
         return dimension;
     }
 
-    public void setDimension(double dimension) {
+    public void setDimension(double dimension) throws IllegalArgumentException {
+        if (dimension < 9 || dimension > 200) {
+            throw new IllegalArgumentException("La dimension ingresada debe estar entre 9m2 y 200m2.");
+        }
         this.dimension = dimension;
     }
 

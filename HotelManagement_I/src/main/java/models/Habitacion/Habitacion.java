@@ -30,12 +30,24 @@ public abstract class Habitacion {
         this.detalleEstado = detalleEstado;
     }
 
+    public Habitacion(String tipo, int numero, List<String> camas, boolean disponible, EstadoHabitacion estado, String detalleEstado) {
+        this.tipo = tipo;
+        this.numero = numero;
+        this.camas = camas;
+        this.estado = estado;
+        this.disponible = disponible;
+        this.detalleEstado = detalleEstado;
+    }
+
     //Getters y Setters
     public String getTipo() {
         return tipo;
     }
 
-    public void setTipo(String tipo) {
+    public void setTipo(String tipo) throws IllegalArgumentException {
+        if (tipo == null || tipo.trim().isEmpty()) {
+            throw new IllegalArgumentException("Debe seleccionar un tipo de habitacion.");
+        }
         this.tipo = tipo;
     }
 
@@ -44,7 +56,7 @@ public abstract class Habitacion {
     }
 
     //Arroja una excepcion si se ingresa un numero de habitacion menor a 1
-    public void setNumero(int numero) {
+    public void setNumero(int numero) throws NroHabitacionInvalidoException{
         if (numero < 0) {
             throw new NroHabitacionInvalidoException("El Nro de habitacion debe ser mayor a 0");
         }
@@ -67,7 +79,10 @@ public abstract class Habitacion {
         return camas;
     }
 
-    public void setCamas(List<String> camas) {
+    public void setCamas(List<String> camas) throws IllegalArgumentException {
+        if(camas.isEmpty()) {
+            throw new IllegalArgumentException("Debe seleccionar al menos una cama.");
+        }
         this.camas = camas;
     }
 
@@ -83,7 +98,10 @@ public abstract class Habitacion {
         return estado;
     }
 
-    public void setEstado(EstadoHabitacion estado) {
+    public void setEstado(EstadoHabitacion estado) throws IllegalArgumentException {
+        if (estado == null) {
+            throw new IllegalArgumentException("El estado no puede estar vacio.");
+        }
         this.estado = estado;
     }
 

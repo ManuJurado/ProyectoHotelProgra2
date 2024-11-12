@@ -12,7 +12,7 @@ import services.GestionHabitaciones;
 
 public class CrearHabitacionController extends BaseController {
 
-    private GestionHabitaciones gestionarHabitaciones;
+    private GestionHabitaciones gestionHabitaciones;
 
     @FXML
     private TextField tipoHabitacionField; // Tipo de habitación
@@ -27,8 +27,8 @@ public class CrearHabitacionController extends BaseController {
 
     private GestionarHabitacionesController gestionarHabitacionesController;
 
-    public void setGestionarHabitaciones(services.GestionHabitaciones gestionarHabitaciones) {
-        this.gestionarHabitaciones = gestionarHabitaciones;
+    public void setGestionarHabitaciones(services.GestionHabitaciones gestionHabitaciones) {
+        this.gestionHabitaciones = gestionHabitaciones;
     }
 
     public void setGestionarHabitacionesController(GestionarHabitacionesController gestionarHabitacionesController) {

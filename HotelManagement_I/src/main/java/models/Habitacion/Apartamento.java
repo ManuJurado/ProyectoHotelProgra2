@@ -24,7 +24,11 @@ public class Apartamento extends Habitacion {
         return ambientes;
     }
 
-    public void setAmbientes(int ambientes) {
+    //Si la cantidad de ambientes no cumple las condiciones se lanza una excepcion
+    public void setAmbientes(int ambientes) throws IllegalArgumentException{
+        if (ambientes < 1 || ambientes > 10) {
+            throw new IllegalArgumentException("La cantidad de ambientes debe ser mayor a 0.");
+        }
         this.ambientes = ambientes;
     }
 

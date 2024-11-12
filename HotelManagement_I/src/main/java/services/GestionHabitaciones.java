@@ -134,18 +134,18 @@ public class GestionHabitaciones implements Gestionable_I<Habitacion> {
     /**-----------------------  INICIO METODOS ABM  -----------------------*/
 
     //Metodo para crear una habitacion (Individual)
-    public Individual crearHabitacionIndividual(String tipo, int numero, int capacidad, List<String> camas, boolean disponible, EstadoHabitacion estado, String detalleEstado) {
+    public Individual crearHabitacionIndividual(String tipo, int numero, List<String> camas, boolean disponible, EstadoHabitacion estado, String detalleEstado) {
 
-        Individual individual = new Individual(tipo, numero, capacidad, camas, disponible, estado, detalleEstado);
+        Individual individual = new Individual(tipo, numero, camas, disponible, estado, detalleEstado);
         habitaciones.add(individual);
         actualizarHabitacionesJson();
         return individual;
     }
 
     //Metodo para crear una habitacion (Doble)
-    public Doble crearHabitacionDoble(String tipo, int numero, int capacidad, List<String> camas, boolean disponible, EstadoHabitacion estado, String detalleEstado) {
+    public Doble crearHabitacionDoble(String tipo, int numero, List<String> camas, boolean disponible, EstadoHabitacion estado, String detalleEstado) {
 
-        Doble doble = new Doble(tipo, numero, capacidad, camas, disponible, estado, detalleEstado);
+        Doble doble = new Doble(tipo, numero, camas, disponible, estado, detalleEstado);
         habitaciones.add(doble);
         actualizarHabitacionesJson();
         return doble;
