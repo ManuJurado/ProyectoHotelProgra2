@@ -1,34 +1,99 @@
 [
-    {
-      "id": 1,
-      "fechaReserva": "2024-11-10",
-      "fechaEntrada": "2024-11-15",
-      "fechaSalida": "2024-11-20",
-      "estadoReserva": "Activa",
-      "comentario": "Reserva para vacaciones",
-      "cantidadPersonas": 2,
-      "pasajeros": [
-        {"dni": "12345678", "nombre": "Juan", "apellido": "Pérez"},
-        {"dni": "23456789", "nombre": "Ana", "apellido": "Gómez"}
-      ],
-      "serviciosAdicionales": ["Wi-Fi", "Desayuno"],
-      "usuarioId": 123,
-      "habitacionId": 101
+  {
+    "pasajeros": [
+      {
+        "apellido": "Pérez",
+        "nombre": "Juan",
+        "dni": "12345678"
+      },
+      {
+        "apellido": "Gómez",
+        "nombre": "Ana",
+        "dni": "23456789"
+      }
+    ],
+    "fechaSalida": "2024-11-20",
+    "cantidadPersonas": 2,
+    "fechaEntrada": "2024-11-15",
+    "serviciosAdicionales": [
+      "Wi-Fi",
+      "Desayuno"
+    ],
+    "usuario": {
+      "fechaIngreso": "2020-01-05",
+      "apellido": "Martinez",
+      "contrasenia": "conserje123",
+      "tipoUsuario": "CONSERJE",
+      "estadoTrabajo": "Activo",
+      "telefono": "16516516516",
+      "nombre": "Sofia",
+      "correoElectronico": "laura.martinez@example.com",
+      "dni": "87654321"
     },
-    {
-      "id": 2,
-      "fechaReserva": "2024-11-12",
-      "fechaEntrada": "2024-11-18",
-      "fechaSalida": "2024-11-22",
-      "estadoReserva": "Confirmada",
-      "comentario": "Viaje de negocios",
-      "cantidadPersonas": 1,
-      "pasajeros": [
-        {"dni": "34567890", "nombre": "Carlos", "apellido": "López"}
+    "id": 1,
+    "estadoReserva": "Activa",
+    "comentario": "Reserva para vacaciones",
+    "fechaReserva": "2024-11-10",
+    "habitacion": {
+      "camas": [
+        "Individual",
+        "Individual"
       ],
-      "serviciosAdicionales": ["Almuerzo", "Estacionamiento"],
-      "usuarioId": 456,
-      "habitacionId": 102
+      "tipo": "Doble",
+      "estado": "LIMPIEZA",
+      "numero": 101,
+      "detalleEstado": "Limpieza matutina realizada por Ernesto.",
+      "capacidad": 2,
+      "disponible": false
     }
-  ]
-  
+  },
+  {
+    "pasajeros": [
+      {
+        "apellido": "López",
+        "nombre": "Carlos",
+        "dni": "34567890"
+      }
+    ],
+    "fechaSalida": "2024-11-22",
+    "cantidadPersonas": 1,
+    "fechaEntrada": "2024-11-18",
+    "serviciosAdicionales": [
+      "Almuerzo",
+      "Estacionamiento"
+    ],
+    "usuario": {
+      "fechaNacimiento": "1995-08-27",
+      "apellido": "Sosa",
+      "direccion": "Catalunia 5157",
+      "habilitacion": "habilitado",
+      "contrasenia": "user1234",
+      "tipoUsuario": "CLIENTE",
+      "puntosFidelidad": 50,
+      "telefono": "1123456789",
+      "nombre": "Manuel",
+      "correoElectronico": "manolo@example.com",
+      "dni": "39098906"
+    },
+    "id": 2,
+    "estadoReserva": "Confirmada",
+    "comentario": "Viaje de negocios",
+    "fechaReserva": "2024-11-12",
+    "habitacion": {
+      "camas": [
+        "Matrimonial",
+        "Individual",
+        "Individual",
+        "Individual"
+      ],
+      "tipo": "Apartamento",
+      "estado": "DISPONIBLE",
+      "numero": 102,
+      "ambientes": 3,
+      "detalleEstado": "",
+      "capacidad": 5,
+      "disponible": true,
+      "cocina": true
+    }
+  }
+]

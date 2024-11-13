@@ -55,17 +55,17 @@ public class GestionReservas implements Gestionable_I<Reserva> {
 
     /**-----------------------  INICIO METODOS ABM  -----------------------*/
 
-    // Metodo para crear una nueva reserva
+    // Crear una nueva reserva
     public Reserva crearReserva(String nombreUsuario, String habitacionId, LocalDate fechaEntrada, LocalDate fechaSalida,
                                 String comentario, int cantidadPersonas, List<String> serviciosAdicionales, List<Pasajero> pasajeros)
             throws UsuarioNoEncontradoException, HabitacionInexistenteException, HabitacionDuplicadaException, FechaInvalidaException {
 
-        // Validación de la cantidad de pasajeros
+        // Validar cantidad de pasajeros
         if (cantidadPersonas > 4) {
             throw new ExcesoPasajerosException("No se pueden agregar más de 4 pasajeros a una reserva.");
         }
 
-        // Buscar el usuario
+        // Buscar usuario
         Usuario usuarioEncontrado = null;
         for (Usuario usuario : GestionUsuario.getInstancia("HotelManagement_I/usuarios.json").getUsuarios()) {
             if (usuario.getNombre().equalsIgnoreCase(nombreUsuario)) {
@@ -73,12 +73,11 @@ public class GestionReservas implements Gestionable_I<Reserva> {
                 break;
             }
         }
-
         if (usuarioEncontrado == null) {
             throw new UsuarioNoEncontradoException("El usuario con nombre " + nombreUsuario + " no se encuentra en el sistema.");
         }
 
-        // Buscar la habitación
+        // Buscar habitación
         Habitacion habitacionEncontrada = null;
         for (Habitacion habitacion : GestionHabitaciones.getInstancia("HotelManagement_I/habitaciones.json").getHabitaciones()) {
             if (String.valueOf(habitacion.getNumero()).equals(habitacionId)) {
@@ -86,17 +85,16 @@ public class GestionReservas implements Gestionable_I<Reserva> {
                 break;
             }
         }
-
         if (habitacionEncontrada == null) {
             throw new HabitacionInexistenteException("La habitación con ID " + habitacionId + " no se encuentra en la lista.");
         }
 
-        // Verificar si la habitación está disponible
+        // Verificar disponibilidad
         if (!habitacionEncontrada.isDisponible()) {
             throw new HabitacionOcupadaException("La habitación con ID " + habitacionId + " ya está ocupada.");
         }
 
-        // Verificar la superposición de fechas con otras reservas
+        // Verificar superposición de fechas
         for (Reserva reservaExistente : listaReservas) {
             if (reservaExistente.getHabitacion().getNumero() == habitacionEncontrada.getNumero()) {
                 LocalDate fechaEntradaExistente = reservaExistente.getFechaEntrada();
@@ -111,13 +109,13 @@ public class GestionReservas implements Gestionable_I<Reserva> {
             }
         }
 
-        // Crear la nueva reserva
-        Reserva nuevaReserva = new Reserva(LocalDate.now(), fechaEntrada, fechaSalida, "reservada", comentario, cantidadPersonas, pasajeros, serviciosAdicionales, usuarioEncontrado, habitacionEncontrada);
+        // Crear la reserva
+        Reserva nuevaReserva = new Reserva(fechaEntrada, fechaSalida, "reservada", comentario, cantidadPersonas, pasajeros, serviciosAdicionales, usuarioEncontrado, habitacionEncontrada);
 
-        // Actualizar el estado de la habitación a ocupada
+        // Actualizar estado de la habitación
         habitacionEncontrada.setEstado(EstadoHabitacion.ALQUILADA);
 
-        // Guardar la nueva reserva en la lista de reservas
+        // Agregar la nueva reserva a la lista
         listaReservas.add(nuevaReserva);
 
         // Guardar la nueva reserva en el archivo JSON
@@ -128,14 +126,24 @@ public class GestionReservas implements Gestionable_I<Reserva> {
             throw new RuntimeException("Error al guardar la reserva en el archivo JSON.");
         }
 
-        // Mostrar mensaje de confirmación
-        System.out.println("Reserva creada con éxito:");
-        System.out.println("Usuario: " + usuarioEncontrado.getNombre() + " - Habitacion: " + habitacionEncontrada.getNumero());
-        System.out.println("Fecha de reserva: " + nuevaReserva.getFechaReserva());
-
         return nuevaReserva; // Devolver la reserva creada
     }
 
+    // Metodo para modificar una reserva existente
+    public void modificarReserva(Reserva reservaModificada) {
+        // Buscar la reserva en la lista usando su ID (o cualquier otro identificador único)
+        for (int i = 0; i < this.listaReservas.size(); i++) {
+            Reserva reserva = this.listaReservas.get(i);
+            if (reserva.getId()==(reservaModificada.getId())) {
+                // Reemplazar la reserva vieja con la nueva reserva modificada
+                this.listaReservas.set(i, reservaModificada);
+                break;
+            }
+        }
+
+        // Luego guardamos las reservas modificadas (puedes implementarlo como desees)
+        actualizarReservasJson();
+    }
 
     // Metodo para eliminar una reserva
     public boolean eliminarReserva(String nombreUsuario, String habitacionId, LocalDate fechaEntrada)
@@ -171,7 +179,7 @@ public class GestionReservas implements Gestionable_I<Reserva> {
     // Metodo para actualizar el archivo JSON con las reservas
     private void actualizarReservasJson() {
         try {
-            GestionJSON.guardarReservasJson(listaReservas, "reservas.json");
+            GestionJSON.guardarReservasJson(listaReservas, "HotelManagement_I/reservas.json");
         } catch (JSONException | IOException e) {
             e.printStackTrace();
         }
@@ -207,6 +215,7 @@ public class GestionReservas implements Gestionable_I<Reserva> {
 
     @Override
     public void guardar(Reserva objeto) {
+        System.out.println(objeto.getFechaReserva());
         listaReservas.add(objeto);
         actualizarReservasJson();
     }
