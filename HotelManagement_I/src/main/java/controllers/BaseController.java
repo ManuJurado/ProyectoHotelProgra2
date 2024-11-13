@@ -31,8 +31,7 @@ public abstract class BaseController {
         this.previousController = previousController;
     }
 
-
-    private void mostrarAlerta(String mensaje) {
+    protected void mostrarAlerta(String mensaje) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText(null);

@@ -25,7 +25,7 @@
     "capacidad": 1,
     "camas": ["Individual"],
     "disponible": false,
-    "estado": "reparación",
+    "estado": "reparacion",
     "detalleEstado": "Problema con el aire acondicionado."
   },
   {

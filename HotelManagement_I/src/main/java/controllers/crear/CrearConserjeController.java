@@ -83,10 +83,7 @@ public class CrearConserjeController extends BaseController {
 
             if (fechaIngresoPicker.getValue() != null) {
                 LocalDate localDate = fechaIngresoPicker.getValue();
-                // Convertir LocalDate a Date con la zona horaria correcta
-                ZoneId zoneId = ZoneId.systemDefault();
-                Date fechaIngreso = Date.from(localDate.atStartOfDay(zoneId).toInstant());
-                conserje.setFechaIngreso(fechaIngreso);
+                conserje.setFechaIngreso(localDate); // Asignar directamente el LocalDate
             } else {
                 errores.add("La fecha de ingreso es obligatoria.");
             }

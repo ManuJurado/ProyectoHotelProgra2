@@ -143,11 +143,10 @@ public class ModificarMiUsuarioController extends BaseController {
             telefonoField.setText(cliente.getTelefono());
 
             // Conversión de java.util.Date a LocalDate para el campo de fechaNacimiento
-            Date fechaNacimiento = cliente.getFechaNacimiento(); // Obtener fecha de nacimiento del cliente
+            LocalDate fechaNacimiento = cliente.getFechaNacimiento(); // Obtener fecha de nacimiento del cliente
             if (fechaNacimiento != null) {
-                // Convertir de java.util.Date a LocalDate
-                LocalDate localDate = fechaNacimiento.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                fechaNacimientoField.setValue(localDate); // Establecer la fecha en el DatePicker
+                // Establecer la fecha en el DatePicker sin necesidad de conversión adicional
+                fechaNacimientoField.setValue(fechaNacimiento);
             }
 
             direccionField.setVisible(true);
@@ -159,13 +158,13 @@ public class ModificarMiUsuarioController extends BaseController {
         } else if (usuario instanceof Conserje) {
             Conserje conserje = (Conserje) usuario;
 
-            // Conversión de java.util.Date a LocalDate para el campo de fechaIngreso
-            Date fechaIngreso = conserje.getFechaIngreso(); // Obtener fecha de ingreso del conserje
+            // Obtener fecha de ingreso del conserje
+            LocalDate fechaIngreso = conserje.getFechaIngreso();
             if (fechaIngreso != null) {
-                // Convertir de java.util.Date a LocalDate
-                LocalDate fechaIngresoLocal = fechaIngreso.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                fechaIngresoField.setValue(fechaIngresoLocal); // Establecer la fecha en el DatePicker
+                // Establecer la fecha en el DatePicker (ya es LocalDate)
+                fechaIngresoField.setValue(fechaIngreso); // Establecer directamente el LocalDate
             }
+
 
             telefonoConserjeField.setText(conserje.getTelefono());
             estadoTrabajoField.setText(conserje.getEstadoTrabajo());
@@ -250,11 +249,10 @@ public class ModificarMiUsuarioController extends BaseController {
                 cliente.setDireccion(direccionField.getText());
                 cliente.setTelefono(telefonoField.getText());
 
-                // Conversión de LocalDate a java.util.Date para el campo fechaNacimiento
+                // Asignación de LocalDate a cliente
                 if (fechaNacimientoField.getValue() != null) {
-                    LocalDate localDate = fechaNacimientoField.getValue();
-                    Date fechaNacimiento = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-                    cliente.setFechaNacimiento(fechaNacimiento);
+                    LocalDate fechaNacimiento = fechaNacimientoField.getValue();
+                    cliente.setFechaNacimiento(fechaNacimiento); // No es necesario convertir, ya que setFechaNacimiento recibe LocalDate
                 }
             }
             // Si es Conserje, actualizamos los datos específicos de Conserje
@@ -263,13 +261,13 @@ public class ModificarMiUsuarioController extends BaseController {
                 conserje.setTelefono(telefonoConserjeField.getText());
                 conserje.setEstadoTrabajo(estadoTrabajoField.getText());
 
-                // Conversión de LocalDate a java.util.Date para la fecha de ingreso
+                // Establecer LocalDate directamente en lugar de convertir a Date
                 if (fechaIngresoField.getValue() != null) {
                     LocalDate localDate = fechaIngresoField.getValue();
-                    Date fechaIngreso = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-                    conserje.setFechaIngreso(fechaIngreso);
+                    conserje.setFechaIngreso(localDate); // Asignamos el LocalDate directamente
                 }
             }
+
 
             // Llamar a `actualizarUsuario` para actualizar y guardar el usuario en JSON
             boolean exito = GestionUsuario.getInstancia("HotelManagement_I/usuarios.json").actualizarUsuario(usuarioSeleccionado);

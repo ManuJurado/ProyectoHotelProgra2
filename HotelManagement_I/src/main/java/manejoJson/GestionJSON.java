@@ -13,6 +13,9 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -244,13 +247,13 @@ public class GestionJSON {
         // Obtener la fecha de nacimiento como String desde el JSON
         String fechaNacimientoString = jsonUsuario.getString("fechaNacimiento");
 
-        Date fechaNacimiento = null;
+        LocalDate fechaNacimiento = null;
         if (fechaNacimientoString != null && !fechaNacimientoString.equalsIgnoreCase("Fecha no disponible")) {
             try {
                 // Intentar parsear la fecha usando el formato adecuado
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); // Formato de la fecha en el JSON
-                fechaNacimiento = dateFormat.parse(fechaNacimientoString); // Convertir el String a Date
-            } catch (ParseException e) {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // Formato de la fecha en el JSON
+                fechaNacimiento = LocalDate.parse(fechaNacimientoString, formatter); // Convertir el String a LocalDate
+            } catch (DateTimeParseException e) {
                 e.printStackTrace(); // Si ocurre un error al parsear la fecha
             }
         }
@@ -258,6 +261,7 @@ public class GestionJSON {
         // Crear y devolver un nuevo Cliente con la fecha de nacimiento convertida
         return new Cliente(nombre, apellido, dni, password, correoElectronico, direccion, telefono, new ArrayList<>(), puntosFidelidad, fechaNacimiento);
     }
+
 
 
     // Metodo para convertir un JSONObject a un Conserje
@@ -278,23 +282,29 @@ public class GestionJSON {
         conserje.setCorreoElectronico(jsonUsuario.getString("correoElectronico"));
 
         // Asignar los atributos específicos de Conserje
-        conserje.setFechaIngreso(parseDate(jsonUsuario.getString("fechaIngreso")));
+        String fechaIngresoString = jsonUsuario.getString("fechaIngreso");
+        if (fechaIngresoString != null && !fechaIngresoString.equalsIgnoreCase("Fecha no disponible")) {
+            conserje.setFechaIngreso(parseDate(fechaIngresoString)); // Convertir fecha a LocalDate
+        }
+
         conserje.setTelefono(jsonUsuario.getString("telefono"));
         conserje.setEstadoTrabajo(jsonUsuario.getString("estadoTrabajo"));
 
         return conserje;
     }
 
-    // Metodo auxiliar parseDate para convertir fechas
-    private static Date parseDate(String fechaString) {
-        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+
+    // Metodo auxiliar para convertir un String en LocalDate
+    private static LocalDate parseDate(String fechaString) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         try {
-            return formato.parse(fechaString);
-        } catch (ParseException e) {
+            return LocalDate.parse(fechaString, formatter); // Convertir el String a LocalDate
+        } catch (DateTimeParseException e) {
             System.err.println("Error al parsear la fecha: " + e.getMessage());
             return null;
         }
     }
+
 
     // Metodo para convertir un JSONObject a un Administrador
     private static Administrador convertirJsonAAdministrador(JSONObject jsonUsuario) throws JSONException {
@@ -337,10 +347,11 @@ public class GestionJSON {
             jsonUsuario.put("direccion", cliente.getDireccion());
             jsonUsuario.put("telefono", cliente.getTelefono());
             jsonUsuario.put("puntosFidelidad", cliente.getPuntosFidelidad());
+
             // Formatear la fecha a "yyyy-MM-dd" antes de guardarla
             if (cliente.getFechaNacimiento() != null) {
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                String fechaNacimientoString = dateFormat.format(cliente.getFechaNacimiento());
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                String fechaNacimientoString = cliente.getFechaNacimiento().format(formatter);
                 jsonUsuario.put("fechaNacimiento", fechaNacimientoString);
             } else {
                 jsonUsuario.put("fechaNacimiento", "Fecha no disponible");
@@ -349,11 +360,12 @@ public class GestionJSON {
             Conserje conserje = (Conserje) usuario;
             jsonUsuario.put("estadoTrabajo", conserje.getEstadoTrabajo());
             jsonUsuario.put("telefono", conserje.getTelefono());
+
             // Formatear la fecha a "yyyy-MM-dd" antes de guardarla
             if (conserje.getFechaIngreso() != null) {
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                String fechaNacimientoString = dateFormat.format(conserje.getFechaIngreso());
-                jsonUsuario.put("fechaIngreso", fechaNacimientoString);
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                String fechaIngresoString = conserje.getFechaIngreso().format(formatter);
+                jsonUsuario.put("fechaIngreso", fechaIngresoString);
             } else {
                 jsonUsuario.put("fechaIngreso", "Fecha no disponible");
             }
@@ -363,6 +375,7 @@ public class GestionJSON {
 
         return jsonUsuario;
     }
+
 
     // --------------------------------- FIN USUARIOS -----------------------------------------------------//
     // --------------------------------- FIN USUARIOS -----------------------------------------------------//

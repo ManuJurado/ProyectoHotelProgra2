@@ -73,9 +73,6 @@ public class GestionarUsuariosController extends BaseController {
         setTextFieldLimit(dniUsuarioField, 10);
 
 
-        // Obtener la instancia de GestionUsuario para cargar los usuarios
-        this.gestionarUsuarios = GestionUsuario.getInstancia("HotelManagement_I/usuarios.json");
-
         cargarUsuarios(); // Carga los usuarios al inicializar
 
         // Agregar un listener al campo de texto
@@ -392,52 +389,42 @@ public class GestionarUsuariosController extends BaseController {
 
     @FXML
     private void onVerDetallesClienteButtonClick(ActionEvent event) {
-        // Obtenemos el cliente seleccionado de la tabla
         Usuario clienteSeleccionado = tablaUsuarios.getSelectionModel().getSelectedItem();
 
         if (clienteSeleccionado != null && clienteSeleccionado instanceof Cliente) {
-            // Crear una nueva ventana (Stage) para mostrar los detalles
             Stage detallesStage = new Stage();
             detallesStage.setTitle("Detalles del Cliente");
 
-            // Crear el contenedor y los Labels para mostrar los detalles del cliente
             VBox vbox = new VBox(10);
             vbox.setPadding(new Insets(20));
 
-            // Mostrar los detalles del cliente (sin la contraseña)
             Label nombreLabel = new Label("Nombre: " + clienteSeleccionado.getNombre());
-            Label apellidoLabel = new Label("DNI: " + clienteSeleccionado.getApellido());
             Label correoLabel = new Label("Correo: " + clienteSeleccionado.getCorreoElectronico());
             Label dniLabel = new Label("DNI: " + clienteSeleccionado.getDni());
             Label direccion = new Label("Direccion: " + ((Cliente) clienteSeleccionado).getDireccion());
             Label telefono = new Label("Telefono: " + ((Cliente) clienteSeleccionado).getTelefono());
-            Label fechaNacimiento = new Label("Fecha Nacimiento: " + ((Cliente) clienteSeleccionado).getFechaNacimiento());
+
+            // Convertir LocalDate a String para mostrar
+            Label fechaNacimiento = new Label("Fecha Nacimiento: " +
+                    ((Cliente) clienteSeleccionado).getFechaNacimiento().toString());
+
             Label puntosFidelidad = new Label("Puntos Fidelidad: " + ((Cliente) clienteSeleccionado).getPuntosFidelidad());
 
-            vbox.getChildren().addAll(nombreLabel,apellidoLabel, correoLabel, dniLabel,direccion,telefono,fechaNacimiento,puntosFidelidad);
+            vbox.getChildren().addAll(nombreLabel, correoLabel, dniLabel, direccion, telefono, fechaNacimiento, puntosFidelidad);
 
-            // Crear un botón para cerrar la ventana
             Button cerrarButton = new Button("Cerrar");
             cerrarButton.setOnAction(e -> detallesStage.close());
 
             vbox.getChildren().add(cerrarButton);
 
-            // Crear la escena y asignarla al Stage
             Scene scene = new Scene(vbox, 300, 350);
             detallesStage.setScene(scene);
-            detallesStage.initModality(Modality.APPLICATION_MODAL); // Bloquear la ventana principal mientras está abierta
+            detallesStage.initModality(Modality.APPLICATION_MODAL);
             detallesStage.showAndWait();
-
         } else {
-            // Mostrar un mensaje de error si no se ha seleccionado un cliente
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Advertencia");
-            alert.setHeaderText("No se ha seleccionado un cliente.");
-            alert.setContentText("Por favor, selecciona un cliente para ver los detalles.");
-            alert.showAndWait();
+            mostrarAlerta("Advertencia", "Por favor, selecciona un cliente para ver los detalles.");
         }
     }
-
 
     // Metodo que se llamará al hacer clic en el botón "Volver"
     @FXML

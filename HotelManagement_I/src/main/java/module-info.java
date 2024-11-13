@@ -27,5 +27,9 @@ module tu.paquete {
     exports controllers.details;
     opens controllers.details to javafx.fxml;
     opens models.Usuarios to javafx.base;  // Esto permite el acceso a la clase Cliente
+    // Abre el paquete models.Habitacion a javafx.base para el acceso reflexivo
+    opens models.Habitacion to javafx.base;
+    // Si deseas que el paquete sea accesible fuera del módulo:
+    exports models.Habitacion;
     exports models;
 }
