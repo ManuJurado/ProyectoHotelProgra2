@@ -8,6 +8,7 @@ public class listaUsuarios< T extends Usuario>{
     private List<T> listaUsuariso;
 
     public listaUsuarios(List<T> listaUsuariso) {
+        this.listaUsuariso = listaUsuariso;
     }
 
     public listaUsuarios() {

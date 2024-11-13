@@ -87,7 +87,7 @@ public class gestorJSONUsuarios {
             usuario.setNombre(jsonObject.getString("nombre"));
             usuario.setApellido(jsonObject.getString("apellido"));
             usuario.setEmail(jsonObject.getString("correoElectronico"));
-            usuario.setPassword(jsonObject.getString("contrasenia"));
+            usuario.setContrasenia(jsonObject.getString("contrasenia"));
             usuario.setDni(jsonObject.getString("dni"));
         } catch (Exception e) {
             throw new RuntimeException("Error al mapear el usuario", e);

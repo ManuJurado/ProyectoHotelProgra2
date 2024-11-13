@@ -1,1 +1,12 @@
-[{"usuario":"Pedro","id":1,"estadoReserva":"Confirmada","habitacionId":106,"fechaReserva":"2024-11-11"},{"usuario":"Natalia","id":1,"estadoReserva":"Confirmada","habitacionId":202,"fechaReserva":"2024-11-11"},{"usuario":"Pedro","id":1,"estadoReserva":"Confirmada","habitacionId":106,"fechaReserva":"2024-11-11"}]
+[{"pasajeros":
+[{"fechaNacimiento":"2003-12-19","apellido":"Rodriguez","idPasajero":1,"numeroDocumento":"45318703","telefono":"2335441613","nombre":"Matias","email":"matirodiguez03@gmail.com","nacionalidad":"Argentino"}],
+  "fechaSalida":"2020-12-26",
+  "cantidadPersonas":2,
+  "fechaEntrada":"2020-12-12",
+  "usuario":"Pedro",
+  "serviciosAdicionales":[],
+  "id":1,
+  "estadoReserva":"Confirmada",
+  "comentario":"hola",
+  "habitacion":202,
+  "fechaReserva":"2024-11-12"}]

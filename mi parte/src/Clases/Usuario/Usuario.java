@@ -6,14 +6,14 @@ public abstract class Usuario {
     private String apellido;
     private String dni;
     private String email;
-    private String password;
+    private String contrasenia;
 
-    public Usuario(String nombre, String apellido, String dni,String email ,String password) {
+    public Usuario(String nombre, String apellido, String dni,String email ,String contrasenia) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.dni = dni;
         this.email = email;
-        this.password = password;
+        this.contrasenia = contrasenia;
     }
 
     public Usuario() {
@@ -44,12 +44,12 @@ public abstract class Usuario {
         this.dni = dni;
     }
 
-    public String getPassword() {
-        return password;
+    public String getContrasenia() {
+        return contrasenia;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setContrasenia(String contrasenia) {
+        this.contrasenia = contrasenia;
     }
 
     public String getEmail() {
@@ -66,7 +66,7 @@ public abstract class Usuario {
                 "nombre='" + nombre + '\'' +
                 ", apellido='" + apellido + '\'' +
                 ", dni='" + dni + '\'' +
-                ", password='" + password + '\'' +
+                ", password='" + contrasenia + '\'' +
                 '}';
     }
 }
