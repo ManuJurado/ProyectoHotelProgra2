@@ -6,6 +6,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import services.GestionHabitaciones;
 import services.Sesion;
 
 public class ConserjeController extends BaseController{
@@ -49,9 +50,7 @@ public class ConserjeController extends BaseController{
 
     @FXML
     private void verListaHabitaciones(ActionEvent event) {
-        // Lógica para ver la lista de habitaciones
-        mostrarAlerta("Lista de Habitaciones", "Mostrando lista de habitaciones.");
-        // Lógica para mostrar las habitaciones aquí
+        cambiarEscenaConSceneAnterior("/views/gestion/gestionarHabitaciones.fxml","Gestionar Habitaciones", (Node) event.getSource());
     }
 
     @FXML

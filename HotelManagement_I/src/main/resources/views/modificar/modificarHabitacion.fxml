@@ -2,11 +2,70 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
 <VBox alignment="CENTER" xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.modificar.ModificarHabitacionController" spacing="10" prefWidth="400.0" prefHeight="300.0">
-    <ComboBox fx:id="tipoHabitacionField" promptText="Tipo de Habitación"/>
-    <ComboBox fx:id="estadoField" promptText="Estado"/>
-    <TextField fx:id="metrosCuadradosField" promptText="Metros Cuadrados"/>
-    <ComboBox fx:id="cantidadCamasField" promptText="Cantidad de Camas"/>
+    <!-- HBox 1 -->
+    <HBox spacing="20" alignment="CENTER_LEFT">
+        <Label text="Cama 1:"/>
+        <ComboBox fx:id="comboBoxCama1" />
+
+        <!-- Exclusivo presidencial -->
+        <CheckBox fx:id="mesaPoolCheckBox" text="Mesa de pool"/>
+        <CheckBox fx:id="jacuzziCheckBox" text="Jacuzzi"/>
+    </HBox>
+
+    <!-- HBox 2: Alineación izquierda -->
+    <HBox spacing="20" alignment="CENTER_LEFT">
+        <Label text="Cama 2:"/>
+        <ComboBox fx:id="comboBoxCama2" HBox.hgrow="ALWAYS" />
+
+        <!-- Exclusivo presidencial -->
+        <CheckBox fx:id="cineCheckBox" text="Cine"/>
+        <CheckBox fx:id="entretenimientoCheckBox" text="Servicios de entretenimiento"/>
+    </HBox>
+
+    <!-- HBox 3: Alineación izquierda -->
+    <HBox spacing="20" alignment="CENTER_LEFT">
+        <Label text="Cama 3:"/>
+        <ComboBox fx:id="comboBoxCama3" HBox.hgrow="ALWAYS" />
+
+        <!-- Exclusivo presidencial -->
+        <CheckBox fx:id="terrazaCheckBox" text="Terraza"/>
+        <CheckBox fx:id="saunaCheckBox" text="Sauna"/>
+    </HBox>
+
+    <!-- HBox 4: Alineación izquierda -->
+    <HBox spacing="20" alignment="CENTER_LEFT">
+        <Label text="Cama 4:"/>
+        <ComboBox fx:id="comboBoxCama4" HBox.hgrow="ALWAYS" />
+    </HBox>
+
+    <!-- Exclusivo Presidencial -->
+    <TextField fx:id="dimensionField" promptText="Dimensión (m²)" maxWidth="100"/>
+
+    <!-- Exclusivo Suite -->
+    <CheckBox text="Posee Comedor?" fx:id="comedorCheckBox" />
+
+    <!-- Exclusivo Suite -->
+    <CheckBox text="Posee Balcón?" fx:id="balconCheckBox" />
+
+    <!-- Exclusivo Apartamento -->
+    <CheckBox text="Posee Cocina?" fx:id="cocinaCheckBox" />
+
+    <!-- Campos específicos para apartamento -->
+    <HBox>
+    <ComboBox fx:id="comboBoxAmbientes" promptText="Cantidad de ambientes">
+        <items>
+            <FXCollections fx:factory="observableArrayList">
+                <String fx:value="1"/>
+                <String fx:value="2"/>
+                <String fx:value="3"/>
+            </FXCollections>
+        </items>
+    </ComboBox>
+    </HBox>
+
     <Button text="Guardar Cambios" onAction="#guardarCambios"/>
     <Button text="Cerrar" onAction="#cerrarVentana"/>
 </VBox>
