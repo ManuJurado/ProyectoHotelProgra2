@@ -23,7 +23,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +59,7 @@ public class GestionarReservasController extends BaseController {
         habitacionColumn.setCellValueFactory(cellData -> new SimpleStringProperty());
         fechaInicioColumn.setCellValueFactory(new PropertyValueFactory<>("fechaInicio"));
         fechaFinColumn.setCellValueFactory(new PropertyValueFactory<>("fechaFin"));
-        clienteColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCliente().getNombre()));
+        clienteColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getUsuario().getNombre()));
         estadoColumn.setCellValueFactory(new PropertyValueFactory<>("estado"));
 
         // Llama al método que carga las reservas en la tabla
@@ -75,29 +74,29 @@ public class GestionarReservasController extends BaseController {
         tablaReservas.setItems(observableReservas);
     }
 
-    // Métodos para crear, modificar, cancelar y ver detalles de reservas
-    @FXML
-    private void onCrearReserva() {
-        // Abre un diálogo para crear una nueva reserva (puedes usar un FXML diferente)
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/crear/crearReserva.fxml"));
-            Parent root = loader.load();
-
-            CrearReservaController crearController = loader.getController();
-            crearController.setGestionReservas(new GestionReservas()); // Pasar la instancia de la clase gestora
-
-            Stage stage = new Stage();
-            stage.setTitle("Crear Reserva");
-            stage.setScene(new Scene(root));
-            stage.showAndWait();
-
-            // Después de cerrar el diálogo, recargar las reservas en la tabla
-            cargarReservasEnTabla();
-        } catch (IOException | AtributoFaltanteException e) {
-            e.printStackTrace();
-            mostrarAlerta("Error", "No se pudo abrir la ventana de crear reserva.");
-        }
-    }
+//    // Métodos para crear, modificar, cancelar y ver detalles de reservas
+//    @FXML
+//    private void onCrearReserva() {
+//        // Abre un diálogo para crear una nueva reserva (puedes usar un FXML diferente)
+//        try {
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/crear/crearReserva.fxml"));
+//            Parent root = loader.load();
+//
+//            CrearReservaController crearController = loader.getController();
+////            crearController.setGestionReservas(new GestionReservas()); // Pasar la instancia de la clase gestora
+//
+//            Stage stage = new Stage();
+//            stage.setTitle("Crear Reserva");
+//            stage.setScene(new Scene(root));
+//            stage.showAndWait();
+//
+//            // Después de cerrar el diálogo, recargar las reservas en la tabla
+//            cargarReservasEnTabla();
+//        } catch (IOException | AtributoFaltanteException e) {
+//            e.printStackTrace();
+//            mostrarAlerta("Error", "No se pudo abrir la ventana de crear reserva.");
+//        }
+//    }
 
     @FXML
     private void onModificarReserva() {
@@ -122,7 +121,7 @@ public class GestionarReservasController extends BaseController {
 
                 // Obtener el controlador y pasarle la reserva seleccionada
                 controllers.details.DetallesReservaController detallesController = loader.getController();
-                detallesController.mostrarDetalles(reservaSeleccionada);
+//                detallesController.mostrarDetalles(reservaSeleccionada);
 
                 // Crear y mostrar la nueva ventana
                 Stage stage = new Stage();

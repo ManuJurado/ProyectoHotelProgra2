@@ -32,11 +32,10 @@ public class LoginController extends BaseController {
 
     @FXML
     public void initialize() {
-        // Limitar el número de caracteres en el usernameField a 20
-        usernameField.setTextFormatter(new TextFormatter<>(change -> change.getControlNewText().length() <= 20 ? change : null));
+        setTextFieldLimit(usernameField,30);
+        iniciarSesionButton.setDefaultButton(true); // Configura el botón como predeterminado
 
-        // Limitar el número de caracteres en el passwordField a 20
-        passwordField.setTextFormatter(new TextFormatter<>(change -> change.getControlNewText().length() <= 20 ? change : null));
+        setTextFieldLimit(passwordField,20);
         iniciarSesionButton.setDefaultButton(true); // Configura el botón como predeterminado
 
         // Usamos Platform.runLater() para garantizar que la escena esté completamente cargada antes de modificar el Stage

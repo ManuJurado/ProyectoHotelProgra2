@@ -2,6 +2,7 @@ package controllers.gestionar;
 
 import controllers.BaseController;
 import controllers.crear.SeleccionarTipoHabitacionController;
+import controllers.modificar.ModificarHabitacionController;
 import enums.EstadoHabitacion;
 import enums.TipoUsuario;
 import javafx.collections.FXCollections;
@@ -26,6 +27,8 @@ import services.Sesion;
 
 import java.io.IOException;
 import java.util.List;
+
+import static java.lang.String.valueOf;
 
 public class GestionarHabitacionesController extends BaseController {
 
@@ -98,8 +101,21 @@ public class GestionarHabitacionesController extends BaseController {
             crearNuevaHabitacionButton.setVisible(false);
             modificarHabitacionButton.setVisible(false);
             eliminarHabitacionButton.setVisible(false);
+        }else if (usuarioLogueado.getTipoUsuario() == TipoUsuario.CONSERJE){
+            eliminarHabitacionButton.setVisible(false);
+            crearNuevaHabitacionButton.setVisible(false);
         }
+
+        // Listener para la selección de la tabla
+        tablaHabitaciones.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null && newValue.getTipo().equals("Individual")) {
+                modificarHabitacionButton.setVisible(false);  // Ocultar el botón si es "Individual"
+            } else {
+                modificarHabitacionButton.setVisible(true);  // Mostrar el botón si no es "Individual"
+            }
+        });
     }
+
 
 
 
@@ -184,12 +200,46 @@ public class GestionarHabitacionesController extends BaseController {
         alert.showAndWait();
     }
 
-    // Metodo para modificar una habitación seleccionada
     @FXML
     private void modificarHabitacion() {
-        System.out.println("Modificar habitación");
-        // Aquí iría la lógica para modificar la habitación seleccionada
+        // Obtener la habitación seleccionada en la tabla
+        Habitacion habitacionSeleccionada = tablaHabitaciones.getSelectionModel().getSelectedItem();
+
+        if (habitacionSeleccionada != null) {
+            // Crear el Stage para la ventana de modificación
+            try {
+                // Cargar el FXML correspondiente a la ventana de modificación
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/modificar/ModificarHabitacion.fxml"));
+                Parent root = loader.load();
+
+                // Obtener el controlador de la ventana de modificación
+                ModificarHabitacionController modificarHabitacionController = loader.getController();
+
+                // Pasar la habitación seleccionada al controlador para que se puedan editar sus datos
+                modificarHabitacionController.sethabitacion(habitacionSeleccionada);
+
+                // Mostrar la ventana en un nuevo Stage
+                Stage modificarStage = new Stage();
+                modificarStage.setScene(new Scene(root));
+                modificarStage.setWidth(600);
+                modificarStage.setHeight(600);
+                modificarStage.setTitle("Modificar Habitación");
+                modificarStage.initModality(Modality.APPLICATION_MODAL); // Bloquea la ventana principal hasta que se cierre esta
+                modificarStage.showAndWait();
+
+                // Actualizar la lista de habitaciones después de que se haya modificado la habitación
+                actualizarListaHabitaciones();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                mostrarAlerta("Error", "Hubo un problema al abrir la ventana de modificación.");
+            }
+        } else {
+            // Si no se ha seleccionado una habitación, mostrar una alerta
+            mostrarAlerta("Selección requerida", "Por favor, selecciona una habitación para modificar.");
+        }
     }
+
 
     // Metodo para ver los detalles de una habitación seleccionada
     // Metodo para ver los detalles de una habitación seleccionada
@@ -266,14 +316,41 @@ public class GestionarHabitacionesController extends BaseController {
         }
     }
 
-
-
-    // Metodo para eliminar una habitación seleccionada
     @FXML
     private void eliminarHabitacion() {
-        System.out.println("Eliminar habitación");
-        // Aquí iría la lógica para eliminar la habitación seleccionada
+        // Obtener la habitación seleccionada en la tabla
+        Habitacion habitacionSeleccionada = tablaHabitaciones.getSelectionModel().getSelectedItem();
+
+        if (habitacionSeleccionada != null) {
+            // Mostrar alerta de confirmación
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirmación de eliminación");
+            alert.setHeaderText("¿Está seguro de eliminar esta habitación?");
+            alert.setContentText("Esta acción no se puede deshacer.");
+
+            // Si el administrador acepta
+            alert.showAndWait().ifPresent(response -> {
+                if (response == ButtonType.OK) {
+                    // Llamar al servicio para eliminar la habitación
+                    boolean eliminada = gestionHabitaciones.eliminar(valueOf(habitacionSeleccionada.getNumero()));
+
+                    if (eliminada) {
+                        // Mostrar una alerta de éxito
+                        mostrarAlerta("Éxito", "La habitación ha sido eliminada correctamente.");
+                        // Actualizar la lista de habitaciones
+                        cargarHabitaciones();
+                    } else {
+                        // Mostrar una alerta de error si no se pudo eliminar
+                        mostrarAlerta("Error", "Hubo un problema al eliminar la habitación.");
+                    }
+                }
+            });
+        } else {
+            // Si no se seleccionó ninguna habitación
+            mostrarAlerta("Selección requerida", "Por favor, seleccione una habitación para eliminar.");
+        }
     }
+
 
     @FXML
     private void filtrarHabitacionesPorTipo() {
@@ -289,7 +366,7 @@ public class GestionarHabitacionesController extends BaseController {
         for (Habitacion habitacion : habitacionesOriginales) {
             // Filtrar primero por tipo, si es "Todos", mostrar todos los tipos
             boolean coincideConTipo = "Todos".equals(filtroTipo) || habitacion.getTipo().toString().equalsIgnoreCase(filtroTipo);
-            boolean coincideConId = String.valueOf(habitacion.getNumero()).contains(filtroId);
+            boolean coincideConId = valueOf(habitacion.getNumero()).contains(filtroId);
 
             // Si la habitación cumple con ambas condiciones (coincide con tipo y ID), la agregamos a la lista filtrada
             if (coincideConTipo && coincideConId) {
@@ -317,7 +394,7 @@ public class GestionarHabitacionesController extends BaseController {
             boolean coincideConTipo = "Todos".equals(filtroTipo) || habitacion.getTipo().toString().equalsIgnoreCase(filtroTipo);
 
             // Filtrar por ID de habitación
-            boolean coincideConId = String.valueOf(habitacion.getNumero()).contains(filtroId);
+            boolean coincideConId = valueOf(habitacion.getNumero()).contains(filtroId);
 
             // Si la habitación cumple con ambas condiciones (coincide con tipo y ID), la agregamos a la lista filtrada
             if (coincideConTipo && coincideConId) {
@@ -340,7 +417,7 @@ public class GestionarHabitacionesController extends BaseController {
 
         // Filtrar por ID y tipo de habitación primero
         for (Habitacion habitacion : habitacionesOriginales) {
-            boolean idCoincide = filtroId.isEmpty() || String.valueOf(habitacion.getNumero()).contains(filtroId);
+            boolean idCoincide = filtroId.isEmpty() || valueOf(habitacion.getNumero()).contains(filtroId);
             boolean tipoCoincide = "Todos".equals(tipoHabitacion) || habitacion.getTipo().equalsIgnoreCase(tipoHabitacion);
 
             // Aplicar la lógica de disponibilidad después de filtrar por ID y tipo

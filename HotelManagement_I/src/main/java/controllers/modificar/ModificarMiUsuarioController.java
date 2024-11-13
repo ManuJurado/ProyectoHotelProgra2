@@ -84,16 +84,16 @@ public class ModificarMiUsuarioController extends BaseController {
         estadoTrabajoField.setVisible(false);
 
         // Limitar la longitud de los campos de texto
-        nombreUsuarioField.setTextFormatter(new TextFormatter<>(change -> change.getControlNewText().length() <= 30 ? change : null)); // Limitar a 50 caracteres
-        apellidoField.setTextFormatter(new TextFormatter<>(change -> change.getControlNewText().length() <= 30 ? change : null)); // Limitar a 50 caracteres
-        dniField.setTextFormatter(new TextFormatter<>(change -> change.getControlNewText().length() <= 10 ? change : null)); // Limitar a 10 caracteres (por ejemplo)
-        contraseniaField.setTextFormatter(new TextFormatter<>(change -> change.getControlNewText().length() <= 30 ? change : null));
-        passwordTextField.setTextFormatter(new TextFormatter<>(change -> change.getControlNewText().length() <= 30 ? change : null));
-        emailUsuarioField.setTextFormatter(new TextFormatter<>(change -> change.getControlNewText().length() <= 50 ? change : null)); // Limitar a 100 caracteres
-        telefonoField.setTextFormatter(new TextFormatter<>(change -> change.getControlNewText().length() <= 15 ? change : null)); // Limitar a 15 caracteres (por ejemplo)
-        direccionField.setTextFormatter(new TextFormatter<>(change -> change.getControlNewText().length() <= 30 ? change : null)); // Limitar a 100 caracteres
-        telefonoConserjeField.setTextFormatter(new TextFormatter<>(change -> change.getControlNewText().length() <= 20 ? change : null)); // Limitar a 100 caracteres
-        telefonoField.setTextFormatter(new TextFormatter<>(change -> change.getControlNewText().length() <= 20 ? change : null)); // Limitar a 100 caracteres
+        setTextFieldLimit(nombreUsuarioField,30);
+        setTextFieldLimit(apellidoField,30);
+        setTextFieldLimit(dniField,10);
+        setTextFieldLimit(contraseniaField,30);
+        setTextFieldLimit(passwordTextField,30);
+        setTextFieldLimit(emailUsuarioField,50);
+        setTextFieldLimit(telefonoField,15);
+        setTextFieldLimit(direccionField,30);
+        setTextFieldLimit(telefonoConserjeField,20);
+        setTextFieldLimit(telefonoField,30);
 
         // Si el controlador GestionarUsuariosController está disponible, usamos el usuario seleccionado.
         if (gestionarUsuariosController != null && usuarioSeleccionado != null) {
