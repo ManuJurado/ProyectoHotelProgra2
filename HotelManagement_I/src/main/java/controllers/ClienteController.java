@@ -94,7 +94,7 @@ public class ClienteController extends BaseController {
     @FXML
     private void verHabitacionesDisponibles(ActionEvent event) {
         // Cambiar a la escena de ver habitaciones disponibles
-        cambiarEscenaConSceneAnterior("/views/gestion/verHabitacionesDisponibles.fxml", "Habitaciones Disponibles", (Node) event.getSource());
+        cambiarEscenaConSceneAnterior("/views/gestion/gestionarHabitaciones.fxml", "Habitaciones Disponibles", (Node) event.getSource());
     }
 
     @FXML

@@ -15,7 +15,7 @@ public class Presidencial extends Habitacion {
 
     public Presidencial(int numero, int capacidad, List<String> camas, boolean disponible, String detalleEstado, List<String> adicionales, double dimension) {
         super(numero, capacidad, camas, disponible, detalleEstado);
-        super.setTipo("PRESIDENCIAL");
+        super.setTipo("Presidencial");
         this.adicionales = adicionales;
         this.dimension = dimension;
     }

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.collections.FXCollections?>
+
+<?import javafx.scene.text.Text?>
+<VBox alignment="CENTER" xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.crear.CrearHabitacionDobleController" spacing="10" prefHeight="400.0" prefWidth="600.0">
+    <!-- Campos generales -->
+    <Text text="Selecciona las camas" />
+
+    <!-- HBox 1 -->
+    <HBox spacing="10" alignment="CENTER">
+        <Label text="Cama 1:"/>
+        <ComboBox fx:id="comboBoxCama1" />
+    </HBox>
+
+    <!-- HBox 2 -->
+    <HBox spacing="10" alignment="CENTER">
+        <Label text="Cama 2:"/>
+        <ComboBox fx:id="comboBoxCama2" />
+    </HBox>
+
+    <!-- Botón Guardar -->
+    <Button text="Guardar Datos" onAction="#guardarHabitacionDoble"/>
+
+    <!-- Botón Cerrar -->
+    <Button text="Cerrar" onAction="#cerrarVentana"/>
+</VBox>

@@ -11,7 +11,7 @@ public class Doble extends Habitacion {
 
     public Doble(int numero, List<String> camas, boolean disponible, String detalleEstado) {
         super(numero, camas, disponible, detalleEstado);
-        super.setTipo("DOBLE");
+        super.setTipo("Doble");
         super.setCapacidad(2);
     }
 }

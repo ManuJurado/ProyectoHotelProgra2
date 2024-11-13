@@ -11,7 +11,7 @@ public class Individual extends Habitacion {
 
     public Individual(int numero, List<String> camas, boolean disponible, String detalleEstado) {
         super(numero, camas, disponible, detalleEstado);
-        super.setTipo("INDIVIDUAL");
+        super.setTipo("Individual");
         super.setCapacidad(1);
     }
 }
