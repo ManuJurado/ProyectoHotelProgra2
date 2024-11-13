@@ -1,4 +1,12 @@
 # Default ignored files
 /shelf/
 /workspace.xml
-/target/
+../HotelManagement_I/target/
+/compiler.xml
+/encodings.xml
+/jarRepositories.xml
+/libraries/java_json.xml
+/misc.xml
+/modules.xml
+/ProyectoHotelProgra2.iml
+/vcs.xml
