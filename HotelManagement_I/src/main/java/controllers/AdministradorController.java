@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
+import services.GeneracionBackUp;
 import services.Sesion;
 
 public class AdministradorController extends BaseController {
@@ -32,6 +33,12 @@ public class AdministradorController extends BaseController {
     @FXML
     private void crearBackup() {
         // Lógica para crear backup
+        if (GeneracionBackUp.GenerarBackUp()){
+            mostrarAlerta("Exito", "BackUp generado con exito!");
+        }
+        else{
+            mostrarAlerta("Error", "Hubo un error al generar el BackUp");
+        }
     }
 
     @FXML
