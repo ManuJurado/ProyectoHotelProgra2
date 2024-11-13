@@ -27,7 +27,7 @@ public class AdministradorController extends BaseController {
 
     @FXML
     private void gestionarHabitaciones(ActionEvent event) {
-        cambiarEscenaConSceneAnterior("/views/gestion/gestionarHabitaciones.fxml", "Gestión de Servicios", (Node) event.getSource());
+        cambiarEscenaConSceneAnterior("/views/gestion/gestionarHabitaciones.fxml", "Gestión de Habitaciones", (Node) event.getSource());
     }
 
     @FXML

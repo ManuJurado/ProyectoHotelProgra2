@@ -8,19 +8,18 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TableColumn;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import models.Pasajero;
 import services.GestionReservas;
 import models.Reserva;
 import javafx.fxml.FXML;
-import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.io.IOException;
@@ -48,112 +47,180 @@ public class GestionarReservasController extends BaseController {
     @FXML
     private TableColumn<Reserva, String> estadoColumn; // Columna para el estado de la reserva
 
+    @FXML
+    public void initialize() {
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        habitacionColumn.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getHabitacion().getNumero())));
+        fechaInicioColumn.setCellValueFactory(new PropertyValueFactory<>("fechaEntrada"));
+        fechaFinColumn.setCellValueFactory(new PropertyValueFactory<>("fechaSalida"));
+        clienteColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getUsuario().getNombre()));
+        estadoColumn.setCellValueFactory(new PropertyValueFactory<>("estadoReserva"));
+
+        cargarReservasEnTabla();
+    }
+
+    // Declaración del servicio de reservas
+    private GestionReservas gestionReservas = GestionReservas.getInstancia("HotelManagement_I/reservas.json");
+
+    public void setGestionReservas(GestionReservas gestionReservas) {
+        this.gestionReservas = gestionReservas;
+    }
+
+    private void cargarReservasEnTabla() {
+        reservas = gestionReservas.getListaReservas();  // Cargar lista desde el servicio
+        ObservableList<Reserva> observableReservas = FXCollections.observableArrayList(reservas);
+        tablaReservas.setItems(observableReservas);
+    }
+
     public void setReservas(List<Reserva> reservas) {
         this.reservas = reservas;
         cargarReservasEnTabla();
     }
 
+    // Métodos para crear, modificar, cancelar y ver detalles de reservas
     @FXML
-    public void initialize() {
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        habitacionColumn.setCellValueFactory(cellData -> new SimpleStringProperty());
-        fechaInicioColumn.setCellValueFactory(new PropertyValueFactory<>("fechaInicio"));
-        fechaFinColumn.setCellValueFactory(new PropertyValueFactory<>("fechaFin"));
-        clienteColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getUsuario().getNombre()));
-        estadoColumn.setCellValueFactory(new PropertyValueFactory<>("estado"));
+    private void onCrearReserva() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/crear/crearReserva.fxml"));
+            Parent root = loader.load();
 
-        // Llama al método que carga las reservas en la tabla
-        cargarReservasEnTabla();
-    }
+            // El controlador de la ventana de crear reserva será cargado automáticamente con el FXMLLoader
+            CrearReservaController crearController = loader.getController();
 
-    private void cargarReservasEnTabla() {
-        // Convierte la lista de reservas en un ObservableList para poder usarlo en la tabla
-        ObservableList<Reserva> observableReservas = FXCollections.observableArrayList(reservas);
+            Stage stage = new Stage();
+            stage.setTitle("Crear Reserva");
+            stage.setScene(new Scene(root));
+            stage.showAndWait();  // Mostrar la ventana y esperar hasta que se cierre
 
-        // Asigna el ObservableList a la tabla
-        tablaReservas.setItems(observableReservas);
-    }
-
-//    // Métodos para crear, modificar, cancelar y ver detalles de reservas
-//    @FXML
-//    private void onCrearReserva() {
-//        // Abre un diálogo para crear una nueva reserva (puedes usar un FXML diferente)
-//        try {
-//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/crear/crearReserva.fxml"));
-//            Parent root = loader.load();
-//
-//            CrearReservaController crearController = loader.getController();
-////            crearController.setGestionReservas(new GestionReservas()); // Pasar la instancia de la clase gestora
-//
-//            Stage stage = new Stage();
-//            stage.setTitle("Crear Reserva");
-//            stage.setScene(new Scene(root));
-//            stage.showAndWait();
-//
-//            // Después de cerrar el diálogo, recargar las reservas en la tabla
-//            cargarReservasEnTabla();
-//        } catch (IOException | AtributoFaltanteException e) {
-//            e.printStackTrace();
-//            mostrarAlerta("Error", "No se pudo abrir la ventana de crear reserva.");
-//        }
-//    }
-
-    @FXML
-    private void onModificarReserva() {
-        // Implementar lógica para modificar una reserva
-    }
-
-    @FXML
-    private void onCancelarReserva() {
-        // Implementar lógica para cancelar una reserva
-    }
-
-    @FXML
-    private void onVerDetalleReserva() {
-        // Obtener la reserva seleccionada en la tabla
-        Reserva reservaSeleccionada = tablaReservas.getSelectionModel().getSelectedItem();
-
-        if (reservaSeleccionada != null) {
-            try {
-                // Cargar el FXML de detalles de la reserva
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/detalles/detallesReserva.fxml"));
-                Parent root = loader.load();
-
-                // Obtener el controlador y pasarle la reserva seleccionada
-                controllers.details.DetallesReservaController detallesController = loader.getController();
-//                detallesController.mostrarDetalles(reservaSeleccionada);
-
-                // Crear y mostrar la nueva ventana
-                Stage stage = new Stage();
-                stage.setTitle("Detalles de la Reserva");
-                stage.setScene(new Scene(root));
-                stage.show();
-            } catch (IOException e) {
-                e.printStackTrace();
-                // Manejar la excepción adecuadamente (por ejemplo, mostrar un mensaje al usuario)
-            }
-        } else {
-            // Mostrar un mensaje de advertencia si no hay reserva seleccionada
-            mostrarAlerta("Advertencia", "Por favor, selecciona una reserva para ver los detalles.");
+            cargarReservasEnTabla();  // Actualizar la tabla después de que la ventana de creación de reserva se haya cerrado
+        } catch (IOException e) {
+            e.printStackTrace();
+            mostrarAlerta("Error", "No se pudo abrir la ventana de crear reserva.");
         }
     }
 
 
-    private String obtenerNombresPasajeros(List<Pasajero> pasajeros) {
-        return pasajeros.stream()
-                .map(pasajero -> pasajero.getNombre() + " " + pasajero.getApellido())
-                .collect(Collectors.joining(", "));
+    @FXML
+    private void onModificarReserva() {
+        Reserva reservaSeleccionada = tablaReservas.getSelectionModel().getSelectedItem();
+        if (reservaSeleccionada == null) {
+            mostrarAlerta("Advertencia", "Selecciona una reserva para modificar.");
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/crear/crearReserva.fxml"));
+            Parent root = loader.load();
+
+            // Obtener el controlador de la nueva ventana
+            CrearReservaController crearController = loader.getController();
+
+            // Pasar la reserva seleccionada para que la ventana de modificación la pueda cargar
+            crearController.setReservaParaModificar(reservaSeleccionada);
+
+            // Mostrar la ventana para modificar la reserva
+            Stage stage = new Stage();
+            stage.setTitle("Modificar Reserva");
+            stage.setScene(new Scene(root));
+            stage.showAndWait();
+
+            // Una vez cerrada la ventana, actualizar la tabla con las reservas modificadas
+            cargarReservasEnTabla();
+        } catch (IOException e) {
+            e.printStackTrace();
+            mostrarAlerta("Error", "No se pudo abrir la ventana de modificar reserva.");
+        }
     }
 
     @FXML
-    private void onCerrarVentana() {
-        // Implementar lógica para cerrar la ventana de gestión de reservas
+    private void onCancelarReserva() {
+        // Obtener la reserva seleccionada de la tabla
+        Reserva reservaSeleccionada = tablaReservas.getSelectionModel().getSelectedItem();
+
+        // Verificar si hay una reserva seleccionada
+        if (reservaSeleccionada == null) {
+            mostrarAlerta("Advertencia", "Selecciona una reserva para cancelar.");
+            return;
+        }
+
+        // Confirmación de cancelación
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "¿Estás seguro de que deseas cancelar esta reserva?");
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            try {
+                // Asegúrate de tener una instancia de GestionReservas
+                GestionReservas gestionReservas = GestionReservas.getInstancia("reservas.json");
+
+                // Llamar al metodo eliminarReserva para cancelar la reserva
+                gestionReservas.eliminarReserva(reservaSeleccionada.getUsuario().getNombre(),
+                        String.valueOf(reservaSeleccionada.getHabitacion().getNumero()),
+                        reservaSeleccionada.getFechaEntrada());
+
+                // Actualizar la tabla de reservas
+                cargarReservasEnTabla();
+
+                // Mostrar alerta de éxito
+                mostrarAlerta("Éxito", "La reserva ha sido cancelada exitosamente.");
+            } catch (Exception e) {
+                e.printStackTrace();
+                mostrarAlerta("Error", "No se pudo cancelar la reserva.");
+            }
+        }
     }
+
+    @FXML
+    private void onVerDetalleReserva() {
+        Reserva reservaSeleccionada = tablaReservas.getSelectionModel().getSelectedItem();
+
+        if (reservaSeleccionada != null) {
+            // Crear la ventana para los detalles
+            Stage detallesStage = new Stage();
+            detallesStage.setHeight(400);
+            detallesStage.setWidth(600);
+            detallesStage.setTitle("Detalles de la Reserva");
+
+            VBox vbox = new VBox(10);
+            vbox.setPadding(new Insets(20));
+
+            // Detalles comunes de la reserva
+            Label nombreLabel = new Label("Nombre del Usuario: " + reservaSeleccionada.getUsuario().getNombre());
+            Label numeroHabitacionLabel = new Label("Número de Habitación: " + reservaSeleccionada.getHabitacion().getNumero());
+            Label fechaEntradaLabel = new Label("Fecha de Entrada: " + reservaSeleccionada.getFechaEntrada());
+            Label fechaSalidaLabel = new Label("Fecha de Salida: " + reservaSeleccionada.getFechaSalida());
+            Label cantidadPersonasLabel = new Label("Cantidad de Personas: " + reservaSeleccionada.getCantidadPersonas());
+
+            vbox.getChildren().addAll(nombreLabel, numeroHabitacionLabel, fechaEntradaLabel, fechaSalidaLabel, cantidadPersonasLabel);
+
+            // Si existen servicios adicionales, los mostramos
+            if (reservaSeleccionada.getServiciosAdicionales() != null && !reservaSeleccionada.getServiciosAdicionales().isEmpty()) {
+                Label serviciosLabel = new Label("Servicios Adicionales: " + String.join(", ", reservaSeleccionada.getServiciosAdicionales()));
+                vbox.getChildren().add(serviciosLabel);
+            }
+
+            // Botón para cerrar
+            Button cerrarButton = new Button("Cerrar");
+            cerrarButton.setOnAction(e -> detallesStage.close());
+            vbox.getChildren().add(cerrarButton);
+
+            // Crear y mostrar la ventana
+            Scene scene = new Scene(vbox, 300, 350);
+            detallesStage.setScene(scene);
+            detallesStage.initModality(Modality.APPLICATION_MODAL);
+            detallesStage.showAndWait();
+        } else {
+            mostrarAlerta("Advertencia", "Selecciona una reserva para ver los detalles.");
+        }
+    }
+
+
+
 
     @FXML
     private void volverAlMenuAdmin(ActionEvent event) {
         cambiarEscena("/views/menu/menuAdministrador.fxml", "Menú Administrador", (Node) event.getSource());
     }
+
 
     private void mostrarAlerta(String titulo, String mensaje) {
         Alert alert = new Alert(Alert.AlertType.WARNING);

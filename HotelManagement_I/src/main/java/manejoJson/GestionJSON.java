@@ -461,14 +461,15 @@ public class GestionJSON {
             JSONArray jsonArrayReservas = new JSONArray(JSONUtiles.leer(archivoJson));
 
             // Obtener las instancias de GestionUsuario y GestionHabitaciones
-            GestionUsuario gestionUsuario = GestionUsuario.getInstancia("ruta/a/tu/archivo_usuarios.json");
-            GestionHabitaciones gestionHabitaciones = GestionHabitaciones.getInstancia("ruta/a/tu/archivo_habitaciones.json");
+            GestionUsuario gestionUsuario = GestionUsuario.getInstancia("HotelManagement_I/usuarios.json");
+            GestionHabitaciones gestionHabitaciones = GestionHabitaciones.getInstancia("HotelManagement_I/habitaciones.json");
 
             // Iterar sobre el JSONArray y mapear los objetos a reservas
             for (int i = 0; i < jsonArrayReservas.length(); i++) {
                 JSONObject jsonReserva = jsonArrayReservas.getJSONObject(i);
 
                 // Extraemos la información de la reserva
+                int idReserva = jsonReserva.getInt("id"); // Extraemos el id de la reserva
                 LocalDate fechaReserva = parseDate(jsonReserva.getString("fechaReserva"));
                 LocalDate fechaEntrada = parseDate(jsonReserva.getString("fechaEntrada"));
                 LocalDate fechaSalida = parseDate(jsonReserva.getString("fechaSalida"));
@@ -485,10 +486,10 @@ public class GestionJSON {
                 List<String> serviciosAdicionales = mapeoServiciosAdicionales(jsonServiciosAdicionales);
 
                 // Obtener el DNI del cliente
-                String dniCliente = jsonReserva.getString("dniCliente");
+                int dniCliente = jsonReserva.getInt("dni");
 
                 // Buscar el usuario por DNI en la lista de usuarios
-                Usuario usuario = gestionUsuario.buscarPorId(dniCliente);
+                Usuario usuario = gestionUsuario.buscarPorId(String.valueOf(dniCliente));
 
                 // Verificar que el usuario esté disponible (si es null, no seguimos con esta reserva)
                 if (usuario == null) {
@@ -510,7 +511,6 @@ public class GestionJSON {
 
                 // Crear la reserva
                 Reserva reserva = new Reserva(
-                        fechaReserva,
                         fechaEntrada,
                         fechaSalida,
                         estadoReserva,
@@ -521,7 +521,8 @@ public class GestionJSON {
                         usuario,
                         habitacion
                 );
-
+                reserva.setFechaReserva(fechaReserva);
+                reserva.setId(idReserva);
                 reservas.add(reserva);
             }
 

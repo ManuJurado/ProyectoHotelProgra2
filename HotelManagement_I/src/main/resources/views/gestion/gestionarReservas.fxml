@@ -5,8 +5,10 @@
 <?import javafx.stage.Stage?>
 
 <VBox alignment="CENTER" xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.gestionar.GestionarReservasController" spacing="10">
-    <Label text="Gestión de Reservas" style="-fx-font-size: 20; -fx-font-weight: bold;"/>
+    <!-- Título de la ventana -->
+    <Label text="Gestión de Reservas"/>
 
+    <!-- Tabla de reservas -->
     <TableView fx:id="tablaReservas" prefHeight="400">
         <columns>
             <TableColumn fx:id="idColumn" text="ID Reserva" />
@@ -18,6 +20,7 @@
         </columns>
     </TableView>
 
+    <!-- Botones para las acciones -->
     <HBox spacing="10">
         <Button text="Crear Reserva" onAction="#onCrearReserva"/>
         <Button text="Modificar Reserva" onAction="#onModificarReserva"/>

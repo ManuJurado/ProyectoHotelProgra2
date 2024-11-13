@@ -1,51 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.geometry.*?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Alert?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.stage.Stage?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.crear.CrearReservaController">
-    <children>
-        <Label text="Crear Nueva Reserva" style="-fx-font-size: 20; -fx-font-weight: bold;" layoutX="10" layoutY="10"/>
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.crear.CrearReservaController" spacing="10" prefHeight="600" prefWidth="500">
 
-        <Label text="Nombre del Cliente:" layoutX="10" layoutY="50"/>
-        <TextField fx:id="txtCliente" layoutX="150" layoutY="50" prefWidth="200"/>
+    <!-- Fecha de entrada y salida -->
+    <HBox spacing="10">
+        <Label text="Fecha de Entrada:"/>
+        <DatePicker fx:id="datePickerFechaEntrada"/>
+    </HBox>
 
-        <Label text="Número de Habitación:" layoutX="10" layoutY="90"/>
-        <TextField fx:id="txtHabitacion" layoutX="150" layoutY="90" prefWidth="200"/>
+    <HBox spacing="10">
+        <Label text="Fecha de Salida:"/>
+        <DatePicker fx:id="datePickerFechaSalida"/>
+    </HBox>
 
-        <Label text="Fecha de Inicio:" layoutX="10" layoutY="130"/>
-        <DatePicker fx:id="dateFechaInicio" layoutX="150" layoutY="130"/>
+    <!-- Cantidad de personas -->
+    <HBox spacing="10">
+        <Label text="Cantidad de Personas:"/>
+        <ChoiceBox fx:id="choiceBoxCantidadPersonas"/>
+    </HBox>
 
-        <Label text="Fecha de Fin:" layoutX="10" layoutY="170"/>
-        <DatePicker fx:id="dateFechaFin" layoutX="150" layoutY="170"/>
+    <!-- Contenedor para los campos de pasajeros -->
+    <VBox fx:id="vboxPasajeros" spacing="10">
+        <!-- Los campos de pasajeros se agregarán dinámicamente aquí -->
+    </VBox>
 
-        <Label text="Cantidad de Pasajeros:" layoutX="10" layoutY="210"/>
-        <ComboBox fx:id="comboPasajeros" layoutX="150" layoutY="210" onAction="#cargarCamposPasajeros"/>
+    <!-- ComboBox para seleccionar servicios adicionales -->
+    <HBox spacing="10">
+        <Label text="Servicios Adicionales:"/>
+        <ComboBox fx:id="comboBoxServiciosAdicionales"/>
+    </HBox>
 
-        <Label text="Seleccionar Pasajero:" layoutX="10" layoutY="250"/>
-        <ComboBox fx:id="comboPasajeroSeleccionado" layoutX="150" layoutY="250" onAction="#cargarDatosPasajero"/>
+    <!-- Tabla de habitaciones disponibles -->
+    <Label text="Seleccionar Habitación:"/>
+    <TableView fx:id="tableViewHabitaciones" prefHeight="200">
+        <TableColumn fx:id="numeroColumna" text="Número" />
+        <TableColumn fx:id="tipoColumna" text="Tipo" />
+        <TableColumn fx:id="estadoColumna" text="Estado" />
+    </TableView>
 
-        <Button text="Cargar Pasajero" layoutX="300" layoutY="250" onAction="#guardarPasajero"/>
+    <!-- Botón de confirmación -->
+    <HBox spacing="10" alignment="center">
+        <Button text="Confirmar Reserva" onAction="#onConfirmarReserva"/>
+        <Button text="Cancelar" onAction="#onCancelar"/>
+    </HBox>
 
-        <Label text="Detalles de Pasajero:" layoutX="10" layoutY="290"/>
-
-        <!-- Campos de texto para los detalles del pasajero -->
-        <Label text="Nombre:" layoutX="10" layoutY="310"/>
-        <TextField fx:id="txtNombre" layoutX="150" layoutY="310" prefWidth="200"/>
-
-        <Label text="Apellido:" layoutX="10" layoutY="350"/>
-        <TextField fx:id="txtApellido" layoutX="150" layoutY="350" prefWidth="200"/>
-
-        <Label text="DNI:" layoutX="10" layoutY="390"/>
-        <TextField fx:id="txtDNI" layoutX="150" layoutY="390" prefWidth="200"/>
-
-        <!-- Añadir un VBox para los pasajeros -->
-        <VBox fx:id="vboxPasajeros" layoutX="10" layoutY="430" spacing="10" prefWidth="400">
-            <!-- Aquí se pueden añadir los TextFields para los pasajeros -->
-        </VBox>
-
-        <Button text="Crear Reserva" layoutX="10" layoutY="480" onAction="#onCrearReserva"/>
-        <Button text="Cancelar" layoutX="150" layoutY="480" onAction="#onCancelarReserva"/>
-    </children>
-</AnchorPane>
+</VBox>

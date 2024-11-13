@@ -31,8 +31,10 @@ public class Reserva {
     private Usuario usuario;
     private Habitacion habitacion;
 
-    public Reserva( LocalDate fechaReserva, LocalDate fechaEntrada, LocalDate fechaSalida, String estadoReserva, String comentario, int cantidadPersonas, List<Pasajero> pasajeros, List<String> serviciosAdicionales, Usuario usuario, Habitacion habitacion) {
-        this.fechaReserva = fechaReserva;
+    public Reserva(){}
+
+    public Reserva(LocalDate fechaEntrada, LocalDate fechaSalida, String estadoReserva, String comentario, int cantidadPersonas, List<Pasajero> pasajeros, List<String> serviciosAdicionales, Usuario usuario, Habitacion habitacion) {
+        setFechaReserva(LocalDate.now());
         this.fechaEntrada = fechaEntrada;
         this.fechaSalida = fechaSalida;
         this.estadoReserva = estadoReserva;
@@ -50,6 +52,10 @@ public class Reserva {
 
     public static int getContadorReservas() {
         return contadorReservas;
+    }
+
+    public void setFechaReserva(LocalDate fechaReserva) {
+        this.fechaReserva = fechaReserva;
     }
 
     public static void setContadorReservas(int contadorReservas) {
