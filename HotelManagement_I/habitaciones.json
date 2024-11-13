@@ -25,12 +25,12 @@
     "capacidad": 1,
     "camas": ["Individual"],
     "disponible": false,
-    "estado": "reparación",
+    "estado": "reparacion",
     "detalleEstado": "Problema con el aire acondicionado."
   },
   {
     "tipo": "Presidencial",
-    "numero": 101,
+    "numero": 104,
     "capacidad": 2,
     "adicionales": ["Sala de conferencias", "Ascensor", "Pileta", "Terraza", "Billar"],
     "dimension": 52.5,
@@ -41,7 +41,7 @@
   },
   {
     "tipo": "Suite",
-    "numero": 101,
+    "numero": 105,
     "capacidad": 2,
     "balcon": false,
     "comedor": true,

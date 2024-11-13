@@ -9,8 +9,8 @@ public class Doble extends Habitacion {
     public Doble() {
     }
 
-    public Doble(int numero, List<String> camas, boolean disponible, EstadoHabitacion estado, String detalleEstado) {
-        super(numero, camas, disponible, estado, detalleEstado);
+    public Doble(int numero, List<String> camas, boolean disponible, String detalleEstado) {
+        super(numero, camas, disponible, detalleEstado);
         super.setTipo("DOBLE");
         super.setCapacidad(2);
     }

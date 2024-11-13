@@ -13,8 +13,8 @@ public class Suite extends Habitacion {
     public Suite() {
     }
 
-    public Suite(int numero, int capacidad, List<String> camas, boolean disponible, EstadoHabitacion estado, String detalleEstado, boolean balcon, boolean comedor) {
-        super(numero, capacidad, camas, disponible, estado, detalleEstado);
+    public Suite(int numero, int capacidad, List<String> camas, boolean disponible, String detalleEstado, boolean balcon, boolean comedor) {
+        super(numero, capacidad, camas, disponible, detalleEstado);
         super.setTipo("SUITE");
         this.balcon = balcon;
         this.comedor = comedor;

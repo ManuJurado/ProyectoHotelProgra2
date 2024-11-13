@@ -13,8 +13,8 @@ public class Presidencial extends Habitacion {
     public Presidencial() {
     }
 
-    public Presidencial(int numero, int capacidad, List<String> camas, boolean disponible, EstadoHabitacion estado, String detalleEstado, List<String> adicionales, double dimension) {
-        super(numero, capacidad, camas, disponible, estado, detalleEstado);
+    public Presidencial(int numero, int capacidad, List<String> camas, boolean disponible, String detalleEstado, List<String> adicionales, double dimension) {
+        super(numero, capacidad, camas, disponible, detalleEstado);
         super.setTipo("PRESIDENCIAL");
         this.adicionales = adicionales;
         this.dimension = dimension;

@@ -13,8 +13,8 @@ public class Apartamento extends Habitacion {
     public Apartamento() {
     }
 
-    public Apartamento(int numero, int capacidad, List<String> camas, boolean disponible, EstadoHabitacion estado, String detalleEstado, int ambientes, boolean cocina) {
-        super(numero, capacidad, camas, disponible, estado, detalleEstado);
+    public Apartamento(int numero, int capacidad, List<String> camas, boolean disponible, String detalleEstado, int ambientes, boolean cocina) {
+        super(numero, capacidad, camas, disponible, detalleEstado);
             super.setTipo("APARTAMENTO");
         this.ambientes = ambientes;
         this.cocina = cocina;
