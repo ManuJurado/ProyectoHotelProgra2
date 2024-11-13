@@ -12,6 +12,7 @@ import models.Usuarios.*;
 import org.json.JSONException;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
@@ -43,7 +44,7 @@ public class GestionUsuario implements Gestionable_I<Usuario> {
     // Metodo para crear un nuevo cliente
     public Cliente crearCliente(String nombre, String apellido, String dni, String password, String correoElectronico,
                                 String direccion, String telefono, List<Reserva> historialReservas, int puntosFidelidad,
-                                Date fechaNacimiento) {
+                                LocalDate fechaNacimiento) {
         // Crear un nuevo cliente con la fecha de nacimiento (sin formatear aquí)
         Cliente cliente = new Cliente(nombre, apellido, dni, password, correoElectronico, direccion, telefono, historialReservas, puntosFidelidad, fechaNacimiento);
 
@@ -116,7 +117,7 @@ public class GestionUsuario implements Gestionable_I<Usuario> {
 
     // Metodo para crear un nuevo conserje
     public Conserje crearConserje(String nombre, String apellido, String dni, String password, String correoElectronico,
-                                  Date fechaIngreso, String telefono, String estadoTrabajo) {
+                                  LocalDate fechaIngreso, String telefono, String estadoTrabajo) {
         Conserje conserje = new Conserje(nombre, apellido, dni, password, correoElectronico, fechaIngreso, telefono, estadoTrabajo);
         try {
             guardar(conserje);

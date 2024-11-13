@@ -2,16 +2,17 @@ package models.Usuarios;
 
 import enums.TipoUsuario;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Conserje extends Usuario {
 
-    private Date fechaIngreso;
+    private LocalDate fechaIngreso;
     private String telefono;
     private String estadoTrabajo;
 
     public Conserje(String nombre, String apellido, String dni, String contrasenia, String correoElectronico,
-                    Date fechaIngreso, String telefono, String estadoTrabajo) {
+                    LocalDate fechaIngreso, String telefono, String estadoTrabajo) {
         super(nombre, apellido, dni, contrasenia, correoElectronico, TipoUsuario.CONSERJE);
         this.fechaIngreso = fechaIngreso;
         this.telefono = telefono;
@@ -23,7 +24,7 @@ public class Conserje extends Usuario {
         super.setTipoUsuario(TipoUsuario.CONSERJE);
     }
 
-    public void setFechaIngreso(Date fechaIngreso) {
+    public void setFechaIngreso(LocalDate fechaIngreso) {
         if (fechaIngreso == null) {
             throw new IllegalArgumentException("La fecha de ingreso no puede ser nula.");
         }
@@ -44,7 +45,7 @@ public class Conserje extends Usuario {
         this.estadoTrabajo = estadoTrabajo;
     }
 
-    public Date getFechaIngreso() { return fechaIngreso; }
+    public LocalDate getFechaIngreso() { return fechaIngreso; }
     public String getTelefono() { return telefono; }
     public String getEstadoTrabajo() { return estadoTrabajo; }
 

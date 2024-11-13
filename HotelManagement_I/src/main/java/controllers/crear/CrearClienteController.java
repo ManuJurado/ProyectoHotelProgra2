@@ -16,6 +16,7 @@ import services.GestionUsuario;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -122,12 +123,10 @@ public class CrearClienteController extends BaseController {
             // Crear instancia de Cliente y asignar valores
             Cliente cliente = new Cliente();
 
-            // Validaciones
+            // Validaciones de campos obligatorios
             validarCampo(cliente::setNombre, nombreField.getText(), "Nombre", errores);
             validarCampo(cliente::setApellido, apellidoField.getText(), "Apellido", errores);
             validarCampo(cliente::setDni, dniField.getText(), "DNI", errores);
-            validarCampo(cliente::setContrasenia, contraseniaField.getText(), "Contraseña", errores);
-            validarCampo(cliente::setContrasenia, confirmarContraseniaField.getText(), "Confirmar Contraseña", errores);
             validarCampo(cliente::setCorreoElectronico, correoElectronicoField.getText(), "Correo Electrónico", errores);
             validarCampo(cliente::setDireccion, direccionField.getText(), "Dirección", errores);
             validarCampo(cliente::setTelefono, telefonoField.getText(), "Teléfono", errores);
@@ -135,7 +134,6 @@ public class CrearClienteController extends BaseController {
             // Validación de las contraseñas
             String contrasenia = contraseniaField.getText();
             String confirmarContrasenia = confirmarContraseniaField.getText();
-            // Comprobación de las contraseñas
             if (contrasenia == null || confirmarContrasenia == null || !contrasenia.equals(confirmarContrasenia)) {
                 errores.add("Las contraseñas no coinciden.");
             } else {
@@ -147,13 +145,11 @@ public class CrearClienteController extends BaseController {
                 }
             }
 
+            // Validación de la fecha de nacimiento
             if (fechaNacimientoPicker.getValue() != null) {
-                LocalDate localDate = fechaNacimientoPicker.getValue();
-                // Convertir LocalDate a Date con la zona horaria correcta
-                ZoneId zoneId = ZoneId.systemDefault();
-                Date fechaNacimiento = Date.from(localDate.atStartOfDay(zoneId).toInstant());
+                LocalDate fechaNacimiento = fechaNacimientoPicker.getValue();
                 try {
-                    cliente.setFechaNacimiento(fechaNacimiento);
+                    cliente.setFechaNacimiento(fechaNacimiento);  // Establecemos el LocalDate en el cliente
                 } catch (FechaInvalidaException e) {
                     errores.add(e.getMessage());
                 }
@@ -174,14 +170,14 @@ public class CrearClienteController extends BaseController {
                     throw new AtributoFaltanteException("El correo electrónico ya está registrado.");
                 }
 
-                // Ahora, cuando vayas a guardar, formateas la fecha a "yyyy-MM-dd" solo para el almacenamiento
-                SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+                // Formatear la fecha a "yyyy-MM-dd" para el almacenamiento en JSON
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                 String fechaNacimientoString = null;
                 if (cliente.getFechaNacimiento() != null) {
-                    fechaNacimientoString = formato.format(cliente.getFechaNacimiento());
+                    fechaNacimientoString = cliente.getFechaNacimiento().format(formatter);
                 }
 
-                // Guardar el cliente en el JSON, manteniendo la fecha como Date en la clase Cliente
+                // Guardar el cliente en el JSON, almacenando la fecha como String en formato "yyyy-MM-dd"
                 gestionUsuario.crearCliente(
                         cliente.getNombre(),
                         cliente.getApellido(),
@@ -192,7 +188,7 @@ public class CrearClienteController extends BaseController {
                         cliente.getTelefono(),
                         new ArrayList<>(), // Historial de reservas vacío
                         0, // Puntos de fidelidad inicial
-                        cliente.getFechaNacimiento() // Se pasa la fecha como Date
+                        cliente.getFechaNacimiento() // Se pasa la fecha como LocalDate
                 );
                 System.out.println("Cliente guardado con éxito");
 
@@ -208,6 +204,7 @@ public class CrearClienteController extends BaseController {
             showAlert(e.getMessage());
         }
     }
+
 
 
 

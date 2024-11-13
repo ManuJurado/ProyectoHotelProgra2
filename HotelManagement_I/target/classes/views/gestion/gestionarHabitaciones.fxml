@@ -10,12 +10,10 @@
         <!-- Tabla de Habitaciones -->
         <TableView fx:id="tablaHabitaciones" layoutX="20" layoutY="50" prefHeight="400" prefWidth="500">
             <columns>
-                <TableColumn fx:id="columnaIdHabitacion" text="ID" />
+                <TableColumn fx:id="columnaNro" text="ID" />
+                <TableColumn fx:id="columnaCapacidad" text="Capacidad" />
                 <TableColumn fx:id="columnaTipo" text="Tipo de Habitación" />
                 <TableColumn fx:id="columnaEstado" text="Estado" />
-                <TableColumn fx:id="columnaMetrosCuadrados" text="Metros Cuadrados" />
-                <TableColumn fx:id="columnaCantidadCamas" text="Cantidad de Camas" />
-                <TableColumn fx:id="columnaDisponible" text="Disponible" />
             </columns>
         </TableView>
 
@@ -25,12 +23,15 @@
             <items>
                 <FXCollections fx:factory="observableArrayList">
                     <String fx:value="Todos" />
-                    <String fx:value="Sencilla" />
+                    <String fx:value="Individual" />
                     <String fx:value="Doble" />
+                    <String fx:value="Apartamento" />
                     <String fx:value="Suite" />
+                    <String fx:value="Presidencial" />
                 </FXCollections>
             </items>
         </ComboBox>
+    <CheckBox fx:id="disponibleCheckBox" text="Disponible" layoutX="450" layoutY="470"/>
 
         <!-- Botones de acción -->
         <Button fx:id="crearNuevaHabitacionButton" text="Crear Nueva Habitación" layoutX="550" layoutY="100" onAction="#crearNuevaHabitacion" />

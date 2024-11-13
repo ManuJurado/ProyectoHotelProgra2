@@ -6,6 +6,7 @@ import models.Reserva;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -14,14 +15,14 @@ public class Cliente extends Usuario {
     private String telefono;
     private List<Reserva> historialReservas;
     private int puntosFidelidad;
-    private Date fechaNacimiento;
+    private LocalDate fechaNacimiento;
 
     public Cliente(){
         super.setTipoUsuario(TipoUsuario.CLIENTE);
     }
 
     public Cliente(String nombre, String apellido, String dni, String contrasenia, String correoElectronico,
-                   String direccion, String telefono, List<Reserva> historialReservas, int puntosFidelidad, Date fechaNacimiento) {
+                   String direccion, String telefono, List<Reserva> historialReservas, int puntosFidelidad, LocalDate fechaNacimiento) {
         super(nombre, apellido, dni, contrasenia, correoElectronico, TipoUsuario.CLIENTE);
         this.direccion = direccion;
         this.telefono = telefono;
@@ -34,7 +35,7 @@ public class Cliente extends Usuario {
     public String getDireccion() { return direccion; }
     public String getTelefono() { return telefono; }
     public int getPuntosFidelidad() { return puntosFidelidad; }
-    public Date getFechaNacimiento() { return fechaNacimiento; }
+    public LocalDate getFechaNacimiento() { return fechaNacimiento; }
     public List<Reserva> getHistorialReservas() { return historialReservas; }
 
     //setters
@@ -54,9 +55,9 @@ public class Cliente extends Usuario {
         this.telefono = telefono;
     }
 
-    public void setFechaNacimiento(Date fechaNacimiento) throws FechaInvalidaException {
+    public void setFechaNacimiento(LocalDate fechaNacimiento) throws FechaInvalidaException {
         // Verificar si la fecha de nacimiento es nula o si es una fecha futura
-        if (fechaNacimiento == null || fechaNacimiento.after(new Date())) {
+        if (fechaNacimiento == null || fechaNacimiento.isAfter(LocalDate.now())) {
             throw new FechaInvalidaException("La fecha de nacimiento no puede ser futura o nula.");
         }
         this.fechaNacimiento = fechaNacimiento;
