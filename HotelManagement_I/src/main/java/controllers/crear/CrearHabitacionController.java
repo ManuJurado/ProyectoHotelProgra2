@@ -1,107 +1,130 @@
 package controllers.crear;
 
 import controllers.BaseController;
+import controllers.details.DatosUsuario;
 import controllers.gestionar.GestionarHabitacionesController;
+import controllers.modificar.ModificarContraseniaController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import services.GestionHabitaciones;
 
-public class CrearHabitacionController extends BaseController {
+import java.io.IOException;
 
-    private GestionHabitaciones gestionHabitaciones;
+public class CrearHabitacionController extends BaseController {
 
     @FXML
     private TextField tipoHabitacionField; // Tipo de habitación
     @FXML
-    private TextField estadoField; // Estado de la habitación
+    private TextField numeroField; // Numero de habitacion
     @FXML
-    private TextField metrosCuadradosField; // Metros cuadrados
+    private TextField capacidadField; // Capacidad
     @FXML
-    private TextField cantidadCamasField; // Cantidad de camas
+    private TextField camasField; // Cantidad de camas
     @FXML
-    private TextField nroHabitacionField; // Cambié el nombre para evitar confusiones
+    private TextField disponibleField; // Disponibilidad
+    @FXML
+    private TextField estadoField; // Estado
+    @FXML
+    private TextField detalleEstadoField; // Detalle del estado
+    @FXML
+    private TextField ambientesField; // Ambientes
+    @FXML
+    private TextField cocinaField; // Cocina
+    @FXML
+    private TextField adicionalesField; // Adicionales
+    @FXML
+    private TextField dimensionField; // Dimension
+    @FXML
+    private TextField balconField; // Balcon
+    @FXML
+    private TextField comedorField; // Comedor
 
-    private GestionarHabitacionesController gestionarHabitacionesController;
+    private Scene previousScene;  // Cambiar a Scene en vez de Stage
 
-    public void setGestionarHabitaciones(services.GestionHabitaciones gestionHabitaciones) {
-        this.gestionHabitaciones = gestionHabitaciones;
+    // Metodo para establecer la escena anterior
+    public void setPreviousScene(Scene previousScene) {
+        this.previousScene = previousScene;
     }
 
-    public void setGestionarHabitacionesController(GestionarHabitacionesController gestionarHabitacionesController) {
-        this.gestionarHabitacionesController = gestionarHabitacionesController;
-    }
-
-    /*@FXML
-    private void crearHabitacion(ActionEvent event) {
-        String tipoHabitacion = tipoHabitacionField.getText();
-        String estado = estadoField.getText();
-        int metrosCuadrados = Integer.parseInt(metrosCuadradosField.getText());
-        int cantidadCamas = Integer.parseInt(cantidadCamasField.getText());
-        Integer nroHabitacion = Integer.parseInt(nroHabitacionField.getText()); // Asegúrate de usar el nombre correcto del campo
-
-        Habitacion nuevaHabitacion = new Habitacion(tipoHabitacion, estado, metrosCuadrados, cantidadCamas);
-        gestionarHabitaciones.agregarHabitacion(nuevaHabitacion);
-
-        mostrarAlerta("Éxito", "Habitación creada con éxito.");
-    }*/
-
-    /*@FXML
-    private void guardarHabitacion(ActionEvent event) {
-        // Crear una nueva habitación usando los datos del formulario
-        Habitacion nuevaHabitacion = new Habitacion(
-                tipoHabitacionField.getText(), // Tipo de habitación
-                estadoField.getText(), // Estado
-                Integer.parseInt(metrosCuadradosField.getText()), // Metros cuadrados
-                Integer.parseInt(cantidadCamasField.getText())// Cantidad de camas
-        );
-
-        // Llama al método para agregar la nueva habitación
-        gestionarHabitaciones.agregarHabitacion(nuevaHabitacion);
-
-        // Aquí llamamos directamente al método de actualización de la tabla
-        if (gestionarHabitacionesController != null) {
-            gestionarHabitacionesController.cargarHabitaciones();
+    @FXML
+    public void initialize() {
+        if(tipoHabitacionField.getText().equalsIgnoreCase("Apartamento")) {
+            adicionalesField.setVisible(false);
+            dimensionField.setVisible(false);
+            balconField.setVisible(false);
+            comedorField.setVisible(false);
+        }
+        else if (tipoHabitacionField.getText().equalsIgnoreCase("Doble") || tipoHabitacionField.getText().equals("Individual")) {
+            adicionalesField.setVisible(false);
+            dimensionField.setVisible(false);
+            balconField.setVisible(false);
+            comedorField.setVisible(false);
+            cocinaField.setVisible(false);
+            ambientesField.setVisible(false);
+        }
+        else if (tipoHabitacionField.getText().equalsIgnoreCase("Presidencial")) {
+            balconField.setVisible(false);
+            comedorField.setVisible(false);
+            cocinaField.setVisible(false);
+            ambientesField.setVisible(false);
+        }
+        else if (tipoHabitacionField.getText().equalsIgnoreCase("Suite")) {
+            adicionalesField.setVisible(false);
+            dimensionField.setVisible(false);
+            cocinaField.setVisible(false);
+            ambientesField.setVisible(false);
         }
 
-        // Actualiza la tabla en el controlador de gestionarHabitaciones
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Stage parentStage = (Stage) stage.getOwner(); // Obtener el escenario padre
+/*
+        // Rellenar campo tipoHabitacion......
+        tipoHabitacionField.setText();
 
-        if (parentStage != null) {
-            GestionarHabitacionesController gestionarHabitacionesController = (GestionarHabitacionesController) parentStage.getScene().getUserData();
-            if (gestionarHabitacionesController != null) {
-                gestionarHabitacionesController.cargarHabitaciones(); // Cambia a cargarHabitaciones()
-            }
-        }
+*/
+        // Limitar el número de caracteres en los campos de texto
+        setTextFieldLimit(tipoHabitacionField, 20);
+        setTextFieldLimit(numeroField, 30);
+        setTextFieldLimit(capacidadField, 30);
+        setTextFieldLimit(camasField, 15);
+        setTextFieldLimit(disponibleField, 10);
+        setTextFieldLimit(estadoField, 15);
+        setTextFieldLimit(detalleEstadoField, 15);
+        setTextFieldLimit(ambientesField, 15);
+        setTextFieldLimit(cocinaField, 15);
+        setTextFieldLimit(adicionalesField, 30);
+        setTextFieldLimit(dimensionField, 30);
+        setTextFieldLimit(balconField, 30);
+        setTextFieldLimit(comedorField, 30);
 
-        // Muestra un mensaje de éxito y cierra la ventana
-        mostrarAlerta("Éxito", "La habitación fue creada con éxito.");
-        stage.close(); // Cerrar la ventana actual
-    }*/
-
-
+    }
+/*
     @FXML
-    private void volverAlMenu(ActionEvent event) {
-        // Aquí puedes implementar la lógica para volver al menú anterior
-        // Por ejemplo, puedes usar el método cambiarEscena similar al anterior
-        cambiarEscena("/views/gestionarHabitaciones.fxml", "Gestión de Habitaciones", (Node) event.getSource());
-    }
+    private void abrirVentanaModificarContrasenia() throws IOException {
+        // Cargar el FXML de la ventana de cambiar contraseña
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/modificar/modificarContrasenia.fxml"));
+        Parent root = loader.load();
 
-    @FXML
-    private void cerrar(ActionEvent event) {
-        // Cerrar la ventana actual después de guardar
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.close();
-    }
+        // Obtener el controlador de la nueva ventana
+        ModificarContraseniaController controller = loader.getController();
 
-    // Metodo para mostrar una alerta con los errores
-    private void showAlert(String mensaje) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setContentText(mensaje);
-        alert.showAndWait();
+        // Pasar el usuario actual al nuevo controlador
+        controller.setUsuario(usuarioSeleccionado);
+
+        // Pasar el controlador actual (ModificarMiUsuarioController) al nuevo controlador
+        controller.setControllerAnterior(this);
+
+        // Crear una nueva ventana (Stage) para mostrar la interfaz de modificar contraseña
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.setTitle("Modificar Contraseña");
+        stage.show();
     }
+    */
+
 }

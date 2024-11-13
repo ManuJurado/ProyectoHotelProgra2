@@ -20,19 +20,19 @@ public abstract class Habitacion {
         this.camas = new ArrayList<>();
     }
 
-    public Habitacion(Integer numero, int capacidad, List<String> camas, boolean disponible, EstadoHabitacion estado, String detalleEstado) {
+    public Habitacion(Integer numero, int capacidad, List<String> camas, boolean disponible, String detalleEstado) {
         this.numero = numero;
         this.capacidad = capacidad;
         this.camas = camas;
         this.disponible = disponible;
-        this.estado = estado;
+        setEstado(EstadoHabitacion.DISPONIBLE);
         this.detalleEstado = detalleEstado;
     }
 
-    public Habitacion(int numero, List<String> camas, boolean disponible, EstadoHabitacion estado, String detalleEstado) {
+    public Habitacion(int numero, List<String> camas, boolean disponible, String detalleEstado) {
         this.numero = numero;
         this.camas = camas;
-        this.estado = estado;
+        setEstado(EstadoHabitacion.DISPONIBLE);
         this.disponible = disponible;
         this.detalleEstado = detalleEstado;
     }

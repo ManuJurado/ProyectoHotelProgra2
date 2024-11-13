@@ -9,6 +9,7 @@ import javafx.scene.control.Alert;
 import javafx.util.Duration;
 import manejoJson.GestionJSON;
 import models.Habitacion.*;
+import models.Usuarios.Usuario;
 import org.json.JSONException;
 import java.io.IOException;
 import java.util.*;
@@ -142,10 +143,20 @@ public class GestionHabitaciones implements Gestionable_I<Habitacion> {
     public Habitacion buscarPorId(String id) {
         try {
             int numero = Integer.parseInt(id);  // Convertimos el id String a int
-            return buscarPorId(String.valueOf(numero));  // Usamos el metodo que ya tenías para buscar por número
+            return buscarPorIdInt(numero);  // Usamos el metodo que ya tenías para buscar por número
         } catch (NumberFormatException e) {
             // Si no se puede convertir el id a int, manejamos el error
             System.out.println("El ID no es válido: " + id);
+        }
+        return null;
+    }
+
+    //Metodo para buscar por id INT
+    public Habitacion buscarPorIdInt(int numero) {
+        for (Habitacion habitacion : habitaciones) {
+            if (habitacion.getNumero() == numero) {
+                return habitacion;
+            }
         }
         return null;
     }
@@ -154,45 +165,45 @@ public class GestionHabitaciones implements Gestionable_I<Habitacion> {
     /**-----------------------  INICIO METODOS ABM  -----------------------*/
 
     //Metodo para crear una habitacion (Individual)
-    public Individual crearHabitacionIndividual(int numero, List<String> camas, boolean disponible, EstadoHabitacion estado, String detalleEstado) {
+    public Individual crearHabitacionIndividual(int numero, List<String> camas, boolean disponible, String detalleEstado) {
 
-        Individual individual = new Individual(numero, camas, disponible, estado, detalleEstado);
+        Individual individual = new Individual(numero, camas, disponible, detalleEstado);
         habitaciones.add(individual);
         actualizarHabitacionesJson();
         return individual;
     }
 
     //Metodo para crear una habitacion (Doble)
-    public Doble crearHabitacionDoble(int numero, List<String> camas, boolean disponible, EstadoHabitacion estado, String detalleEstado) {
+    public Doble crearHabitacionDoble(int numero, List<String> camas, boolean disponible, String detalleEstado) {
 
-        Doble doble = new Doble(numero, camas, disponible, estado, detalleEstado);
+        Doble doble = new Doble(numero, camas, disponible, detalleEstado);
         habitaciones.add(doble);
         actualizarHabitacionesJson();
         return doble;
     }
 
     //Metodo para crear una habitacion (Apartamento)
-    public Apartamento crearHabitacionApartamento(int numero, int capacidad, List<String> camas, boolean disponible, EstadoHabitacion estado, String detalleEstado, int ambientes, boolean cocina) {
+    public Apartamento crearHabitacionApartamento(int numero, int capacidad, List<String> camas, boolean disponible, String detalleEstado, int ambientes, boolean cocina) {
 
-        Apartamento apartamento = new Apartamento(numero, capacidad, camas, disponible, estado, detalleEstado, ambientes, cocina);
+        Apartamento apartamento = new Apartamento(numero, capacidad, camas, disponible, detalleEstado, ambientes, cocina);
         habitaciones.add(apartamento);
         actualizarHabitacionesJson();
         return  apartamento;
     }
 
     //Metodo para crear una habitacion (Presidencial)
-    public Presidencial crearHabitacionPresidencial(int numero, int capacidad, List<String> camas, boolean disponible, EstadoHabitacion estado, String detalleEstado, List<String> adicionales, double dimension) {
+    public Presidencial crearHabitacionPresidencial(int numero, int capacidad, List<String> camas, boolean disponible, String detalleEstado, List<String> adicionales, double dimension) {
 
-        Presidencial presidencial = new Presidencial(numero, capacidad, camas, disponible, estado, detalleEstado, adicionales, dimension);
+        Presidencial presidencial = new Presidencial(numero, capacidad, camas, disponible, detalleEstado, adicionales, dimension);
         habitaciones.add(presidencial);
         actualizarHabitacionesJson();
         return  presidencial;
     }
 
     //Metodo para crear una habitacion (Suite)
-    public Suite crearHabitacionSuite(int numero, int capacidad, List<String> camas, boolean disponible, EstadoHabitacion estado, String detalleEstado, boolean balcon, boolean comedor) {
+    public Suite crearHabitacionSuite(int numero, int capacidad, List<String> camas, boolean disponible, String detalleEstado, boolean balcon, boolean comedor) {
 
-        Suite suite = new Suite(numero, capacidad, camas, disponible, estado, detalleEstado, balcon, comedor);
+        Suite suite = new Suite(numero, capacidad, camas, disponible, detalleEstado, balcon, comedor);
         habitaciones.add(suite);
         actualizarHabitacionesJson();
         return  suite;
@@ -218,8 +229,12 @@ public class GestionHabitaciones implements Gestionable_I<Habitacion> {
 
     // Metodo para guardar una habitación
     @Override
-    public void guardar(Habitacion objeto) {
-        habitaciones.add(objeto);  // Agrega la habitación a la lista
+    public void guardar(Habitacion hab) {
+        // Verificar si el numero de habitacion ya existe
+        if (buscarPorIdInt(hab.getNumero()) != null) {
+            throw new HabitacionDuplicadaException("Ya existe una habitacion con el numero: " + hab.getNumero());
+        }
+        habitaciones.add(hab);  // Agrega la habitación a la lista
         actualizarHabitacionesJson();  // Guarda los cambios en el archivo JSON
     }
 
