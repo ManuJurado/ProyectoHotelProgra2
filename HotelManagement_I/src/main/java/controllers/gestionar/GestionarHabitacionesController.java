@@ -1,208 +1,75 @@
 package controllers.gestionar;
 
 import controllers.BaseController;
-import controllers.crear.CrearHabitacionController;
-import controllers.modificar.ModificarHabitacionController;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
-import models.Habitacion.Habitacion;
-import services.GestionHabitaciones;
-
-import java.io.IOException;
-import java.util.List;
 
 public class GestionarHabitacionesController extends BaseController {
 
+    @FXML
+    private TableView tablaHabitaciones;
+    @FXML
+    private TextField idHabitacionField;
+    @FXML
+    private ComboBox<String> tipoHabitacionComboBox;
+    @FXML
+    private Button crearNuevaHabitacionButton;
+    @FXML
+    private Button modificarHabitacionButton;
+    @FXML
+    private Button eliminarHabitacionButton;
+    @FXML
+    private Button verDetallesHabitacionButton;
 
+    // Metodo para crear nueva habitación
     @FXML
-    private TableView<Habitacion> tablaHabitaciones;
-    @FXML
-    private TableColumn<Habitacion, String> columnaTipo;
-    @FXML
-    private TableColumn<Habitacion, String> columnaEstado;
-    @FXML
-    private TableColumn<Habitacion, Integer> columnaMetrosCuadrados;
-    @FXML
-    private TableColumn<Habitacion, Integer> columnaCantidadCamas;
-    @FXML
-    private TableColumn<Habitacion, Integer> nroHabitacion;
-
-    private services.GestionHabitaciones gestionarHabitaciones;
-    private ObservableList<Habitacion> habitacionesOriginales;
-
-    @FXML
-    public void initialize() {
-        gestionarHabitaciones = new GestionHabitaciones();
-        // Configura las columnas de la tabla
-        nroHabitacion.setCellValueFactory(new PropertyValueFactory<>("nroHabitacion"));
-        columnaTipo.setCellValueFactory(new PropertyValueFactory<>("tipoHabitacion"));
-        columnaEstado.setCellValueFactory(new PropertyValueFactory<>("estado"));
-        columnaMetrosCuadrados.setCellValueFactory(new PropertyValueFactory<>("metrosCuadrados"));
-        columnaCantidadCamas.setCellValueFactory(new PropertyValueFactory<>("cantidadCamas"));
+    private void crearNuevaHabitacion() {
+        System.out.println("Crear nueva habitación");
+        // Aquí iría la lógica para crear una nueva habitación
     }
 
-    // Metodo para establecer el servicio de gestión de habitaciones
-/*    public void setGestionarHabitaciones(GestionHabitaciones gestionarHabitaciones) {
-        this.gestionarHabitaciones = gestionarHabitaciones;
-        cargarHabitaciones(); // Carga habitaciones después de configurar
-    }
-
-    public void cargarHabitaciones() {
-        if (gestionarHabitaciones != null) {
-            List<Habitacion> habitaciones = gestionarHabitaciones.obtenerHabitaciones();
-            System.out.println("Habitaciones cargadas: " + habitaciones.size()); // Depuración
-
-            // Limpiar la tabla antes de agregar nuevos elementos
-            tablaHabitaciones.getItems().clear();
-
-            // Actualizar la tabla con las habitaciones obtenidas
-            ObservableList<Habitacion> habitacionesObservable = FXCollections.observableArrayList(habitaciones);
-            tablaHabitaciones.setItems(habitacionesObservable); // Actualiza la tabla en la UI
-        } else {
-            System.out.println("GestionarHabitaciones es nulo."); // Depuración adicional
-        }
-    }*/
-
-
+    // Metodo para modificar una habitación seleccionada
     @FXML
-    private void onCrearHabitacion(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/crear/crearHabitacion.fxml"));
-            Parent root = loader.load();
-
-            CrearHabitacionController crearHabitacionController = loader.getController();
-            crearHabitacionController.setGestionarHabitaciones(gestionarHabitaciones);
-
-            // Aquí pasamos la referencia al controlador de gestión de habitaciones
-            crearHabitacionController.setGestionarHabitacionesController(this);
-
-            // Crear un nuevo escenario
-            Stage stage = new Stage();
-            stage.setTitle("Crear Habitación");
-            stage.setScene(new Scene(root));
-
-            // Mostrar el nuevo escenario
-            stage.show();
-
-        } catch (IOException e) {
-            mostrarAlerta("Error", "No se pudo cargar la vista de crear habitación.");
-            e.printStackTrace(); // Muestra la traza de error en la consola para depuración
-        }
+    private void modificarHabitacion() {
+        System.out.println("Modificar habitación");
+        // Aquí iría la lógica para modificar la habitación seleccionada
     }
 
-/*    @FXML
-    private void onModificarHabitacion(ActionEvent event) {
-        Habitacion habitacionSeleccionada = tablaHabitaciones.getSelectionModel().getSelectedItem();
-        if (habitacionSeleccionada != null) {
-            try {
-                // Cargar el FXML del formulario de modificación
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/modificar/ModificarHabitacion.fxml"));
-                Parent root = loader.load();
-
-                // Obtener el controlador del nuevo FXML
-                ModificarHabitacionController modificarHabitacionController = loader.getController();
-                modificarHabitacionController.setHabitacion(habitacionSeleccionada, this); // Pasar la habitación seleccionada y el controlador actual
-
-                // Crear una nueva ventana para mostrar el formulario
-                Stage stage = new Stage();
-                stage.setTitle("Modificar Habitación");
-                stage.setScene(new Scene(root));
-                stage.show();
-
-                // Cerrar la ventana actual si es necesario (opcional)
-                // ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
-            } catch (IOException e) {
-                e.printStackTrace();
-                mostrarAlerta("Error", "No se pudo abrir el formulario de modificación.");
-            }
-        } else {
-            mostrarAlerta("Advertencia", "Por favor, selecciona una habitación para modificar.");
-        }
-    }*/
-
-/*    @FXML
-    private void onHabilitarInhabilitarHabitacion(ActionEvent event) {
-        Habitacion habitacionSeleccionada = tablaHabitaciones.getSelectionModel().getSelectedItem();
-        if (habitacionSeleccionada != null) {
-            // Lógica para habilitar o inhabilitar la habitación
-            String nuevoEstado = habitacionSeleccionada.getEstado().equals("disponible") ? "no disponible" : "disponible";
-            habitacionSeleccionada.setEstado(nuevoEstado);
-            cargarHabitaciones();
-        } else {
-            mostrarAlerta("Advertencia", "Por favor, selecciona una habitación para habilitar/inhabilitar.");
-        }
-    }
-
+    // Metodo para ver los detalles de una habitación seleccionada
     @FXML
-    private void onBorrarHabitacion(ActionEvent event) {
-        Habitacion habitacionSeleccionada = tablaHabitaciones.getSelectionModel().getSelectedItem();
-        if (habitacionSeleccionada != null) {
-            gestionarHabitaciones.eliminarHabitacion(habitacionSeleccionada);
-            cargarHabitaciones();
-        } else {
-            mostrarAlerta("Advertencia", "Por favor, selecciona una habitación para borrar.");
-        }
+    private void verDetallesHabitacion() {
+        System.out.println("Ver detalles de la habitación");
+        // Aquí iría la lógica para ver los detalles de la habitación seleccionada
     }
 
-    public void actualizarListaHabitaciones() {
-        if (gestionarHabitaciones != null) {
-            List<Habitacion> habitaciones = gestionarHabitaciones.obtenerHabitaciones();
-            System.out.println("Usuarios cargados: " + habitaciones.size()); // Depuración
-
-            // Limpiar la tabla antes de agregar nuevos elementos
-            tablaHabitaciones.getItems().clear();
-
-            // Guardar la lista original de usuarios
-            habitacionesOriginales = FXCollections.observableArrayList(habitaciones);
-
-            // Actualizar la tabla con los usuarios obtenidos
-            tablaHabitaciones.setItems(habitacionesOriginales); // Actualiza la tabla en la UI
-        } else {
-            System.out.println("GestionarUsuarios es nulo."); // Depuración adicional
-        }
-    }
-
+    // Metodo para eliminar una habitación seleccionada
     @FXML
-    private void onVerDetalleHabitacion(ActionEvent event) {
-        Habitacion habitacionSeleccionada = tablaHabitaciones.getSelectionModel().getSelectedItem();
-        if (habitacionSeleccionada != null) {
-            // Lógica para mostrar detalles de la habitación (puedes usar un cuadro de diálogo o nueva ventana)
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Detalles de la Habitación");
-            alert.setHeaderText(habitacionSeleccionada.getTipoHabitacion());
-            alert.setContentText("Estado: " + habitacionSeleccionada.getEstado() +
-                    "\nMetros Cuadrados: " + habitacionSeleccionada.getMetrosCuadrados() +
-                    "\nCantidad de Camas: " + habitacionSeleccionada.getCantidadCamas() +
-                    "\nCapacidad: " + habitacionSeleccionada.getCapacidad());
-            alert.showAndWait();
-        } else {
-            mostrarAlerta("Advertencia", "Por favor, selecciona una habitación para ver detalles.");
-        }
-    }*/
-
-    @FXML
-    private void volverAlMenuAdmin(ActionEvent event) {
-        cambiarEscena("/views/menu/menuAdministrador.fxml", "Menú Administrador", (Node) event.getSource());
+    private void eliminarHabitacion() {
+        System.out.println("Eliminar habitación");
+        // Aquí iría la lógica para eliminar la habitación seleccionada
     }
 
-    private void mostrarAlerta(String titulo, String mensaje) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle(titulo);
-        alert.setHeaderText(null);
-        alert.setContentText(mensaje);
-        alert.showAndWait();
+    // Metodo para filtrar las habitaciones por ID
+    @FXML
+    private void filtrarHabitacionesPorId() {
+        String idHabitacion = idHabitacionField.getText();
+        System.out.println("Filtrar habitaciones por ID: " + idHabitacion);
+        // Aquí iría la lógica para filtrar las habitaciones por ID
+    }
+
+    // Metodo para filtrar las habitaciones por tipo
+    @FXML
+    private void filtrarHabitacionesPorTipo() {
+        String tipoHabitacion = tipoHabitacionComboBox.getValue();
+        System.out.println("Filtrar habitaciones por tipo: " + tipoHabitacion);
+        // Aquí iría la lógica para filtrar las habitaciones por tipo
+    }
+
+    // Metodo para volver al menú anterior
+    @FXML
+    private void volverAlMenuAdmin() {
+        Stage stage = (Stage) crearNuevaHabitacionButton.getScene().getWindow();
+        stage.close();
     }
 }

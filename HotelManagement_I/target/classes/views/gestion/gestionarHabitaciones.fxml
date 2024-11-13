@@ -1,14 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.collections.FXCollections?>
 
-<VBox spacing="20" alignment="CENTER" xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml"
-      fx:controller="controllers.gestionar.GestionarServiciosController">
+<?import java.lang.String?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.gestionar.GestionarHabitacionesController">
+        <Label text="Gestión de Habitaciones" layoutX="20" layoutY="20" />
 
-    <Label text="Gestión de Servicios" style="-fx-font-size: 18px;"/>
+        <!-- Tabla de Habitaciones -->
+        <TableView fx:id="tablaHabitaciones" layoutX="20" layoutY="50" prefHeight="400" prefWidth="500">
+            <columns>
+                <TableColumn fx:id="columnaIdHabitacion" text="ID" />
+                <TableColumn fx:id="columnaTipo" text="Tipo de Habitación" />
+                <TableColumn fx:id="columnaEstado" text="Estado" />
+                <TableColumn fx:id="columnaMetrosCuadrados" text="Metros Cuadrados" />
+                <TableColumn fx:id="columnaCantidadCamas" text="Cantidad de Camas" />
+                <TableColumn fx:id="columnaDisponible" text="Disponible" />
+            </columns>
+        </TableView>
 
-    <!-- Aquí podrías agregar más componentes para la gestión de servicios -->
+        <!-- Filtros -->
+        <TextField fx:id="idHabitacionField" layoutX="20" layoutY="470" prefWidth="150" promptText="ID Habitacion" onKeyReleased="#filtrarHabitacionesPorId" />
+        <ComboBox fx:id="tipoHabitacionComboBox" layoutX="200" layoutY="470" prefWidth="130" onAction="#filtrarHabitacionesPorTipo">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="Todos" />
+                    <String fx:value="Sencilla" />
+                    <String fx:value="Doble" />
+                    <String fx:value="Suite" />
+                </FXCollections>
+            </items>
+        </ComboBox>
 
-    <Button text="Volver" onAction="#volverAlMenuAdmin"/>
-</VBox>
+        <!-- Botones de acción -->
+        <Button fx:id="crearNuevaHabitacionButton" text="Crear Nueva Habitación" layoutX="550" layoutY="100" onAction="#crearNuevaHabitacion" />
+        <Button fx:id="modificarHabitacionButton" text="Modificar Habitacion" layoutX="550" layoutY="150" onAction="#modificarHabitacion" />
+        <Button fx:id="eliminarHabitacionButton" text="Eliminar Habitacion" layoutX="550" layoutY="200" onAction="#eliminarHabitacion" />
+        <Button fx:id="verDetallesHabitacionButton" text="Ver Detalles de Habitacion" layoutX="550" layoutY="250" onAction="#verDetallesHabitacion" />
+
+        <Button text="Volver" layoutX="550" layoutY="350" onAction="#volverAlMenuAdmin" />
+</AnchorPane>
