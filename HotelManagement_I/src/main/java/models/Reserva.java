@@ -1,34 +1,61 @@
 package models;
 
+import exceptions.ExcesoPasajerosException;
+import exceptions.FechaInvalidaException;
+import exceptions.HabitacionInexistenteException;
+import exceptions.UsuarioNoEncontradoException;
+import models.Habitacion.*;
+import models.Usuarios.*;
 
-import models.Habitacion.Habitacion;
-import models.Usuarios.Usuario;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONException;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-public class Reserva {
-    private static List<Reserva> reservas = new ArrayList<>();
-    private int id;
-    private List<Pasajero> pasajeros;
-    private Habitacion habitacion;
-    private LocalDate fechaInicio;
-    private LocalDate fechaFin;
-    private Usuario cliente;
-    private String estado;  // Estado de la reserva
 
-    public Reserva(int id, List<Pasajero> pasajeros, Habitacion habitacion, LocalDate fechaInicio, LocalDate fechaFin, Usuario cliente, String estado) {
-        this.id = id;
+public class Reserva {
+
+    private static int contadorReservas = 1;
+    private int id;
+    private LocalDate fechaReserva;
+    private LocalDate fechaEntrada;
+    private LocalDate fechaSalida;
+    private String estadoReserva;
+    private String comentario;
+    private int cantidadPersonas;
+    private List<Pasajero> pasajeros;
+    private List<String> serviciosAdicionales;
+    private Usuario usuario;
+    private Habitacion habitacion;
+
+    public Reserva( LocalDate fechaReserva, LocalDate fechaEntrada, LocalDate fechaSalida, String estadoReserva, String comentario, int cantidadPersonas, List<Pasajero> pasajeros, List<String> serviciosAdicionales, Usuario usuario, Habitacion habitacion) {
+        this.fechaReserva = fechaReserva;
+        this.fechaEntrada = fechaEntrada;
+        this.fechaSalida = fechaSalida;
+        this.estadoReserva = estadoReserva;
+        this.comentario = comentario;
+        this.cantidadPersonas = cantidadPersonas;
         this.pasajeros = pasajeros;
+        this.serviciosAdicionales = serviciosAdicionales;
+        this.usuario = usuario;
         this.habitacion = habitacion;
-        this.fechaInicio = fechaInicio;
-        this.fechaFin = fechaFin;
-        this.cliente = cliente;
-        this.estado = estado;  // Asignar estado
     }
 
-    // Getters y setters
+    private String obtenerFechaActual() {
+        return java.time.LocalDate.now().toString();  // Devuelve la fecha actual en formato ISO
+    }
+
+    public static int getContadorReservas() {
+        return contadorReservas;
+    }
+
+    public static void setContadorReservas(int contadorReservas) {
+        Reserva.contadorReservas = contadorReservas;
+    }
+
     public int getId() {
         return id;
     }
@@ -37,85 +64,123 @@ public class Reserva {
         this.id = id;
     }
 
-    public List<Pasajero> getPasajeros() {
-        return pasajeros;
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public void setPasajeros(List<Pasajero> pasajeros) {
-        this.pasajeros = pasajeros;
+    public void setUsuario(Usuario usuario) throws UsuarioNoEncontradoException {
+        if (usuario == null) {
+            throw new UsuarioNoEncontradoException("El usuario no puede ser nulo.");
+        }
+        this.usuario = usuario;
     }
 
     public Habitacion getHabitacion() {
         return habitacion;
     }
 
-    public void setHabitacion(Habitacion habitacion) {
+    public LocalDate getFechaReserva() {
+        return fechaReserva;
+    }
+
+    public void setHabitacion(Habitacion habitacion) throws HabitacionInexistenteException {
+        if (habitacion == null) {
+            throw new HabitacionInexistenteException("La habitación no puede ser nula.");
+        }
         this.habitacion = habitacion;
     }
 
-    public LocalDate getFechaInicio() {
-        return fechaInicio;
+    public void setFechaEntrada(LocalDate fechaEntrada) throws FechaInvalidaException {
+        if (fechaEntrada.isBefore(LocalDate.now())) {
+            throw new FechaInvalidaException("La fecha de entrada no puede ser anterior a la fecha actual.");
+        }
+        this.fechaEntrada = fechaEntrada;
     }
 
-    public void setFechaInicio(LocalDate fechaInicio) {
-        this.fechaInicio = fechaInicio;
+    public LocalDate getFechaEntrada() {
+        return fechaEntrada;
     }
 
-    public LocalDate getFechaFin() {
-        return fechaFin;
+    public void setFechaSalida(LocalDate fechaSalida) throws FechaInvalidaException {
+        if (fechaSalida.isBefore(fechaEntrada)) {
+            throw new FechaInvalidaException("La fecha de salida no puede ser anterior a la fecha de entrada.");
+        }
+        this.fechaSalida = fechaSalida;
     }
 
-    public void setFechaFin(LocalDate fechaFin) {
-        this.fechaFin = fechaFin;
+    public LocalDate getFechaSalida() {
+        return fechaSalida;
     }
 
-    public Usuario getCliente() {
-        return cliente;
+    public String getEstadoReserva() {
+        return estadoReserva;
     }
 
-    public void setCliente(Usuario cliente) {
-        this.cliente = cliente;
+    public void setEstadoReserva(String estadoReserva) throws IllegalArgumentException {
+        if (estadoReserva == null || estadoReserva.isEmpty()) {
+            throw new IllegalArgumentException("El estado de la reserva no puede ser vacío.");
+        }
+        this.estadoReserva = estadoReserva;
     }
 
-    public String getEstado() {
-        return estado;
+    public String getComentario() {
+        return comentario;
     }
 
-    public void setEstado(String estado) {
-        this.estado = estado;
+    public void setComentario(String comentario) {
+        if (comentario != null && comentario.length() > 100) {
+            throw new IllegalArgumentException("El comentario no puede exceder los 100 caracteres.");
+        }
+        this.comentario = comentario;
     }
 
-    public String getFechaReserva() {
-        return "Desde: " + fechaInicio.toString() + " hasta: " + fechaFin.toString();
+    public int getCantidadPersonas() {
+        return cantidadPersonas;
     }
 
-    public List<Pasajero> getListaPasajeros() {
+    public void setCantidadPersonas(int cantidadPersonas) throws IllegalArgumentException {
+        if (cantidadPersonas > 4) {
+            throw new IllegalArgumentException("La cantidad de personas debe ser menor que 4.");
+        }
+        this.cantidadPersonas = cantidadPersonas;
+    }
+
+    public List<String> getServiciosAdicionales() {
+        return serviciosAdicionales;
+    }
+
+    public void setServiciosAdicionales(List<String> serviciosAdicionales) {
+        if (serviciosAdicionales == null || serviciosAdicionales.isEmpty()) {
+            throw new IllegalArgumentException("Debe proporcionar al menos un servicio adicional.");
+        }
+        this.serviciosAdicionales = serviciosAdicionales;
+    }
+
+    public List<Pasajero> getPasajeros() {
         return pasajeros;
     }
 
-    // Métodos para obtener datos específicos
-    public String getNombreCliente() {
-        return cliente != null ? cliente.getNombre() : "Cliente no asignado";
+    public void setPasajeros(List<Pasajero> pasajeros) throws ExcesoPasajerosException {
+        if (pasajeros.size() > 4) {
+            throw new ExcesoPasajerosException("No se pueden agregar más de 4 pasajeros.");
+        }
+        this.pasajeros = pasajeros;
     }
 
-    public LocalDate getFechaInicioReserva() {
-        return fechaInicio;
+    @Override
+    public String toString() {
+        return "Reserva{" +
+                "id=" + id +
+                ", fechaReserva=" + fechaReserva +
+                ", fechaEntrada=" + fechaEntrada +
+                ", fechaSalida=" + fechaSalida +
+                ", estadoReserva='" + estadoReserva + '\'' +
+                ", comentario='" + comentario + '\'' +
+                ", cantidadPersonas=" + cantidadPersonas +
+                ", pasajeros=" + pasajeros +
+                ", serviciosAdicionales=" + serviciosAdicionales +
+                ", usuario=" + usuario +
+                ", habitacion=" + habitacion +
+                '}';
     }
-
-    public LocalDate getFechaFinReserva() {
-        return fechaFin;
-    }
-
-    // Metodo para crear una nueva reserva
-    public static void crearReserva(int id, List<Pasajero> pasajeros, Habitacion habitacion, LocalDate fechaInicio, LocalDate fechaFin, Usuario cliente, String estado) {
-        Reserva nuevaReserva = new Reserva(id, pasajeros, habitacion, fechaInicio, fechaFin, cliente, estado);
-        reservas.add(nuevaReserva);
-        System.out.println("Reserva creada para el cliente " + cliente.getNombre() + " desde " + fechaInicio + " hasta " + fechaFin);
-    }
-
-    // Metodo para obtener todas las reservas
-    public static List<Reserva> obtenerReservas() {
-        return reservas;
-    }
-
 }

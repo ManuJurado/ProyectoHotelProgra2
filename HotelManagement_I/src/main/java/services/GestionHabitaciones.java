@@ -280,5 +280,113 @@ public class GestionHabitaciones implements Gestionable_I<Habitacion> {
         timeline.play();
     }
 
+
+    // Metodo para modificar una habitación (Suite)
+    public void modificarHabitacionSuite(int idHabitacion, int capacidad, List<String> camas, boolean disponible, String estado, boolean balcon, boolean comedor) {
+        Habitacion habitacion = buscarPorIdInt(idHabitacion);  // Buscar la habitación por ID
+        if (habitacion != null && habitacion instanceof Suite) {
+            Suite habitacionSuite = (Suite) habitacion;  // Convertimos a la clase Suite
+
+            // Modificamos los atributos
+            habitacionSuite.setCapacidad(capacidad);
+            habitacionSuite.setCamas(camas);
+            habitacionSuite.setDisponible(disponible);
+            habitacionSuite.setEstado(EstadoHabitacion.valueOf(estado));
+            habitacionSuite.setBalcon(balcon);
+            habitacionSuite.setComedor(comedor);
+
+            // Actualizamos la habitación modificada en la lista de habitaciones
+            int index = habitaciones.indexOf(habitacion);  // Encontramos la posición de la habitación en la lista
+            if (index != -1) {
+                habitaciones.set(index, habitacionSuite);  // Reemplazamos la habitación en la lista
+            }
+
+            // Guardamos la habitación modificada
+            actualizarHabitacionesJson();
+        } else {
+            throw new HabitacionInexistenteException("La habitación con ID " + idHabitacion + " no existe o no es una habitación de tipo Suite.");
+        }
+    }
+
+    // Metodo para modificar una habitación (Presidencial)
+    public void modificarHabitacionPresidencial(int idHabitacion, int capacidad, List<String> camas, boolean disponible, String estado, List<String> adicionales, double dimension) {
+        Habitacion habitacion = buscarPorIdInt(idHabitacion);  // Buscar la habitación por ID
+        if (habitacion != null && habitacion instanceof Presidencial) {
+            Presidencial habitacionPresidencial = (Presidencial) habitacion;  // Convertimos a la clase Presidencial
+
+            // Modificamos los atributos
+            habitacionPresidencial.setCapacidad(capacidad);
+            habitacionPresidencial.setCamas(camas);
+            habitacionPresidencial.setDisponible(disponible);
+            habitacionPresidencial.setEstado(EstadoHabitacion.valueOf(estado));
+            habitacionPresidencial.setAdicionales(adicionales);
+            habitacionPresidencial.setDimension(dimension);
+
+            // Actualizamos la habitación modificada en la lista de habitaciones
+            int index = habitaciones.indexOf(habitacion);  // Encontramos la posición de la habitación en la lista
+            if (index != -1) {
+                habitaciones.set(index, habitacionPresidencial);  // Reemplazamos la habitación en la lista
+            }
+
+            // Guardamos la habitación modificada
+            actualizarHabitacionesJson();
+        } else {
+            throw new HabitacionInexistenteException("La habitación con ID " + idHabitacion + " no existe o no es una habitación de tipo Presidencial.");
+        }
+    }
+
+    // Metodo para modificar una habitación (Apartamento)
+    public void modificarHabitacionApartamento(int idHabitacion, int capacidad, List<String> camas, boolean disponible, String estado, int ambientes, boolean cocina) {
+        Habitacion habitacion = buscarPorIdInt(idHabitacion);  // Buscar la habitación por ID
+        if (habitacion != null && habitacion instanceof Apartamento) {
+            Apartamento habitacionApartamento = (Apartamento) habitacion;  // Convertimos a la clase Apartamento
+
+            // Modificamos los atributos
+            habitacionApartamento.setCapacidad(capacidad);
+            habitacionApartamento.setCamas(camas);
+            habitacionApartamento.setDisponible(disponible);
+            habitacionApartamento.setEstado(EstadoHabitacion.valueOf(estado));
+            habitacionApartamento.setAmbientes(ambientes);
+            habitacionApartamento.setCocina(cocina);
+
+            // Actualizamos la habitación modificada en la lista de habitaciones
+            int index = habitaciones.indexOf(habitacion);  // Encontramos la posición de la habitación en la lista
+            if (index != -1) {
+                habitaciones.set(index, habitacionApartamento);  // Reemplazamos la habitación en la lista
+            }
+
+            // Guardamos la habitación modificada
+            actualizarHabitacionesJson();
+        } else {
+            throw new HabitacionInexistenteException("La habitación con ID " + idHabitacion + " no existe o no es una habitación de tipo Apartamento.");
+        }
+    }
+
+    // Metodo para modificar una habitación (Doble)
+    public void modificarHabitacionDoble(int idHabitacion, int capacidad, List<String> camas, boolean disponible, String estado) {
+        Habitacion habitacion = buscarPorIdInt(idHabitacion);  // Buscar la habitación por ID
+        if (habitacion != null && habitacion instanceof Doble) {
+            Doble habitacionDoble = (Doble) habitacion;  // Convertimos a la clase Doble
+
+            // Modificamos los atributos
+            habitacionDoble.setCapacidad(capacidad);
+            habitacionDoble.setCamas(camas);
+            habitacionDoble.setDisponible(disponible);
+            habitacionDoble.setEstado(EstadoHabitacion.valueOf(estado));
+
+            // Actualizamos la habitación modificada en la lista de habitaciones
+            int index = habitaciones.indexOf(habitacion);  // Encontramos la posición de la habitación en la lista
+            if (index != -1) {
+                habitaciones.set(index, habitacionDoble);  // Reemplazamos la habitación en la lista
+            }
+
+            // Guardamos los cambios en el archivo JSON
+            actualizarHabitacionesJson();
+        } else {
+            throw new HabitacionInexistenteException("La habitación con ID " + idHabitacion + " no existe o no es una habitación de tipo Doble.");
+        }
+    }
+
+
     /*-----------------------  FIN METODOS ABM  -----------------------*/
 }

@@ -1,0 +1,34 @@
+[
+    {
+      "id": 1,
+      "fechaReserva": "2024-11-10",
+      "fechaEntrada": "2024-11-15",
+      "fechaSalida": "2024-11-20",
+      "estadoReserva": "Activa",
+      "comentario": "Reserva para vacaciones",
+      "cantidadPersonas": 2,
+      "pasajeros": [
+        {"dni": "12345678", "nombre": "Juan", "apellido": "Pérez"},
+        {"dni": "23456789", "nombre": "Ana", "apellido": "Gómez"}
+      ],
+      "serviciosAdicionales": ["Wi-Fi", "Desayuno"],
+      "usuarioId": 123,
+      "habitacionId": 101
+    },
+    {
+      "id": 2,
+      "fechaReserva": "2024-11-12",
+      "fechaEntrada": "2024-11-18",
+      "fechaSalida": "2024-11-22",
+      "estadoReserva": "Confirmada",
+      "comentario": "Viaje de negocios",
+      "cantidadPersonas": 1,
+      "pasajeros": [
+        {"dni": "34567890", "nombre": "Carlos", "apellido": "López"}
+      ],
+      "serviciosAdicionales": ["Almuerzo", "Estacionamiento"],
+      "usuarioId": 456,
+      "habitacionId": 102
+    }
+  ]
+  
