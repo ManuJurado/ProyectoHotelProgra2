@@ -1,14 +1,17 @@
 package controllers.gestionar;
 
 import controllers.BaseController;
+import controllers.crear.SeleccionarTipoHabitacionController;
 import enums.EstadoHabitacion;
 import enums.TipoUsuario;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -16,13 +19,12 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import models.Habitacion.*;
-import models.Usuarios.Cliente;
 import models.Usuarios.Usuario;
 import services.GestionHabitaciones;
 import services.GestionUsuario;
 import services.Sesion;
 
-import java.lang.reflect.InvocationTargetException;
+import java.io.IOException;
 import java.util.List;
 
 public class GestionarHabitacionesController extends BaseController {
@@ -122,11 +124,64 @@ public class GestionarHabitacionesController extends BaseController {
         tablaHabitaciones.setItems(habitacionesOriginales); // Actualiza la tabla en la UI
     }
 
-    // Metodo para crear nueva habitación
+    private String tipoHabitacionSeleccionado;
+
     @FXML
-    private void crearNuevaHabitacion() {
-        System.out.println("Crear nueva habitación");
-        // Aquí iría la lógica para crear una nueva habitación
+    private void crearNuevaHabitacion(ActionEvent event) {
+        try {
+            // Guardar la escena actual antes de cambiarla
+            Scene currentScene = ((Node) event.getSource()).getScene();
+
+            // Cargar el FXML para la ventana de selección del tipo de habitación
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/crear/seleccionarTipoHabitacion.fxml"));
+            Parent root = loader.load();
+
+            // Obtener el controlador de la nueva ventana
+            SeleccionarTipoHabitacionController seleccionarTipoController = loader.getController();
+
+            // Pasar el controlador principal (GestionarHabitacionesController) al nuevo controlador
+            seleccionarTipoController.setPreviousController(this);
+
+            // Crear una nueva ventana (Stage) para seleccionar el tipo de habitación
+            Stage newStage = new Stage();
+            newStage.setScene(new Scene(root));
+            newStage.setTitle("Seleccionar Tipo de Habitación");
+            newStage.initModality(Modality.APPLICATION_MODAL); // Bloquear la ventana principal hasta que se cierre esta
+            newStage.showAndWait();
+
+            // Después de que se cierra la ventana auxiliar, actualizar la lista de habitaciones en el controlador principal
+            // Solo si se ha seleccionado un tipo de habitación
+            if (tipoHabitacionSeleccionado != null) {
+                System.out.println("SELECCIONADO EL TIPO DE HABITACION: " + tipoHabitacionSeleccionado);
+
+                // Aquí puedes agregar la lógica para actualizar la lista de habitaciones.
+                // Suponiendo que tienes un metodo `actualizarListaHabitaciones()` en tu controlador principal:
+            }
+            actualizarListaHabitaciones();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void actualizarListaHabitaciones() {
+        // Recargar los usuarios desde el archivo JSON
+        cargarHabitaciones(); // Recarga la lista de habitaciones desde el archivo JSON
+
+        // Actualiza la tabla con los usuarios obtenidos
+        tablaHabitaciones.setItems(habitacionesOriginales); // Actualiza la tabla en la UI
+    }
+
+    public void setTipoHabitacionSeleccionado(String tipoHabitacionSeleccionado) {
+        this.tipoHabitacionSeleccionado = tipoHabitacionSeleccionado;
+    }
+
+    private void mostrarAlerta(String titulo, String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
     }
 
     // Metodo para modificar una habitación seleccionada
@@ -136,6 +191,7 @@ public class GestionarHabitacionesController extends BaseController {
         // Aquí iría la lógica para modificar la habitación seleccionada
     }
 
+    // Metodo para ver los detalles de una habitación seleccionada
     // Metodo para ver los detalles de una habitación seleccionada
     @FXML
     private void verDetallesHabitacion(ActionEvent event) {
@@ -155,8 +211,13 @@ public class GestionarHabitacionesController extends BaseController {
             Label nroLabel = new Label("Nro habitación: " + habitacionSeleccionada.getNumero());
             Label tipoLabel = new Label("Tipo de habitación: " + habitacionSeleccionada.getTipo());
             Label capLabel = new Label("Capacidad: " + habitacionSeleccionada.getCapacidad());
-
             vbox.getChildren().addAll(nroLabel, tipoLabel, capLabel);
+
+            // Mostrar lista de camas
+            if (!habitacionSeleccionada.getCamas().isEmpty()) {
+                Label camasLabel = new Label("Camas: " + String.join(", ", habitacionSeleccionada.getCamas()));
+                vbox.getChildren().add(camasLabel);
+            }
 
             // Si es un Apartamento, agregar detalles específicos
             if (habitacionSeleccionada instanceof Apartamento) {
@@ -164,7 +225,7 @@ public class GestionarHabitacionesController extends BaseController {
 
                 // Detalles específicos para Apartamento
                 Label ambientesLabel = new Label("Ambientes: " + apartamento.getAmbientes());
-                Label cocinaLabel = new Label("Cocina: " + apartamento.isCocina());
+                Label cocinaLabel = new Label("Cocina: " + (apartamento.isCocina() ? "Sí" : "No"));
                 vbox.getChildren().addAll(ambientesLabel, cocinaLabel);
             }
             // Si es una Suite, agregar detalles específicos
@@ -204,6 +265,7 @@ public class GestionarHabitacionesController extends BaseController {
             mostrarAlerta("Por favor, selecciona una habitación para ver los detalles.");
         }
     }
+
 
 
     // Metodo para eliminar una habitación seleccionada
@@ -293,6 +355,7 @@ public class GestionarHabitacionesController extends BaseController {
         // Actualizar la tabla con las habitaciones filtradas
         tablaHabitaciones.setItems(habitacionesFiltradas);
     }
+
 
     // Metodo para volver al menú anterior
     @FXML

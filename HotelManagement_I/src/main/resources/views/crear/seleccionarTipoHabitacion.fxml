@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.crear.SeleccionarTipoHabitacionController" spacing="20" alignment="CENTER">
+    <ComboBox fx:id="comboBoxTipoHabitacion" prefWidth="200">
+        <items>
+            <FXCollections fx:factory="observableArrayList">
+                <String fx:value="Individual" />
+                <String fx:value="Doble" />
+                <String fx:value="Apartamento" />
+                <String fx:value="Suite" />
+                <String fx:value="Presidencial" />
+            </FXCollections>
+        </items>
+    </ComboBox>
+
+    <Button text="Aceptar" onAction="#handleAceptar" />
+    <Button text="Cancelar" onAction="#handleCancelar" />
+</VBox>

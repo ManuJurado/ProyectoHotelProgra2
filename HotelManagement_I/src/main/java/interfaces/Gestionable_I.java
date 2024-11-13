@@ -11,4 +11,6 @@ public interface Gestionable_I<T> {
 
         // Metodo para guardar un objeto T
         void guardar(T objeto) throws UsuarioDuplicadoException;
+
+
 }

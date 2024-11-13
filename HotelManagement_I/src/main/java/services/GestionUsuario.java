@@ -113,8 +113,6 @@ public class GestionUsuario implements Gestionable_I<Usuario> {
         return false; // No se encontró el usuario
     }
 
-
-
     // Metodo para crear un nuevo conserje
     public Conserje crearConserje(String nombre, String apellido, String dni, String password, String correoElectronico,
                                   LocalDate fechaIngreso, String telefono, String estadoTrabajo) {
@@ -244,7 +242,7 @@ public class GestionUsuario implements Gestionable_I<Usuario> {
         alert.show();
 
         // Usamos un Timeline para cerrar el alert después de 2 segundos (2000 milisegundos)
-        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(2000), e -> alert.close()));
+        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000), e -> alert.close()));
         timeline.setCycleCount(1);
         timeline.play();
     }

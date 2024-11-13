@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Alert?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.stage.Stage?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<VBox spacing="20" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.crear.CrearHabitacionPresidencial" prefWidth="600" prefHeight="300">
+
+    <!-- HBox 1 -->
+    <HBox spacing="20" alignment="CENTER_LEFT">
+        <Label text="Cama 1:"/>
+        <ComboBox fx:id="comboBoxCama1" />
+        <CheckBox fx:id="mesaPoolCheckBox" text="Mesa de pool"/>
+        <CheckBox fx:id="jacuzziCheckBox" text="Jacuzzi"/>
+    </HBox>
+
+    <!-- HBox 2: Alineación izquierda -->
+    <HBox spacing="20" alignment="CENTER_LEFT">
+        <Label text="Cama 2:"/>
+        <ComboBox fx:id="comboBoxCama2" HBox.hgrow="ALWAYS" />
+        <CheckBox fx:id="cineCheckBox" text="Cine"/>
+        <CheckBox fx:id="entretenimientoCheckBox" text="Servicios de entretenimiento"/>
+    </HBox>
+
+    <!-- HBox 3: Alineación izquierda -->
+    <HBox spacing="20" alignment="CENTER_LEFT">
+        <Label text="Cama 3:"/>
+        <ComboBox fx:id="comboBoxCama3" HBox.hgrow="ALWAYS" />
+        <CheckBox fx:id="terrazaCheckBox" text="Terraza"/>
+        <CheckBox fx:id="saunaCheckBox" text="Sauna"/>
+    </HBox>
+
+    <!-- HBox 4: Alineación izquierda -->
+    <HBox spacing="20" alignment="CENTER_LEFT">
+        <Label text="Cama 4:"/>
+        <ComboBox fx:id="comboBoxCama4" HBox.hgrow="ALWAYS" />
+    </HBox>
+
+    <!-- Dimensión -->
+    <TextField fx:id="dimensionField" promptText="Dimensión (m²)" maxWidth="100"/>
+
+    <!-- Botones de guardar y cancelar -->
+    <HBox spacing="10">
+        <Button text="Guardar" onAction="#guardarHabitacionPresidencial" />
+        <Button text="Cancelar" onAction="#cerrarVentana" />
+    </HBox>
+
+</VBox>

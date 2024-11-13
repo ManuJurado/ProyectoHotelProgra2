@@ -206,10 +206,6 @@ public class CrearClienteController extends BaseController {
     }
 
 
-
-
-
-
     // Metodo de validación general para los campos
     private void validarCampo(Consumer<String> setter, String value, String campo, List<String> errores) {
         try {

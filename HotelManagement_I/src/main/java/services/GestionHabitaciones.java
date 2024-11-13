@@ -165,47 +165,44 @@ public class GestionHabitaciones implements Gestionable_I<Habitacion> {
     /**-----------------------  INICIO METODOS ABM  -----------------------*/
 
     //Metodo para crear una habitacion (Individual)
-    public Individual crearHabitacionIndividual(int numero, List<String> camas, boolean disponible, String detalleEstado) {
-
-        Individual individual = new Individual(numero, camas, disponible, detalleEstado);
-        habitaciones.add(individual);
-        actualizarHabitacionesJson();
+    public Individual crearHabitacionIndividual(List<String> camas, boolean disponible, String detalleEstado) {
+        int numeroHabitacion = establecerNroHabitacion();
+        Individual individual = new Individual(numeroHabitacion, camas, disponible, detalleEstado);
+        guardar(individual);
         return individual;
     }
 
     //Metodo para crear una habitacion (Doble)
-    public Doble crearHabitacionDoble(int numero, List<String> camas, boolean disponible, String detalleEstado) {
-
-        Doble doble = new Doble(numero, camas, disponible, detalleEstado);
-        habitaciones.add(doble);
-        actualizarHabitacionesJson();
+    public Doble crearHabitacionDoble(List<String> camas, boolean disponible, String detalleEstado) {
+        int numeroHabitacion = establecerNroHabitacion();
+        Doble doble = new Doble(numeroHabitacion, camas, disponible, detalleEstado);
+        guardar(doble);
         return doble;
     }
 
     //Metodo para crear una habitacion (Apartamento)
-    public Apartamento crearHabitacionApartamento(int numero, int capacidad, List<String> camas, boolean disponible, String detalleEstado, int ambientes, boolean cocina) {
-
-        Apartamento apartamento = new Apartamento(numero, capacidad, camas, disponible, detalleEstado, ambientes, cocina);
-        habitaciones.add(apartamento);
-        actualizarHabitacionesJson();
+    public Apartamento crearHabitacionApartamento(int capacidad, List<String> camas, boolean disponible, String detalleEstado, int ambientes, boolean cocina) {
+        // Obtener el siguiente número de habitación disponible
+        int numeroHabitacion = establecerNroHabitacion();
+        // Crear la instancia de Apartamento con el número generado automáticamente
+        Apartamento apartamento = new Apartamento(numeroHabitacion, capacidad, camas, disponible, detalleEstado, ambientes, cocina);
+        guardar(apartamento);
         return  apartamento;
     }
 
     //Metodo para crear una habitacion (Presidencial)
-    public Presidencial crearHabitacionPresidencial(int numero, int capacidad, List<String> camas, boolean disponible, String detalleEstado, List<String> adicionales, double dimension) {
-
-        Presidencial presidencial = new Presidencial(numero, capacidad, camas, disponible, detalleEstado, adicionales, dimension);
-        habitaciones.add(presidencial);
-        actualizarHabitacionesJson();
+    public Presidencial crearHabitacionPresidencial(int capacidad, List<String> camas, boolean disponible, String detalleEstado, List<String> adicionales, double dimension) {
+        int numeroHabitacion = establecerNroHabitacion();
+        Presidencial presidencial = new Presidencial(numeroHabitacion, capacidad, camas, disponible, detalleEstado, adicionales, dimension);
+        guardar(presidencial);
         return  presidencial;
     }
 
     //Metodo para crear una habitacion (Suite)
-    public Suite crearHabitacionSuite(int numero, int capacidad, List<String> camas, boolean disponible, String detalleEstado, boolean balcon, boolean comedor) {
-
-        Suite suite = new Suite(numero, capacidad, camas, disponible, detalleEstado, balcon, comedor);
-        habitaciones.add(suite);
-        actualizarHabitacionesJson();
+    public Suite crearHabitacionSuite(int capacidad, List<String> camas, boolean disponible, String detalleEstado, boolean balcon, boolean comedor) {
+        int numeroHabitacion = establecerNroHabitacion();
+        Suite suite = new Suite(numeroHabitacion, capacidad, camas, disponible, detalleEstado, balcon, comedor);
+        guardar(suite);
         return  suite;
     }
 
@@ -247,7 +244,27 @@ public class GestionHabitaciones implements Gestionable_I<Habitacion> {
         }
     }
 
-    // Metodo para mostrar el mensaje temporal
+    // Metodo para establecer el número de habitación automáticamente
+    public int establecerNroHabitacion() {
+        // Lista de números de habitaciones existentes
+        Set<Integer> numerosHabitaciones = new HashSet<>();
+
+        // Añadir los números de habitaciones actuales a un conjunto (Set)
+        for (Habitacion h : habitaciones) {
+            numerosHabitaciones.add(h.getNumero());
+        }
+
+        // Buscar el primer número faltante
+        int siguienteNumero = 1;
+        while (numerosHabitaciones.contains(siguienteNumero)) {
+            siguienteNumero++;  // Si el número existe, buscamos el siguiente
+        }
+
+        // Retornar el siguiente número disponible
+        return siguienteNumero;
+    }
+
+    // Metodo para mostrar un mensaje temporal
     private void mostrarMensajeTemporal(String mensaje) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Cargando");
@@ -258,7 +275,7 @@ public class GestionHabitaciones implements Gestionable_I<Habitacion> {
         alert.show();
 
         // Usamos un Timeline para cerrar el alert después de 2 segundos (2000 milisegundos)
-        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(2000), e -> alert.close()));
+        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000), e -> alert.close()));
         timeline.setCycleCount(1);
         timeline.play();
     }

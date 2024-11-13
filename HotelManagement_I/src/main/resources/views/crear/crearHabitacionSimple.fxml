@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.text.Text?>
+<VBox alignment="CENTER" xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.crear.CrearHabitacionSimple" spacing="10" prefHeight="400.0" prefWidth="600.0">
+    <!-- Campos generales -->
+    <Text text="Deseas craer una habitacion Individual?"/>
+    <!-- Botón Guardar -->
+    <Button text="Guardar Datos" onAction="#guardarHabitacionSimple"/>
+
+    <!-- Botón Cerrar -->
+    <Button fx:id="btnCerrar" text="Cerrar" onAction="#cerrarVentana"/>
+</VBox>
