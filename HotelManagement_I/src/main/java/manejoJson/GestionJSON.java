@@ -486,7 +486,8 @@ public class GestionJSON {
                 List<String> serviciosAdicionales = mapeoServiciosAdicionales(jsonServiciosAdicionales);
 
                 // Obtener el DNI del cliente
-                int dniCliente = jsonReserva.getInt("dni");
+                JSONObject jsonUsuario = jsonReserva.getJSONObject("usuario");
+                int dniCliente = jsonUsuario.getInt("dni");
 
                 // Buscar el usuario por DNI en la lista de usuarios
                 Usuario usuario = gestionUsuario.buscarPorId(String.valueOf(dniCliente));
@@ -498,7 +499,8 @@ public class GestionJSON {
                 }
 
                 // Obtener el número de la habitación desde el JSON
-                int numeroHabitacion = jsonReserva.getInt("habitacionNumero");
+                JSONObject jsonHabitacion = jsonReserva.getJSONObject("habitacion");
+                int numeroHabitacion = jsonHabitacion.getInt("numero");
 
                 // Buscar la habitación correspondiente a ese número
                 Habitacion habitacion = gestionHabitaciones.buscarPorIdInt(numeroHabitacion);

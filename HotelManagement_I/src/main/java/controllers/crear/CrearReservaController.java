@@ -63,6 +63,7 @@ public class CrearReservaController extends BaseController {
         cargarHabitacionesDisponibles();
         configurarTableViewHabitaciones();
         actualizarCamposPasajeros(1);
+        configurarComboBoxServiciosAdicionales();
 
 
         // Inicializa la reserva como nueva si no se está modificando una

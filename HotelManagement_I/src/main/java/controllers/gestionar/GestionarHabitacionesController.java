@@ -79,7 +79,7 @@ public class GestionarHabitacionesController extends BaseController {
         setTextFieldLimit(idHabitacionField, 3);
         cargarHabitaciones();  // Cargar las habitaciones en la tabla
 
-        disponibleCheckBox.setSelected(false); // Inicialmente no está seleccionado
+        disponibleCheckBox.setSelected(true); // Inicialmente no está seleccionado
 
         // Cargar las opciones en el ComboBox
         tipoHabitacionComboBox.setItems(FXCollections.observableArrayList("Todos", "Individual", "Doble", "Apartamento", "Suite", "Presidencial"));
@@ -105,15 +105,6 @@ public class GestionarHabitacionesController extends BaseController {
             eliminarHabitacionButton.setVisible(false);
             crearNuevaHabitacionButton.setVisible(false);
         }
-
-        // Listener para la selección de la tabla
-        tablaHabitaciones.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null && newValue.getTipo().equals("Individual")) {
-                modificarHabitacionButton.setVisible(false);  // Ocultar el botón si es "Individual"
-            } else {
-                modificarHabitacionButton.setVisible(true);  // Mostrar el botón si no es "Individual"
-            }
-        });
     }
 
 
@@ -377,6 +368,10 @@ public class GestionarHabitacionesController extends BaseController {
         // Actualizar la tabla con las habitaciones filtradas
         tablaHabitaciones.setItems(habitacionesFiltradas);
     }
+
+//    public void filtradoDisponibles(){
+//        tablaHabitaciones.
+//    }
 
     @FXML
     private void filtrarHabitacionesPorId() {
