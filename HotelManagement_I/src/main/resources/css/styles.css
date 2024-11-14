@@ -1,14 +1,13 @@
 .root {
     -fx-background-image:
-        url("file:/C:/Users/Manu/OneDrive/Escritorio/ProyectoHotelProgra2/HotelManagement_I/src/main/resources/images/hotel3.png"),
-        url("file:/C:/Users/Manu/OneDrive/Escritorio/ProyectoHotelProgra2/HotelManagement_I/src/main/resources/images/logo.png");
+        url("../images/hotel3.png"),
+        url("../images/logo.png");
     -fx-background-size: cover, 100px 50px;  /* El primer fondo cubre toda la ventana, el segundo se ajusta a 100x100px */
     -fx-background-position: center center, top left; /* El primer fondo está centrado, el segundo en la esquina superior izquierda */
     -fx-background-repeat: no-repeat, no-repeat; /* Ninguno de los fondos se repite */
     -fx-background-opacity: 0.9; /* Aplica opacidad a la imagen de fondo */
     -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.5), 20, 0, 0, 0);
 }
-
 
 /* Para que los elementos de la UI (campos de texto y botones) se vean sobre la imagen */
 .vbox-background {
