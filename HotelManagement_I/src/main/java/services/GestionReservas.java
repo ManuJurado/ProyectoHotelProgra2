@@ -55,7 +55,6 @@ public class GestionReservas implements Gestionable_I<Reserva> {
 
     /**-----------------------  INICIO METODOS ABM  -----------------------*/
 
-    // Crear una nueva reserva
     public Reserva crearReserva(String nombreUsuario, String habitacionId, LocalDate fechaEntrada, LocalDate fechaSalida,
                                 String comentario, int cantidadPersonas, List<String> serviciosAdicionales, List<Pasajero> pasajeros)
             throws UsuarioNoEncontradoException, HabitacionInexistenteException, HabitacionDuplicadaException, FechaInvalidaException {
@@ -89,6 +88,11 @@ public class GestionReservas implements Gestionable_I<Reserva> {
             throw new HabitacionInexistenteException("La habitación con ID " + habitacionId + " no se encuentra en la lista.");
         }
 
+        // Validar que la cantidad de personas no exceda la capacidad de la habitación
+        if (cantidadPersonas > habitacionEncontrada.getCapacidad()) {
+            throw new ExcesoPasajerosException("La cantidad de personas excede la capacidad de la habitación seleccionada.");
+        }
+
         // Verificar disponibilidad
         if (!habitacionEncontrada.isDisponible()) {
             throw new HabitacionOcupadaException("La habitación con ID " + habitacionId + " ya está ocupada.");
@@ -110,10 +114,11 @@ public class GestionReservas implements Gestionable_I<Reserva> {
         }
 
         // Crear la reserva
-        Reserva nuevaReserva = new Reserva(fechaEntrada, fechaSalida, "reservada", comentario, cantidadPersonas, pasajeros, serviciosAdicionales, usuarioEncontrado, habitacionEncontrada);
+        Reserva nuevaReserva = new Reserva(fechaEntrada, fechaSalida, "Reservada", comentario, cantidadPersonas, pasajeros, serviciosAdicionales, usuarioEncontrado, habitacionEncontrada);
 
         // Actualizar estado de la habitación
         habitacionEncontrada.setEstado(EstadoHabitacion.ALQUILADA);
+        habitacionEncontrada.setDisponible(false);
 
         // Agregar la nueva reserva a la lista
         listaReservas.add(nuevaReserva);
@@ -128,6 +133,7 @@ public class GestionReservas implements Gestionable_I<Reserva> {
 
         return nuevaReserva; // Devolver la reserva creada
     }
+
 
     // Metodo para modificar una reserva existente
     public void modificarReserva(Reserva reservaModificada) {

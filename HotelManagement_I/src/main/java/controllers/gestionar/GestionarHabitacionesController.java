@@ -1,6 +1,7 @@
 package controllers.gestionar;
 
 import controllers.BaseController;
+import controllers.GlobalData;
 import controllers.crear.SeleccionarTipoHabitacionController;
 import controllers.modificar.ModificarHabitacionController;
 import enums.EstadoHabitacion;
@@ -79,7 +80,7 @@ public class GestionarHabitacionesController extends BaseController {
         setTextFieldLimit(idHabitacionField, 3);
         cargarHabitaciones();  // Cargar las habitaciones en la tabla
 
-        disponibleCheckBox.setSelected(true); // Inicialmente no está seleccionado
+        disponibleCheckBox.setSelected(false); // Inicialmente no está seleccionado
 
         // Cargar las opciones en el ComboBox
         tipoHabitacionComboBox.setItems(FXCollections.observableArrayList("Todos", "Individual", "Doble", "Apartamento", "Suite", "Presidencial"));
@@ -199,15 +200,13 @@ public class GestionarHabitacionesController extends BaseController {
         if (habitacionSeleccionada != null) {
             // Crear el Stage para la ventana de modificación
             try {
+                GlobalData.setHabitacionSeleccionada(habitacionSeleccionada);
                 // Cargar el FXML correspondiente a la ventana de modificación
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/modificar/ModificarHabitacion.fxml"));
                 Parent root = loader.load();
 
                 // Obtener el controlador de la ventana de modificación
                 ModificarHabitacionController modificarHabitacionController = loader.getController();
-
-                // Pasar la habitación seleccionada al controlador para que se puedan editar sus datos
-                modificarHabitacionController.sethabitacion(habitacionSeleccionada);
 
                 // Mostrar la ventana en un nuevo Stage
                 Stage modificarStage = new Stage();

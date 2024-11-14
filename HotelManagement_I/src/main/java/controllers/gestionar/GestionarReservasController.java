@@ -116,7 +116,7 @@ public class GestionarReservasController extends BaseController {
             CrearReservaController crearController = loader.getController();
 
             // Pasar la reserva seleccionada para que la ventana de modificación la pueda cargar
-            crearController.setReservaParaModificar(reservaSeleccionada);
+//            crearController.setReservaParaModificar(reservaSeleccionada);
 
             // Mostrar la ventana para modificar la reserva
             Stage stage = new Stage();

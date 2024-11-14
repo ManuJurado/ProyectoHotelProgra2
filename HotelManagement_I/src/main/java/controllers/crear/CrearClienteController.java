@@ -25,31 +25,13 @@ import java.util.function.Consumer;
 public class CrearClienteController extends BaseController {
 
     @FXML
-    private TextField nombreField;
+    private TextField nombreField,apellidoField,dniField,passwordTextField,correoElectronicoField,direccionField,telefonoField,confirmarPasswordTextField;
     @FXML
-    private TextField apellidoField;
+    private PasswordField contraseniaField,confirmarContraseniaField;
     @FXML
-    private TextField dniField;
-    @FXML
-    private PasswordField contraseniaField;
-    @FXML
-    private TextField passwordTextField;   // El campo donde mostramos la contraseña como texto
-    @FXML
-    private Button verContraseñaButton;    // El botón para alternar la visibilidad
-    @FXML
-    private TextField correoElectronicoField;
-    @FXML
-    private TextField direccionField;
-    @FXML
-    private TextField telefonoField;
+    private Button verContraseñaButton,verConfirmarContraseñaButton;    // El botón para alternar la visibilidad
     @FXML
     private DatePicker fechaNacimientoPicker;
-    @FXML
-    private PasswordField confirmarContraseniaField;
-    @FXML
-    private TextField confirmarPasswordTextField;
-    @FXML
-    private Button verConfirmarContraseñaButton;
 
     private Scene previousScene;  // Cambiar a Scene en vez de Stage
 
@@ -69,6 +51,7 @@ public class CrearClienteController extends BaseController {
         dniField.setText(DatosUsuario.getDni());
 
         // Limitar el número de caracteres en los campos de texto
+        setTextFieldLimit(fechaNacimientoPicker.getEditor(), 10);
         setTextFieldLimit(nombreField, 30);
         setTextFieldLimit(apellidoField, 30);
         setTextFieldLimit(direccionField, 30);

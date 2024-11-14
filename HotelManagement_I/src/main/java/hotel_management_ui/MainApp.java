@@ -1,16 +1,20 @@
 package hotel_management_ui;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.layout.VBox;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import javafx.scene.media.MediaView;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-import javafx.scene.Parent;
-import javafx.fxml.FXMLLoader;
+import javafx.util.Duration;
 
 import java.io.File;
+import java.util.Objects;
 
 public class MainApp extends Application {
     private Stage primaryStage;
@@ -21,19 +25,42 @@ public class MainApp extends Application {
         primaryStage.setWidth(900);
         primaryStage.setHeight(700);
         primaryStage.setResizable(false);
-        playIntroVideo(); // Reproducir el video al iniciar
+
+        // Crear un Pane para contener el fondo animado
+        Pane root = new Pane();
+        root.setPrefSize(900, 700);
+
+        // Cargar la imagen de fondo
+        Image backgroundImage = new Image("file:/C:/Users/Manu/OneDrive/Escritorio/ProyectoHotelProgra2/HotelManagement_I/src/main/resources/images/hotel3.png");
+        ImageView backgroundImageView = new ImageView(backgroundImage);
+        backgroundImageView.setFitWidth(900);
+        backgroundImageView.setFitHeight(700);
+
+        // Agregar la imagen de fondo al Pane
+        root.getChildren().add(backgroundImageView);
+
+        // Crear la animación para el fondo (efecto parallax)
+        Timeline timeline = new Timeline(
+                new KeyFrame(Duration.ZERO, new KeyValue(backgroundImageView.translateYProperty(), 0)),
+                new KeyFrame(Duration.seconds(30), new KeyValue(backgroundImageView.translateYProperty(), 100)) // Mueve la imagen hacia abajo
+        );
+        timeline.setCycleCount(Timeline.INDEFINITE); // Repetir la animación infinitamente
+        timeline.setAutoReverse(true); // Hace que la animación vuelva hacia arriba después de cada ciclo
+        timeline.play(); // Iniciar la animación
+
+        // Ahora que tenemos el fondo animado, cargamos el video de introducción
+        playIntroVideo(root);
+
+        primaryStage.setScene(new Scene(root));
+        primaryStage.show();
     }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
-
-    // Metodo para reproducir el video
-    private void playIntroVideo() {
+    private void playIntroVideo(Pane root) {
         String videoPath = new File("HotelManagement_I/video.mp4").toURI().toString();
-        Media media = new Media(videoPath);
-        MediaPlayer mediaPlayer = new MediaPlayer(media);
-        MediaView mediaView = new MediaView(mediaPlayer);
+        javafx.scene.media.Media media = new javafx.scene.media.Media(videoPath);
+        javafx.scene.media.MediaPlayer mediaPlayer = new javafx.scene.media.MediaPlayer(media);
+        javafx.scene.media.MediaView mediaView = new javafx.scene.media.MediaView(mediaPlayer);
+
         mediaView.setFitWidth(900);
         mediaView.setFitHeight(700);
         mediaView.setPreserveRatio(false);
@@ -43,17 +70,16 @@ public class MainApp extends Application {
             showLoginScreen(); // Mostrar la pantalla de login al finalizar el video
         });
 
-        Scene videoScene = new Scene(new VBox(mediaView));
-        primaryStage.setScene(videoScene);
-        primaryStage.show();
+        // Agregar el video al fondo animado
+        root.getChildren().add(mediaView);
         mediaPlayer.play();
     }
 
-    // Metodo para mostrar la pantalla de inicio (login)
     private void showLoginScreen() {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/views/menu/login.fxml")); // Carga el archivo FXML de inicio
-            Scene scene = new Scene(root);
+            javafx.scene.Parent root = javafx.fxml.FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/views/menu/login.fxml")));
+            javafx.scene.Scene scene = new javafx.scene.Scene(root);
+            scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
 
             primaryStage.setWidth(900);
             primaryStage.setHeight(700);
@@ -62,5 +88,9 @@ public class MainApp extends Application {
         } catch (Exception e) {
             e.printStackTrace(); // Manejo básico de errores
         }
+    }
+
+    public static void main(String[] args) {
+        launch(args);
     }
 }

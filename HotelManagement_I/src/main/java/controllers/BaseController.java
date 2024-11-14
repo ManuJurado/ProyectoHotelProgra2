@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
+import javafx.scene.control.TextInputControl;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 
@@ -45,7 +46,14 @@ public abstract class BaseController {
             System.out.println("Cargando FXML: " + fxmlFileName); // Imprime la carga
             System.out.println("Ruta FXML: " + loader.getLocation());
             Parent root = loader.load();
+
+            // Crear la nueva escena
             Scene scene = new Scene(root);
+
+            // Aplicar el CSS a la nueva escena
+            scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
+
+            // Obtener el Stage de la escena actual
             Stage stage = (Stage) someNode.getScene().getWindow();
             stage.setScene(scene);
             stage.setTitle(title);
@@ -60,6 +68,7 @@ public abstract class BaseController {
         }
     }
 
+
     public void cambiarEscenaConSceneAnterior(String fxml, String title, Node node) {
         Stage currentStage = (Stage) node.getScene().getWindow();
         Scene currentScene = currentStage.getScene();  // Guardamos la Scene actual
@@ -68,8 +77,13 @@ public abstract class BaseController {
         try {
             Parent root = loader.load();
 
-            // Configurar la nueva escena y guardar el controlador en userData
+            // Crear la nueva escena
             Scene newScene = new Scene(root);
+
+            // Aplicar el CSS a la nueva escena
+            newScene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
+
+            // Configurar la nueva escena y guardar el controlador en userData
             newScene.setUserData(loader.getController());  // Guarda el controlador en userData
 
             // Pasar la escena anterior al nuevo controlador
@@ -85,15 +99,16 @@ public abstract class BaseController {
         }
     }
 
+
     // Metodo para limitar la cantidad de caracteres permitidos en un TextField
-    public void setTextFieldLimit(TextField textField, int maxLength) {
+    public void setTextFieldLimit(TextInputControl textInput, int maxLength) {
         TextFormatter<String> formatter = new TextFormatter<>(change -> {
             if (change.getControlNewText().length() > maxLength) {
                 return null;  // No permite el cambio si el texto supera el límite
             }
             return change;
         });
-        textField.setTextFormatter(formatter);
+        textInput.setTextFormatter(formatter);
     }
 
 

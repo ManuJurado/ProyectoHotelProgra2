@@ -1,15 +1,21 @@
 package controllers;
 
 import enums.TipoUsuario;
+import javafx.animation.KeyFrame;
+import javafx.animation.RotateTransition;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import models.Usuarios.Usuario;
 import org.json.JSONException;
 import services.GestionUsuario;
@@ -25,30 +31,13 @@ public class LoginController extends BaseController {
     private TextField usernameField;
 
     @FXML
-    private TextField passwordField;
+    private PasswordField passwordField;
 
     @FXML
     private Button iniciarSesionButton; // Declara el botón en el controlador
 
-    @FXML
-    public void initialize() {
-        setTextFieldLimit(usernameField,30);
-        iniciarSesionButton.setDefaultButton(true); // Configura el botón como predeterminado
-
-        setTextFieldLimit(passwordField,20);
-        iniciarSesionButton.setDefaultButton(true); // Configura el botón como predeterminado
-
-        // Usamos Platform.runLater() para garantizar que la escena esté completamente cargada antes de modificar el Stage
-        Platform.runLater(() -> {
-            Stage stage = (Stage) usernameField.getScene().getWindow(); // Cambié usuarioField por usernameField
-            stage.setTitle("Inicio de sesión"); // Título de la ventana
-            stage.setWidth(800);  // Ancho
-            stage.setHeight(700); // Alto
-            stage.setResizable(false); // Hacemos que la ventana no sea redimensionable
-        });
-    }
-
     private List<Usuario> usuarios = new ArrayList<>();
+
 
     // Constructor modificado para obtener la lista de usuarios a través del Singleton
     public LoginController() throws JSONException {
@@ -56,6 +45,29 @@ public class LoginController extends BaseController {
         usuarios = GestionUsuario.getInstancia("HotelManagement_I/usuarios.json").getUsuarios();
         System.out.println(usuarios);
         System.out.printf("\n");
+    }
+
+    @FXML
+    public void initialize() {
+        setTextFieldLimit(usernameField, 30);
+        setTextFieldLimit(passwordField, 20);
+
+        iniciarSesionButton.setDefaultButton(true); // Configura el botón como predeterminado
+
+        // Aplicar el CSS directamente sobre la escena del LoginController
+        Platform.runLater(() -> {
+            Scene scene = usernameField.getScene();  // Obtener la escena desde el campo usernameField
+            scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());  // Agregar la hoja de estilos CSS
+        });
+
+        // Usamos Platform.runLater() para garantizar que la escena esté completamente cargada antes de modificar el Stage
+        Platform.runLater(() -> {
+            Stage stage = (Stage) usernameField.getScene().getWindow();
+            stage.setTitle("Inicio de sesión");
+            stage.setWidth(800);
+            stage.setHeight(700);
+            stage.setResizable(false);
+        });
     }
 
     @FXML

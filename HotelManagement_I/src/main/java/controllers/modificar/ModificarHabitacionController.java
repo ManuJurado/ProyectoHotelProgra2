@@ -1,6 +1,8 @@
 package controllers.modificar;
 
 import controllers.BaseController;
+import controllers.GlobalData;
+import enums.EstadoHabitacion;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
@@ -8,7 +10,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import models.Habitacion.Habitacion;
+import models.Habitacion.*;
 import services.GestionHabitaciones;
 
 import java.util.ArrayList;
@@ -17,45 +19,111 @@ import java.util.List;
 public class ModificarHabitacionController extends BaseController {
 
     // Campos comunes
-    @FXML private ComboBox<String> comboBoxCama1;
-    @FXML private ComboBox<String> comboBoxCama2;
-    @FXML private ComboBox<String> comboBoxCama3;
-    @FXML private ComboBox<String> comboBoxCama4;
+    @FXML private ComboBox<String> comboBoxCama1, comboBoxCama2, comboBoxCama3, comboBoxCama4;
+    @FXML private ComboBox<String> comboBoxEstadoHabitacion;
+
+    @FXML private CheckBox checkBoxEstadoDisponible;
 
     // Campos exclusivos Presidencial
-    @FXML private CheckBox mesaPoolCheckBox;
-    @FXML private CheckBox jacuzziCheckBox;
-    @FXML private CheckBox cineCheckBox;
-    @FXML private CheckBox entretenimientoCheckBox;
-    @FXML private CheckBox terrazaCheckBox;
-    @FXML private CheckBox saunaCheckBox;
+    @FXML private CheckBox mesaPoolCheckBox, jacuzziCheckBox, cineCheckBox, entretenimientoCheckBox, terrazaCheckBox, saunaCheckBox;
 
     // Campos exclusivos Suite
-    @FXML private CheckBox comedorCheckBox;
-    @FXML private CheckBox balconCheckBox;
+    @FXML private CheckBox comedorCheckBox, balconCheckBox;
 
     // Campos exclusivos Apartamento
     @FXML private CheckBox cocinaCheckBox;
     @FXML private ComboBox<String> comboBoxAmbientes;
 
-    // Campo exclusivo para dimensión
+    // Campo exclusivo para presidencial
     @FXML private TextField dimensionField;
 
     private Habitacion habitacion;
 
     @FXML
     public void initialize() {
+        habitacion = GlobalData.getHabitacionSeleccionada();
+
+        // Ocultar todos los campos al principio
+        mesaPoolCheckBox.setVisible(false);
+        jacuzziCheckBox.setVisible(false);
+        cineCheckBox.setVisible(false);
+        entretenimientoCheckBox.setVisible(false);
+        terrazaCheckBox.setVisible(false);
+        saunaCheckBox.setVisible(false);
+        comedorCheckBox.setVisible(false);
+        balconCheckBox.setVisible(false);
+        cocinaCheckBox.setVisible(false);
+        comboBoxAmbientes.setVisible(false);
+        dimensionField.setVisible(false);
+
+        comboBoxEstadoHabitacion.getItems().addAll("Disponible", "Alquilada", "En limpieza", "En reparación", "Desinfección");
+        comboBoxEstadoHabitacion.setValue("Disponible");  // Estado inicial
+
+        if (habitacion != null) {
+            // Cargar el estado de la habitación en el ComboBox
+            comboBoxEstadoHabitacion.setValue(String.valueOf(habitacion.getEstado()));
+
+            // Cargar la disponibilidad del CheckBox
+            checkBoxEstadoDisponible.setSelected(habitacion.isDisponible());
+
+            // Llenar las camas seleccionadas (si hay camas predefinidas en la habitación)
+            List<String> camas = habitacion.getCamas();
+            for (int i = 0; i < camas.size(); i++) {
+                // Dependiendo de la cantidad de camas, asignamos a cada ComboBox
+                if (i < 4) { // Limitar hasta 4 camas, puedes ajustar según tu necesidad
+                    ComboBox<String> comboBoxCama = obtenerComboBoxCama(i + 1);
+                    assert comboBoxCama != null;
+                    comboBoxCama.setValue(camas.get(i));
+                }
+            }
+
+            // Comprobar el tipo de habitación y hacer ajustes correspondientes
+            if (habitacion instanceof Individual) {
+                // Ocultar los ComboBoxes de camas adicionales
+                comboBoxCama2.setVisible(false);
+                comboBoxCama3.setVisible(false);
+                comboBoxCama4.setVisible(false);
+            } else if (habitacion instanceof Presidencial) {
+                // Mostrar y configurar los campos exclusivos para Presidencial
+                setCamposVisibles(true, false, false, false);  // Solo mostrar campos de Presidencial
+                // Inicializar los CheckBoxes exclusivos de Presidencial
+                System.out.printf("afsadasdbasbfdbasbsafdbasdfbadf");
+                Presidencial habitacionPresidencial = (Presidencial) habitacion;
+                mesaPoolCheckBox.setSelected(habitacionPresidencial.tieneMesaPool());
+                jacuzziCheckBox.setSelected(habitacionPresidencial.tieneJacuzzi());
+                cineCheckBox.setSelected(habitacionPresidencial.tieneCine());
+                entretenimientoCheckBox.setSelected(habitacionPresidencial.tieneEntretenimiento());
+                terrazaCheckBox.setSelected(habitacionPresidencial.tieneTerraza());
+                saunaCheckBox.setSelected(habitacionPresidencial.tieneSauna());
+                dimensionField.setText(String.valueOf(habitacionPresidencial.getDimension()));
+            } else if (habitacion instanceof Suite) {
+                // Mostrar y configurar los campos exclusivos para Suite
+                setCamposVisibles(false, true, false, false);  // Solo mostrar campos de Suite
+                // Inicializar los CheckBoxes exclusivos de Suite
+                Suite habitacionSuite = (Suite) habitacion;
+                comedorCheckBox.setSelected(habitacionSuite.isComedor());
+                balconCheckBox.setSelected(habitacionSuite.isBalcon());
+            } else if (habitacion instanceof Apartamento) {
+                // Mostrar y configurar los campos exclusivos para Apartamento
+                setCamposVisibles(false, false, true, false);  // Solo mostrar campos de Apartamento
+                // Inicializar los CheckBoxes exclusivos de Apartamento
+                Apartamento habitacionApartamento = (Apartamento) habitacion;
+                cocinaCheckBox.setSelected(habitacionApartamento.isCocina());
+                comboBoxAmbientes.setValue(String.valueOf(habitacionApartamento.getAmbientes()));
+            } else {
+                // Si el tipo no coincide, puedes agregar un comportamiento por defecto
+                setCamposVisibles(false, false, false, false);
+            }
+        }else {
+            System.out.println("HABITACIONNULL");
+        }
+
         // Inicializar ComboBox de camas con las opciones disponibles
         List<String> tiposCama = List.of("No seleccionado", "Simple", "Doble", "QueenSize", "KingSize");
         comboBoxCama1.getItems().addAll(tiposCama);
         comboBoxCama2.getItems().addAll(tiposCama);
         comboBoxCama3.getItems().addAll(tiposCama);
         comboBoxCama4.getItems().addAll(tiposCama);
-
-        comboBoxCama1.setValue("No seleccionado");
-        comboBoxCama2.setValue("No seleccionado");
-        comboBoxCama3.setValue("No seleccionado");
-        comboBoxCama4.setValue("No seleccionado");
 
         // Deshabilitar los ComboBox de camas adicionales
         comboBoxCama2.setDisable(true);
@@ -91,65 +159,37 @@ public class ModificarHabitacionController extends BaseController {
                 comboBoxCama4.setDisable(false);
             }
         });
-
-        // Inicializar todos los controles como no visibles
-        setVisibilidad(false);
     }
 
-    public void sethabitacion(Habitacion habitacion) {
-        this.habitacion = habitacion;
-        ajustarVisibilidad();
-    }
+    private void setCamposVisibles(boolean presidencialVisible, boolean suiteVisible, boolean apartamentoVisible, boolean individualVisible) {
 
-    private void ajustarVisibilidad() {
-        // Establecer todos los controles en false por defecto
-        setVisibilidad(false);
+        // Mostrar solo los campos correspondientes al tipo de habitación
+        if (presidencialVisible) {
+            mesaPoolCheckBox.setVisible(true);
+            jacuzziCheckBox.setVisible(true);
+            cineCheckBox.setVisible(true);
+            entretenimientoCheckBox.setVisible(true);
+            terrazaCheckBox.setVisible(true);
+            saunaCheckBox.setVisible(true);
+            dimensionField.setVisible(true); // Solo para Presidencial
+        }
 
-        // Campos comunes (siempre visibles)
-        comboBoxCama1.setVisible(true);
-        comboBoxCama2.setVisible(true);
-        comboBoxCama3.setVisible(true);
-        comboBoxCama4.setVisible(true);
+        if (suiteVisible) {
+            comedorCheckBox.setVisible(true);
+            balconCheckBox.setVisible(true);
+        }
 
-        // Lógica basada en el tipo de habitación
-        switch (habitacion.getTipo()) {
-            case "Presidencial":
-                mesaPoolCheckBox.setVisible(true);
-                jacuzziCheckBox.setVisible(true);
-                cineCheckBox.setVisible(true);
-                entretenimientoCheckBox.setVisible(true);
-                terrazaCheckBox.setVisible(true);
-                saunaCheckBox.setVisible(true);
-                dimensionField.setVisible(true); // Solo para Presidencial
-                break;
+        if (apartamentoVisible) {
+            cocinaCheckBox.setVisible(true);
+            comboBoxAmbientes.setVisible(true);
+        }
 
-            case "Suite":
-                comedorCheckBox.setVisible(true);
-                balconCheckBox.setVisible(true);
-                break;
-
-            case "Apartamento":
-                cocinaCheckBox.setVisible(true);
-                comboBoxAmbientes.setVisible(true);
-                break;
+        if (individualVisible) {
+            comboBoxCama2.setVisible(false);
+            comboBoxCama3.setVisible(false);
+            comboBoxCama4.setVisible(false);
         }
     }
-
-    private void setVisibilidad(boolean visible) {
-        // Función auxiliar para ocultar todos los elementos
-        mesaPoolCheckBox.setVisible(visible);
-        jacuzziCheckBox.setVisible(visible);
-        cineCheckBox.setVisible(visible);
-        entretenimientoCheckBox.setVisible(visible);
-        terrazaCheckBox.setVisible(visible);
-        saunaCheckBox.setVisible(visible);
-        comedorCheckBox.setVisible(visible);
-        balconCheckBox.setVisible(visible);
-        cocinaCheckBox.setVisible(visible);
-        comboBoxAmbientes.setVisible(visible);
-        dimensionField.setVisible(visible);
-    }
-
     @FXML
     private void guardarCambios() {
         List<String> errores = new ArrayList<>();
@@ -175,154 +215,83 @@ public class ModificarHabitacionController extends BaseController {
             errores.add("Debe seleccionar al menos una cama.");
         }
 
-        // Verificar tipo de habitación y realizar validaciones específicas
-        try {
-            // Validación para habitaciones Presidenciales
-            if (habitacion.getTipo().equals("Presidencial")) {
-                double dimensionHabitacion = 0;
-                try {
-                    dimensionHabitacion = Double.parseDouble(dimensionField.getText());
-                } catch (NumberFormatException e) {
-                    errores.add("La dimensión debe ser un número válido.");
-                }
+        // Obtener el estado seleccionado en el ComboBox
+        String estadoSeleccionado = comboBoxEstadoHabitacion.getValue();
 
-                if (capacidad > 4) {
-                    errores.add("La capacidad máxima para una habitación presidencial es 4.");
-                }
-
-                if (!errores.isEmpty()) {
-                    showAlert(String.join("\n", errores));
-                } else {
-                    // Actualizar la habitación presidencial
-                    GestionHabitaciones gestionHabitacion = GestionHabitaciones.getInstancia("HotelManagement_I/habitaciones.json");
-                    gestionHabitacion.modificarHabitacionPresidencial(habitacion.getNumero(), capacidad, camasSeleccionadas, true, "Disponible", obtenerAdicionalesSeleccionados(), dimensionHabitacion);
-                    mostrarMensajeTemporal("Habitación Presidencial modificada correctamente");
-                    cerrarVentana();
-                }
-
-                // Validación para habitaciones Suite
-            } else if (habitacion.getTipo().equals("Suite")) {
-                if (capacidad > 4) {
-                    errores.add("La capacidad máxima para una habitación suite es 4.");
-                }
-
-                if (!errores.isEmpty()) {
-                    showAlert(String.join("\n", errores));
-                } else {
-                    // Actualizar la habitación suite
-                    GestionHabitaciones gestionHabitacion = GestionHabitaciones.getInstancia("HotelManagement_I/habitaciones.json");
-                    gestionHabitacion.modificarHabitacionSuite(habitacion.getNumero(), capacidad, camasSeleccionadas, true, "Disponible", balconCheckBox.isSelected(), comedorCheckBox.isSelected());
-                    mostrarMensajeTemporal("Habitación Suite modificada correctamente");
-                    cerrarVentana();
-                }
-
-                // Validación para habitaciones Apartamento
-            } else if (habitacion.getTipo().equals("Apartamento")) {
-                if (capacidad > 4) {
-                    errores.add("La capacidad máxima para una habitación apartamento es 4.");
-                }
-
-                if (!errores.isEmpty()) {
-                    showAlert(String.join("\n", errores));
-                } else {
-                    // Actualizar la habitación apartamento
-                    GestionHabitaciones gestionHabitacion = GestionHabitaciones.getInstancia("HotelManagement_I/habitaciones.json");
-                    gestionHabitacion.modificarHabitacionApartamento(habitacion.getNumero(), capacidad, camasSeleccionadas, true, "Disponible", obtenerAmbientes(), cocinaCheckBox.isSelected());
-                    mostrarMensajeTemporal("Habitación Apartamento modificada correctamente");
-                    cerrarVentana();
-                }
-
-                // Validación para habitaciones Dobles
-            } else if (habitacion.getTipo().equals("Doble")) {
-                if (capacidad > 2) {
-                    errores.add("La capacidad máxima para una habitación doble es 2.");
-                }
-
-                // Validar camas seleccionadas para habitaciones dobles
-                if (camasSeleccionadas.size() > 2) {
-                    errores.add("Solo se pueden seleccionar hasta 2 camas.");
-                }
-
-                if (!errores.isEmpty()) {
-                    showAlert(String.join("\n", errores));
-                } else {
-                    // Actualizar la habitación doble
-                    GestionHabitaciones gestionHabitacion = GestionHabitaciones.getInstancia("HotelManagement_I/habitaciones.json");
-                    gestionHabitacion.modificarHabitacionDoble(habitacion.getNumero(), capacidad, camasSeleccionadas, true, "Disponible");
-                    mostrarMensajeTemporal("Habitación Doble modificada correctamente");
-                    cerrarVentana();
-                }
-
-            } else {
-                // Si el tipo de habitación no es válido
-                errores.add("Tipo de habitación no válido.");
-                showAlert(String.join("\n", errores));
-            }
-
-        } catch (Exception e) {
-            // Manejo de excepciones acumuladas
-            errores.add("Ocurrió un error al guardar la habitación: " + e.getMessage());
-            showAlert(String.join("\n", errores));
+        // Validar que se haya seleccionado un estado
+        if (estadoSeleccionado == null || estadoSeleccionado.isEmpty()) {
+            errores.add("Debe seleccionar un estado para la habitación.");
         }
 
-    }
+        // Validar si la habitación está disponible o no
+        boolean disponible = checkBoxEstadoDisponible.isSelected();
 
-    // Métodos auxiliares para obtener los valores de los campos
-    private List<String> obtenerAdicionalesSeleccionados() {
-        List<String> adicionalesSeleccionados = new ArrayList<>();
-        if (mesaPoolCheckBox.isSelected()) adicionalesSeleccionados.add("Mesa de pool");
-        if (jacuzziCheckBox.isSelected()) adicionalesSeleccionados.add("Jacuzzi");
-        if (cineCheckBox.isSelected()) adicionalesSeleccionados.add("Cine");
-        if (entretenimientoCheckBox.isSelected()) adicionalesSeleccionados.add("Servicios de entretenimiento");
-        if (terrazaCheckBox.isSelected()) adicionalesSeleccionados.add("Terraza");
-        if (saunaCheckBox.isSelected()) adicionalesSeleccionados.add("Sauna");
-        return adicionalesSeleccionados;
+        // Implementar validaciones adicionales o guardar la habitación
+        if (errores.isEmpty()) {
+            // Aquí deberías guardar los datos de la habitación modificada
+            // Por ejemplo, actualizar el objeto habitacion con los nuevos datos.
+            habitacion.setCamas(camasSeleccionadas);
+            habitacion.setEstado(EstadoHabitacion.valueOf(estadoSeleccionado));
+            habitacion.setDisponible(disponible);
+
+            if (habitacion instanceof Presidencial) {
+                Presidencial habitacionPresidencial = (Presidencial) habitacion;
+                habitacionPresidencial.setMesaPool(mesaPoolCheckBox.isSelected());
+                habitacionPresidencial.setJacuzzi(jacuzziCheckBox.isSelected());
+                habitacionPresidencial.setCine(cineCheckBox.isSelected());
+                habitacionPresidencial.setEntretenimiento(entretenimientoCheckBox.isSelected());
+                habitacionPresidencial.setTerraza(terrazaCheckBox.isSelected());
+                habitacionPresidencial.setSauna(saunaCheckBox.isSelected());
+                habitacionPresidencial.setDimension(Double.parseDouble(dimensionField.getText()));
+            } else if (habitacion instanceof Suite) {
+                Suite habitacionSuite = (Suite) habitacion;
+                habitacionSuite.setComedor(comedorCheckBox.isSelected());
+                habitacionSuite.setBalcon(balconCheckBox.isSelected());
+            } else if (habitacion instanceof Apartamento) {
+                Apartamento habitacionApartamento = (Apartamento) habitacion;
+                habitacionApartamento.setCocina(cocinaCheckBox.isSelected());
+                habitacionApartamento.setAmbientes(Integer.parseInt(comboBoxAmbientes.getValue()));
+            }
+            // Aquí va la lógica para guardar la habitación modificada (por ejemplo, en un archivo o base de datos)
+            closeStage();
+        } else {
+            mostrarErrores(errores);
+        }
     }
 
     private int obtenerValorCama(String tipoCama) {
         switch (tipoCama) {
-            case "Simple":
-                return 1;
-            case "Doble":
-            case "QueenSize":
-            case "KingSize":
-                return 2;
-            default:
-                return 0;
+            case "Simple": return 1;
+            case "Doble": return 2;
+            case "QueenSize": return 2;
+            case "KingSize": return 3;
+            default: return 0;
         }
     }
 
-    private int obtenerAmbientes() {
-        try {
-            return Integer.parseInt(comboBoxAmbientes.getValue());
-        } catch (NumberFormatException e) {
-            return 0;
+    private void mostrarErrores(List<String> errores) {
+        // Función para mostrar errores
+        StringBuilder mensajeErrores = new StringBuilder("Errores encontrados:");
+        for (String error : errores) {
+            mensajeErrores.append("\n").append(error);
         }
-    }
-
-    private void showAlert(String mensaje) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error en los datos");
-        alert.setHeaderText("Se encontraron los siguientes errores:");
-        alert.setContentText(mensaje);
+        Alert alert = new Alert(Alert.AlertType.ERROR, mensajeErrores.toString(), ButtonType.OK);
         alert.showAndWait();
     }
 
-    private void mostrarMensajeTemporal(String mensaje) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Cargando");
-        alert.setHeaderText(null);
-        alert.setContentText(mensaje);
-        alert.show();
-        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000), e -> alert.close()));
-        timeline.setCycleCount(1);
-        timeline.play();
-    }
-
     @FXML
-    public void cerrarVentana() {
+    private void closeStage() {
         Stage stage = (Stage) comboBoxCama1.getScene().getWindow();
         stage.close();
     }
 
+    private ComboBox<String> obtenerComboBoxCama(int numero) {
+        switch (numero) {
+            case 1: return comboBoxCama1;
+            case 2: return comboBoxCama2;
+            case 3: return comboBoxCama3;
+            case 4: return comboBoxCama4;
+            default: return null;
+        }
+    }
 }

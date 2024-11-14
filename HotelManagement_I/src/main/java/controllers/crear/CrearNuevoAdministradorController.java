@@ -19,25 +19,11 @@ import java.util.function.Consumer;
 public class CrearNuevoAdministradorController extends BaseController {
 
     @FXML
-    private TextField nombreField;
+    private TextField nombreField, apellidoField, dniField, passwordTextField, correoElectronicoField, confirmarPasswordTextField;
     @FXML
-    private TextField apellidoField;
+    private PasswordField contraseniaField, confirmarContraseniaField;
     @FXML
-    private TextField dniField;
-    @FXML
-    private PasswordField contraseniaField;
-    @FXML
-    private TextField passwordTextField;
-    @FXML
-    private Button verContraseñaButton;
-    @FXML
-    private TextField correoElectronicoField;
-    @FXML
-    private PasswordField confirmarContraseniaField;
-    @FXML
-    private TextField confirmarPasswordTextField;
-    @FXML
-    private Button verConfirmarContraseñaButton;
+    private Button verContraseñaButton, verConfirmarContraseñaButton;
 
     private Scene previousScene;
 

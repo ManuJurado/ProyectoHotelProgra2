@@ -1,8 +1,6 @@
 package controllers.crear;
 
-import com.fasterxml.jackson.core.json.async.NonBlockingJsonParser;
 import controllers.BaseController;
-import enums.EstadoHabitacion;
 import exceptions.FechaInvalidaException;
 import exceptions.UsuarioNoEncontradoException;
 import javafx.collections.FXCollections;
@@ -23,14 +21,13 @@ import services.Sesion;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class CrearReservaController extends BaseController {
 
     @FXML
-    private DatePicker datePickerFechaEntrada;
-    @FXML
-    private DatePicker datePickerFechaSalida;
+    private DatePicker datePickerFechaEntrada, datePickerFechaSalida;
     @FXML
     private ChoiceBox<Integer> choiceBoxCantidadPersonas;
     @FXML
@@ -38,58 +35,64 @@ public class CrearReservaController extends BaseController {
     @FXML
     private TableView<Habitacion> tableViewHabitaciones;
     @FXML
-    private ComboBox<String> servicios;
-    @FXML
-    private ComboBox<String> comboBoxServiciosAdicionales;
+    private CheckBox checkBoxWiFi, checkBoxDesayuno, checkBoxPiscina, checkBoxSpa, checkBoxEstacionamiento;
 
-    private List<String> serviciosAdicionales = new ArrayList<>();  // Ya tienes esta lista declarada
+    private List<String> serviciosAdicionalesSeleccionados = new ArrayList<>();
 
+    private void configurarCheckBoxesServiciosAdicionales() {
+        // Mapeo de cada CheckBox con su nombre de servicio correspondiente
+        Map<CheckBox, String> serviciosMap = Map.of(
+                checkBoxWiFi, "WiFi",
+                checkBoxDesayuno, "Desayuno",
+                checkBoxPiscina, "Piscina",
+                checkBoxSpa, "Spa",
+                checkBoxEstacionamiento, "Estacionamiento"
+        );
+
+        // Configuración de cada CheckBox
+        for (Map.Entry<CheckBox, String> entry : serviciosMap.entrySet()) {
+            CheckBox checkBox = entry.getKey();
+            String servicioNombre = entry.getValue();
+
+            // Listener para agregar el servicio a la lista si está seleccionado
+            checkBox.selectedProperty().addListener((obs, oldVal, newVal) -> {
+                if (newVal) {
+                    if (!serviciosAdicionalesSeleccionados.contains(servicioNombre)) {
+                        serviciosAdicionalesSeleccionados.add(servicioNombre);
+                    }
+                } else {
+                    serviciosAdicionalesSeleccionados.remove(servicioNombre);
+                }
+            });
+        }
+    }
 
     private List<HBox> camposPasajeros = new ArrayList<>();
     private List<Pasajero> pasajeros = new ArrayList<>();
     private Habitacion habitacionSeleccionada;
 
-    // Instancia de GestionHabitaciones para cargar desde JSON
     private GestionHabitaciones gestionHabitaciones = GestionHabitaciones.getInstancia("habitaciones.json");
     private GestionReservas gestionReservas = GestionReservas.getInstancia("reservas.json");
-    private Reserva reservaParaModificar;  // Variable para almacenar la reserva que se va a modificar
-
-
+    private Reserva reservaParaModificar;
 
     @FXML
     public void initialize() {
+        setTextFieldLimit(datePickerFechaSalida.getEditor(),10);
+        setTextFieldLimit(datePickerFechaEntrada.getEditor(),10);
+
+        configurarCheckBoxesServiciosAdicionales();
         configurarChoiceBoxCantidadPersonas();
         configurarDatePicker();
         cargarHabitacionesDisponibles();
         configurarTableViewHabitaciones();
         actualizarCamposPasajeros(1);
-        configurarComboBoxServiciosAdicionales();
 
-
-        // Inicializa la reserva como nueva si no se está modificando una
         if (reservaParaModificar == null) {
             reservaParaModificar = new Reserva();
         }
     }
 
-    private void configurarComboBoxServiciosAdicionales() {
-        // Lista de servicios adicionales
-        List<String> serviciosDisponibles = List.of("WiFi", "Desayuno", "Piscina", "Spa", "Estacionamiento");
-
-        // Asignar la lista de servicios al ComboBox
-        comboBoxServiciosAdicionales.setItems(FXCollections.observableArrayList(serviciosDisponibles));
-
-        // Establecer una acción cuando se seleccione un servicio
-        comboBoxServiciosAdicionales.setOnAction(event -> {
-            String servicioSeleccionado = comboBoxServiciosAdicionales.getSelectionModel().getSelectedItem();
-            if (servicioSeleccionado != null && !serviciosAdicionales.contains(servicioSeleccionado)) {
-                serviciosAdicionales.add(servicioSeleccionado);
-            }
-        });
-    }
-
     private void cargarHabitacionesDisponibles() {
-        // Filtrar habitaciones disponibles y cargarlas en la tabla
         List<Habitacion> habitacionesDisponibles = gestionHabitaciones.getHabitaciones().stream()
                 .filter(habitacion -> "disponible".equalsIgnoreCase(habitacion.getEstado().toString()))
                 .collect(Collectors.toList());
@@ -99,7 +102,6 @@ public class CrearReservaController extends BaseController {
     }
 
     private void configurarTableViewHabitaciones() {
-        // Configurar columnas de la tabla
         TableColumn<Habitacion, String> numeroColumna = new TableColumn<>("Número");
         numeroColumna.setCellValueFactory(new PropertyValueFactory<>("numero"));
 
@@ -111,7 +113,6 @@ public class CrearReservaController extends BaseController {
 
         tableViewHabitaciones.getColumns().addAll(numeroColumna, tipoColumna, estadoColumna);
 
-        // Listener para capturar la habitación seleccionada
         tableViewHabitaciones.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
                 habitacionSeleccionada = newSelection;
@@ -135,11 +136,14 @@ public class CrearReservaController extends BaseController {
             HBox hboxPasajero = new HBox(10);
             TextField tfNombre = new TextField();
             tfNombre.setPromptText("Nombre");
+            setTextFieldLimit(tfNombre,20);
 
             TextField tfApellido = new TextField();
             tfApellido.setPromptText("Apellido");
+            setTextFieldLimit(tfApellido,20);
 
             TextField tfDni = new TextField();
+            setTextFieldLimit(tfDni,10);
             tfDni.setPromptText("DNI");
 
             hboxPasajero.getChildren().addAll(tfNombre, tfApellido, tfDni);
@@ -170,68 +174,27 @@ public class CrearReservaController extends BaseController {
         });
     }
 
-    // Metodo para cargar los datos de la reserva seleccionada
-    public void setReservaParaModificar(Reserva reserva) {
-        this.reservaParaModificar = reserva;
-
-        // Cargar los datos de la reserva en los campos
-        datePickerFechaEntrada.setValue(reserva.getFechaEntrada());
-        datePickerFechaSalida.setValue(reserva.getFechaSalida());
-        choiceBoxCantidadPersonas.setValue(reserva.getCantidadPersonas());
-        // Aquí puedes agregar los servicios adicionales si es necesario
-        // Y cargar la habitación seleccionada
-    }
-
     @FXML
     private void onConfirmarReserva() throws UsuarioNoEncontradoException, FechaInvalidaException {
         LocalDate fechaEntrada = datePickerFechaEntrada.getValue();
         LocalDate fechaSalida = datePickerFechaSalida.getValue();
         int cantidadPersonas = choiceBoxCantidadPersonas.getValue();
 
-
         if (fechaEntrada == null || fechaSalida == null || cantidadPersonas <= 0) {
             mostrarAlerta("Advertencia", "Por favor, completa todos los campos requeridos.");
             return;
         }
 
-        // Si es una nueva reserva, asigna los valores directamente
-        if (reservaParaModificar == null) {
-            reservaParaModificar = new Reserva();  // Aseguramos que la reserva sea una nueva
+        try {
+            gestionReservas.crearReserva(Sesion.getUsuarioLogueado().getNombre(), String.valueOf(habitacionSeleccionada.getNumero()),fechaEntrada,fechaSalida,"Disfruta la vida que es una sola",cantidadPersonas,serviciosAdicionalesSeleccionados,obtenerPasajeros());
+            mostrarAlerta("Éxito", "La reserva se ha creado exitosamente.");
+            Stage stage = (Stage) choiceBoxCantidadPersonas.getScene().getWindow();
+            stage.close();
+        }catch (RuntimeException e){
+            showAlert(e.getMessage());
         }
 
-        // Actualizar la reserva con los nuevos valores
-        reservaParaModificar.setPasajeros(obtenerPasajeros());
-        reservaParaModificar.setFechaReserva(LocalDate.now());
-        reservaParaModificar.setFechaEntrada(fechaEntrada);
-        reservaParaModificar.setFechaSalida(fechaSalida);
-        reservaParaModificar.setServiciosAdicionales(serviciosAdicionales);
-        reservaParaModificar.setComentario("Disfruta la vida que es una sola");
-        reservaParaModificar.setCantidadPersonas(cantidadPersonas);
-        reservaParaModificar.setEstadoReserva("Reservada");
-        reservaParaModificar.setUsuario(Sesion.getUsuarioLogueado());
-        reservaParaModificar.setHabitacion(habitacionSeleccionada);
 
-
-        // Aquí puedes actualizar los otros detalles de la reserva (habitaciones, servicios, etc.)
-
-        // Guardar la reserva (modificada o nueva)
-        gestionReservas.guardar(reservaParaModificar);  // Metodo para guardar una nueva reserva
-
-        // Cerrar la ventana
-        Stage stage = (Stage) choiceBoxCantidadPersonas.getScene().getWindow();
-        stage.close();
-
-        mostrarAlerta("Éxito", "La reserva se ha creado exitosamente.");
-    }
-
-    private void configurarServicios() {
-        servicios.setItems(FXCollections.observableArrayList("WiFi", "Desayuno", "Piscina", "Spa")); // Ejemplo de servicios
-        servicios.setOnAction(event -> {
-            String servicioSeleccionado = servicios.getSelectionModel().getSelectedItem();
-            if (servicioSeleccionado != null && !serviciosAdicionales.contains(servicioSeleccionado)) {
-                serviciosAdicionales.add(servicioSeleccionado);
-            }
-        });
     }
 
     private List<Pasajero> obtenerPasajeros() {
@@ -253,16 +216,18 @@ public class CrearReservaController extends BaseController {
         stage.close();
     }
 
-
-
-    private LocalDate obtenerFechaActual() {
-        return LocalDate.now();
+    // Metodo para mostrar una alerta con los errores acumulados
+    private void showAlert(String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error en los datos");
+        alert.setHeaderText("Se encontraron los siguientes errores:");
+        alert.setContentText(mensaje);
+        alert.showAndWait();
     }
 
     private void mostrarAlerta(String titulo, String mensaje) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(titulo);
-        alert.setHeaderText(null);
         alert.setContentText(mensaje);
         alert.showAndWait();
     }
