@@ -1,29 +1,81 @@
-/* Cambia el color de fondo de todo el VBox */
-.vbox {
-    -fx-background-color: #ff0000; /* Color de fondo rojo */
-    -fx-padding: 20; /* Padding para el contenido dentro del VBox */
-}
-
-/* Estilos para el Label */
-.welcome-label {
-    -fx-font-size: 24px; /* Tamaño de fuente */
-    -fx-text-fill: #660066; /* Color del texto */
-}
-
-/* Estilos para el Button */
-.hello-button {
-    -fx-background-color: #660066; /* Color de fondo del botón */
-    -fx-text-fill: green; /* Color del texto del botón */
-    -fx-font-size: 16px; /* Tamaño de fuente del botón */
-    -fx-padding: 10px 20px; /* Padding del botón */
-    -fx-border-radius: 5px; /* Bordes redondeados */
-    -fx-background-radius: 5px; /* Bordes redondeados */
+.root {
+    -fx-background-image:
+        url("file:/C:/Users/Manu/OneDrive/Escritorio/ProyectoHotelProgra2/HotelManagement_I/src/main/resources/images/hotel3.png"),
+        url("file:/C:/Users/Manu/OneDrive/Escritorio/ProyectoHotelProgra2/HotelManagement_I/src/main/resources/images/logo.png");
+    -fx-background-size: cover, 100px 50px;  /* El primer fondo cubre toda la ventana, el segundo se ajusta a 100x100px */
+    -fx-background-position: center center, top left; /* El primer fondo está centrado, el segundo en la esquina superior izquierda */
+    -fx-background-repeat: no-repeat, no-repeat; /* Ninguno de los fondos se repite */
+    -fx-background-opacity: 0.9; /* Aplica opacidad a la imagen de fondo */
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.5), 20, 0, 0, 0);
 }
 
 
-/* Efecto al pasar el mouse sobre el botón */
-.hello-button:hover {
-    -fx-background-color: #993399; /* Cambia el color de fondo cuando el cursor está sobre el botón */
-    -fx-text-fill: white; /* Cambia el color del texto al pasar el cursor */
-    -fx-cursor: hand; /* Cambia el cursor a una mano cuando está sobre el botón */
+/* Para que los elementos de la UI (campos de texto y botones) se vean sobre la imagen */
+.vbox-background {
+    -fx-background-color: rgba(255, 255, 255, 0.7); /* Fondo semi-transparente */
+    -fx-padding: 20px;
+    -fx-spacing: 10px;
+}
+
+
+/* Estilo para los botones y campos de texto */
+.text-field, .password-field, .button {
+    -fx-background-color: rgba(255, 255, 255, 0.7);  /* Fondo semi-transparente */
+    -fx-border-color: #cccccc;                        /* Color del borde */
+    -fx-border-width: 2px;                            /* Ancho del borde */
+    -fx-text-fill: #333333;                           /* Color del texto */
+    -fx-font-size: 14px;                              /* Tamaño del texto */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 5, 0, 2, 2);
+}
+
+/* Estilo para cuando un TextField o PasswordField tiene foco */
+.text-field:focused, .password-field:focused {
+    -fx-border-color: #660066; /* Color del borde cuando tiene foco */
+    -fx-background-color: rgba(255, 255, 255, 0.9); /* Fondo más claro */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 5, 0, 0, 0); /* Sombra al enfocar */
+}
+
+.content-container {
+    -fx-background-color: rgba(255, 255, 255, 0.8); /* Fondo semi-transparente */
+    -fx-padding: 20px;
+    -fx-spacing: 10px;
+    -fx-background-radius: 10px; /* Bordes redondeados */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0, 0, 4); /* Sombra */
+}
+
+.button:hover {
+    -fx-background-color: #993399;
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+}
+/* Efecto al hacer clic en el botón */
+.button:pressed {
+    -fx-background-color: #993399; /* Color de fondo al presionar */
+    -fx-scale-x: 0.95;  /* Reduce ligeramente el tamaño */
+    -fx-scale-y: 0.95;
+}
+
+
+.label {
+    -fx-font-size: 18px;                              /* Tamaño del texto para el label */
+    -fx-font-weight: bold;                            /* Negrita */
+    -fx-text-fill: black;                          /* Color blanco para el texto */
+}
+
+/* Bordes redondeados */
+.text-field, .password-field, .button, .label {
+    -fx-background-radius: 8px; /* Bordes redondeados más suaves */
+    -fx-border-radius: 8px;
+}
+
+.content-container {
+    -fx-background-color: rgba(255, 255, 255, 0.7); /* Fondo semi-transparente para que el contenido sea legible */
+    -fx-padding: 20px;
+    -fx-spacing: 10px;
+}
+
+/* Efecto de hover para los campos de texto */
+.text-field:hover, .password-field:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.1); /* Fondo ligeramente más claro */
+    -fx-border-color: #660066; /* Resalta el borde */
 }

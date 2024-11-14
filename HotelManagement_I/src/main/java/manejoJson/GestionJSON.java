@@ -607,7 +607,9 @@ public class GestionJSON {
         jsonReserva.put("pasajeros", JPasajeros);
 
         // Agregar los servicios adicionales
-        JSONArray JServiciosAdicionales = new JSONArray(reserva.getServiciosAdicionales());
+        JSONArray JServiciosAdicionales = new JSONArray(
+                reserva.getServiciosAdicionales() != null ? reserva.getServiciosAdicionales() : new ArrayList<>()
+        );
         jsonReserva.put("serviciosAdicionales", JServiciosAdicionales);
 
         // Agregar los detalles completos del usuario

@@ -4,6 +4,7 @@
 
 <?import javafx.collections.FXCollections?>
 <?import java.lang.String?>
+
 <VBox alignment="CENTER" xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.modificar.ModificarHabitacionController" spacing="10" prefWidth="400.0" prefHeight="300.0">
     <!-- HBox 1 -->
     <HBox spacing="20" alignment="CENTER_LEFT">
@@ -17,8 +18,7 @@
 
     <!-- HBox 2: Alineación izquierda -->
     <HBox spacing="20" alignment="CENTER_LEFT">
-        <Label text="Cama 2:"/>
-        <ComboBox fx:id="comboBoxCama2" HBox.hgrow="ALWAYS" />
+        <ComboBox fx:id="comboBoxCama2" promptText="Cama 2:" HBox.hgrow="ALWAYS" />
 
         <!-- Exclusivo presidencial -->
         <CheckBox fx:id="cineCheckBox" text="Cine"/>
@@ -27,8 +27,7 @@
 
     <!-- HBox 3: Alineación izquierda -->
     <HBox spacing="20" alignment="CENTER_LEFT">
-        <Label text="Cama 3:"/>
-        <ComboBox fx:id="comboBoxCama3" HBox.hgrow="ALWAYS" />
+        <ComboBox fx:id="comboBoxCama3" promptText="Cama 3:" HBox.hgrow="ALWAYS" />
 
         <!-- Exclusivo presidencial -->
         <CheckBox fx:id="terrazaCheckBox" text="Terraza"/>
@@ -37,9 +36,11 @@
 
     <!-- HBox 4: Alineación izquierda -->
     <HBox spacing="20" alignment="CENTER_LEFT">
-        <Label text="Cama 4:"/>
-        <ComboBox fx:id="comboBoxCama4" HBox.hgrow="ALWAYS" />
+        <ComboBox fx:id="comboBoxCama4" promptText="Cama 4:" HBox.hgrow="ALWAYS" />
     </HBox>
+
+    <ComboBox fx:id="comboBoxEstadoHabitacion" prefWidth="200.0" />
+    <CheckBox fx:id="checkBoxEstadoDisponible" text="Disponible" />
 
     <!-- Exclusivo Presidencial -->
     <TextField fx:id="dimensionField" promptText="Dimensión (m²)" maxWidth="100"/>
@@ -67,5 +68,5 @@
     </HBox>
 
     <Button text="Guardar Cambios" onAction="#guardarCambios"/>
-    <Button text="Cerrar" onAction="#cerrarVentana"/>
+    <Button text="Cerrar" onAction="#closeStage"/>
 </VBox>
