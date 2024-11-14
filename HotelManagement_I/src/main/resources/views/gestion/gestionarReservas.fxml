@@ -23,8 +23,10 @@
     <!-- Botones para las acciones -->
     <HBox spacing="10">
         <Button text="Crear Reserva" onAction="#onCrearReserva"/>
-        <Button text="Modificar Reserva" onAction="#onModificarReserva"/>
+        <Button fx:id="buttonModificarReserva" text="Modificar Reserva" onAction="#onModificarReserva"/>
         <Button text="Cancelar Reserva" onAction="#onCancelarReserva"/>
+        <Button fx:id="buttonCheckIn" text="Check-in" onAction="#onCheckIn"/>
+        <Button fx:id="buttonCheckOut" text="Check-out" onAction="#onCheckOut"/>
         <Button text="Ver Detalle" onAction="#onVerDetalleReserva"/>
         <Button text="Volver" onAction="#volverAlMenuAdmin"/>
     </HBox>

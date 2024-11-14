@@ -1,1 +1,274 @@
-[{"pasajeros":[{"apellido":"López","nombre":"Carlos","dni":"34567890"}],"fechaSalida":"2024-11-22","cantidadPersonas":1,"fechaEntrada":"2024-11-18","serviciosAdicionales":["Almuerzo","Estacionamiento"],"usuario":{"fechaNacimiento":"1995-08-27","apellido":"Sosa","direccion":"Catalunia 5157","habilitacion":"habilitado","contrasenia":"user1234","tipoUsuario":"CLIENTE","puntosFidelidad":50,"telefono":"1123456789","nombre":"Manuel","correoElectronico":"manolo@example.com","dni":"39098906"},"id":1,"estadoReserva":"Confirmada","comentario":"Viaje de negocios","fechaReserva":"2024-11-12","habitacion":{"camas":["Matrimonial","Individual","Individual","Individual"],"tipo":"Apartamento","estado":"DISPONIBLE","numero":102,"ambientes":3,"detalleEstado":"","capacidad":5,"disponible":true,"cocina":true}},{"pasajeros":[{"apellido":"pas1","nombre":"pas1","dni":"5165165156"},{"apellido":"pas2","nombre":"pas2","dni":"4515616556"},{"apellido":"pas3","nombre":"pas3","dni":"651651561"}],"fechaSalida":"2024-11-15","cantidadPersonas":3,"fechaEntrada":"2024-11-14","serviciosAdicionales":["Desayuno"],"usuario":{"apellido":"admin","habilitacion":"habilitado","contrasenia":"111111","tipoUsuario":"ADMINISTRADOR","nombre":"admin","correoElectronico":"admin@gmail.com","dni":"222222222"},"id":2,"estadoReserva":"Reservada","comentario":"Disfruta la vida que es una sola","fechaReserva":"2024-11-14","habitacion":{"camas":["Simple"],"tipo":"Individual","estado":"DISPONIBLE","numero":10,"detalleEstado":"Disponible","capacidad":1,"disponible":true}},{"pasajeros":[{"apellido":"Sosa","nombre":"Manu","dni":"123456789"}],"fechaSalida":"2024-11-15","cantidadPersonas":1,"fechaEntrada":"2024-11-14","serviciosAdicionales":["Desayuno"],"usuario":{"apellido":"admin","habilitacion":"habilitado","contrasenia":"111111","tipoUsuario":"ADMINISTRADOR","nombre":"admin","correoElectronico":"admin@gmail.com","dni":"222222222"},"id":3,"estadoReserva":"Reservada","comentario":"Disfruta la vida que es una sola","fechaReserva":"2024-11-14","habitacion":{"camas":["No seleccionado","No seleccionado","No seleccionado","Simple"],"tipo":"Doble","estado":"ALQUILADA","numero":7,"detalleEstado":"Disponible","capacidad":2,"disponible":false}},{"pasajeros":[{"apellido":"sosa","nombre":"manu","dni":"11151651"}],"fechaSalida":"2024-11-15","cantidadPersonas":1,"fechaEntrada":"2024-11-14","serviciosAdicionales":["Piscina"],"usuario":{"apellido":"admin","habilitacion":"habilitado","contrasenia":"111111","tipoUsuario":"ADMINISTRADOR","nombre":"admin","correoElectronico":"admin@gmail.com","dni":"222222222"},"id":7,"estadoReserva":"Reservada","comentario":"Disfruta la vida que es una sola","fechaReserva":"2024-11-14","habitacion":{"camas":["Queen"],"balcon":false,"comedor":true,"tipo":"Suite","estado":"ALQUILADA","numero":105,"detalleEstado":"","capacidad":2,"disponible":false}},{"pasajeros":[{"apellido":"sosa","nombre":"manu","dni":"7898484948"},{"apellido":"salias","nombre":"emi","dni":"4894894894"}],"fechaSalida":"2024-11-23","cantidadPersonas":2,"fechaEntrada":"2024-11-22","serviciosAdicionales":["Desayuno"],"usuario":{"apellido":"admin","habilitacion":"habilitado","contrasenia":"111111","tipoUsuario":"ADMINISTRADOR","nombre":"admin","correoElectronico":"admin@gmail.com","dni":"222222222"},"id":9,"estadoReserva":"Reservada","comentario":"Disfruta la vida que es una sola","fechaReserva":"2024-11-14","habitacion":{"camas":["No seleccionado","No seleccionado","No seleccionado","Simple"],"tipo":"Doble","estado":"ALQUILADA","numero":7,"detalleEstado":"Disponible","capacidad":2,"disponible":false}}]
+[
+    {
+        "pasajeros": [
+            {
+                "apellido": "López",
+                "nombre": "Carlos",
+                "dni": "34567890"
+            }
+        ],
+        "fechaSalida": "2024-11-22",
+        "cantidadPersonas": 1,
+        "fechaEntrada": "2024-11-18",
+        "serviciosAdicionales": [
+            "Almuerzo",
+            "Estacionamiento"
+        ],
+        "usuario": {
+            "fechaNacimiento": "1995-08-27",
+            "apellido": "Sosa",
+            "direccion": "Catalunia 5157",
+            "habilitacion": "habilitado",
+            "contrasenia": "user1234",
+            "tipoUsuario": "CLIENTE",
+            "puntosFidelidad": 50,
+            "telefono": "1123456789",
+            "nombre": "Manuel",
+            "correoElectronico": "manolo@example.com",
+            "dni": "39098906"
+        },
+        "id": 1,
+        "estadoReserva": "Reservada",
+        "comentario": "Viaje de negocios",
+        "fechaReserva": "2024-11-12",
+        "habitacion": {
+            "camas": [
+                "Matrimonial",
+                "Individual",
+                "Individual",
+                "Individual"
+            ],
+            "tipo": "Apartamento",
+            "estado": "DISPONIBLE",
+            "numero": 102,
+            "ambientes": 3,
+            "detalleEstado": "",
+            "capacidad": 5,
+            "disponible": false,
+            "cocina": true
+        }
+    },
+    {
+        "pasajeros": [
+            {
+                "apellido": "pas1",
+                "nombre": "pas1",
+                "dni": "5165165156"
+            },
+            {
+                "apellido": "pas2",
+                "nombre": "pas2",
+                "dni": "4515616556"
+            },
+            {
+                "apellido": "pas3",
+                "nombre": "pas3",
+                "dni": "651651561"
+            }
+        ],
+        "fechaSalida": "2024-11-15",
+        "cantidadPersonas": 3,
+        "fechaEntrada": "2024-11-14",
+        "serviciosAdicionales": [
+            "Desayuno"
+        ],
+        "usuario": {
+            "apellido": "admin",
+            "habilitacion": "habilitado",
+            "contrasenia": "111111",
+            "tipoUsuario": "ADMINISTRADOR",
+            "nombre": "admin",
+            "correoElectronico": "admin@gmail.com",
+            "dni": "222222222"
+        },
+        "id": 2,
+        "estadoReserva": "Reservada",
+        "comentario": "Disfruta la vida que es una sola",
+        "fechaReserva": "2024-11-14",
+        "habitacion": {
+            "camas": [
+                "Simple"
+            ],
+            "tipo": "Individual",
+            "estado": "DISPONIBLE",
+            "numero": 10,
+            "detalleEstado": "Disponible",
+            "capacidad": 1,
+            "disponible": true
+        }
+    },
+    {
+        "pasajeros": [
+            {
+                "apellido": "Sosa",
+                "nombre": "Manu",
+                "dni": "123456789"
+            }
+        ],
+        "fechaSalida": "2024-11-15",
+        "cantidadPersonas": 1,
+        "fechaEntrada": "2024-11-14",
+        "serviciosAdicionales": [
+            "Desayuno"
+        ],
+        "usuario": {
+            "apellido": "admin",
+            "habilitacion": "habilitado",
+            "contrasenia": "111111",
+            "tipoUsuario": "ADMINISTRADOR",
+            "nombre": "admin",
+            "correoElectronico": "admin@gmail.com",
+            "dni": "222222222"
+        },
+        "id": 3,
+        "estadoReserva": "Reservada",
+        "comentario": "Disfruta la vida que es una sola",
+        "fechaReserva": "2024-11-14",
+        "habitacion": {
+            "camas": [
+                "No seleccionado",
+                "No seleccionado",
+                "No seleccionado",
+                "Simple"
+            ],
+            "tipo": "Doble",
+            "estado": "ALQUILADA",
+            "numero": 7,
+            "detalleEstado": "Disponible",
+            "capacidad": 2,
+            "disponible": false
+        }
+    },
+    {
+        "pasajeros": [
+            {
+                "apellido": "sosa",
+                "nombre": "manu",
+                "dni": "11151651"
+            }
+        ],
+        "fechaSalida": "2024-11-15",
+        "cantidadPersonas": 1,
+        "fechaEntrada": "2024-11-14",
+        "serviciosAdicionales": [
+            "Piscina"
+        ],
+        "usuario": {
+            "apellido": "admin",
+            "habilitacion": "habilitado",
+            "contrasenia": "111111",
+            "tipoUsuario": "ADMINISTRADOR",
+            "nombre": "admin",
+            "correoElectronico": "admin@gmail.com",
+            "dni": "222222222"
+        },
+        "id": 7,
+        "estadoReserva": "Reservada",
+        "comentario": "Disfruta la vida que es una sola",
+        "fechaReserva": "2024-11-14",
+        "habitacion": {
+            "camas": [
+                "Queen"
+            ],
+            "balcon": false,
+            "comedor": true,
+            "tipo": "Suite",
+            "estado": "ALQUILADA",
+            "numero": 105,
+            "detalleEstado": "",
+            "capacidad": 2,
+            "disponible": false
+        }
+    },
+    {
+        "pasajeros": [
+            {
+                "apellido": "sosa",
+                "nombre": "manu",
+                "dni": "7898484948"
+            },
+            {
+                "apellido": "salias",
+                "nombre": "emi",
+                "dni": "4894894894"
+            }
+        ],
+        "fechaSalida": "2024-11-23",
+        "cantidadPersonas": 2,
+        "fechaEntrada": "2024-11-22",
+        "serviciosAdicionales": [
+            "Desayuno"
+        ],
+        "usuario": {
+            "apellido": "admin",
+            "habilitacion": "habilitado",
+            "contrasenia": "111111",
+            "tipoUsuario": "ADMINISTRADOR",
+            "nombre": "admin",
+            "correoElectronico": "admin@gmail.com",
+            "dni": "222222222"
+        },
+        "id": 9,
+        "estadoReserva": "Reservada",
+        "comentario": "Disfruta la vida que es una sola",
+        "fechaReserva": "2024-11-14",
+        "habitacion": {
+            "camas": [
+                "No seleccionado",
+                "No seleccionado",
+                "No seleccionado",
+                "Simple"
+            ],
+            "tipo": "Doble",
+            "estado": "ALQUILADA",
+            "numero": 7,
+            "detalleEstado": "Disponible",
+            "capacidad": 2,
+            "disponible": false
+        }
+    },
+    {
+        "pasajeros": [
+            {
+                "apellido": "asdsad",
+                "nombre": "asdasd",
+                "dni": "234234324"
+            }
+        ],
+        "fechaSalida": "2024-11-23",
+        "cantidadPersonas": 1,
+        "fechaEntrada": "2024-11-22",
+        "serviciosAdicionales": [
+            "Desayuno"
+        ],
+        "usuario": {
+            "apellido": "admin",
+            "habilitacion": "habilitado",
+            "contrasenia": "111111",
+            "tipoUsuario": "ADMINISTRADOR",
+            "nombre": "admin",
+            "correoElectronico": "admin@gmail.com",
+            "dni": "222222222"
+        },
+        "id": 10,
+        "estadoReserva": "Reservada",
+        "comentario": "Disfruta la vida que es una sola",
+        "fechaReserva": "2024-11-14",
+        "habitacion": {
+            "camas": [
+                "Matrimonial",
+                "Individual",
+                "Individual",
+                "Individual"
+            ],
+            "tipo": "Apartamento",
+            "estado": "DISPONIBLE",
+            "numero": 102,
+            "ambientes": 3,
+            "detalleEstado": "",
+            "capacidad": 5,
+            "disponible": false,
+            "cocina": true
+        }
+    }
+]

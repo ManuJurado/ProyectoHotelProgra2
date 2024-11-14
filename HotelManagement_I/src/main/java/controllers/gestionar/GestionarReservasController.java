@@ -2,6 +2,8 @@ package controllers.gestionar;
 
 import controllers.BaseController;
 import controllers.crear.CrearReservaController;
+import enums.EstadoHabitacion;
+import enums.TipoUsuario;
 import exceptions.AtributoFaltanteException;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -17,14 +19,17 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import models.Pasajero;
+import services.GestionHabitaciones;
 import services.GestionReservas;
 import models.Reserva;
 import javafx.fxml.FXML;
 import javafx.scene.control.cell.PropertyValueFactory;
+import services.Sesion;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -48,7 +53,18 @@ public class GestionarReservasController extends BaseController {
     private TableColumn<Reserva, String> estadoColumn; // Columna para el estado de la reserva
 
     @FXML
+    private Button buttonModificarReserva,buttonCheckIn,buttonCheckOut;
+
+    @FXML
     public void initialize() {
+        if (Sesion.getUsuarioLogueado().getTipoUsuario() == TipoUsuario.CLIENTE){
+            buttonModificarReserva.setVisible(false);
+            buttonCheckIn.setVisible(false);
+            buttonCheckOut.setVisible(false);
+        }else if (Sesion.getUsuarioLogueado().getTipoUsuario() == TipoUsuario.CONSERJE){
+            buttonModificarReserva.setVisible(false);
+        }
+
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         habitacionColumn.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getHabitacion().getNumero())));
         fechaInicioColumn.setCellValueFactory(new PropertyValueFactory<>("fechaEntrada"));
@@ -68,8 +84,19 @@ public class GestionarReservasController extends BaseController {
 
     private void cargarReservasEnTabla() {
         reservas = gestionReservas.getListaReservas();  // Cargar lista desde el servicio
+        if(Sesion.getUsuarioLogueado().getTipoUsuario() == TipoUsuario.CLIENTE){
+            List<Reserva> listaFiltrada = new ArrayList<>();
+            for (Reserva r : reservas){
+                if(r.getUsuario().getDni().equals(Sesion.getUsuarioLogueado().getDni())){
+                    listaFiltrada.add(r);
+                }
+            }
+            ObservableList<Reserva> reservasFiltradas = FXCollections.observableArrayList(listaFiltrada);
+            tablaReservas.setItems(reservasFiltradas);
+        }else {
         ObservableList<Reserva> observableReservas = FXCollections.observableArrayList(reservas);
         tablaReservas.setItems(observableReservas);
+        }
     }
 
     public void setReservas(List<Reserva> reservas) {
@@ -210,6 +237,84 @@ public class GestionarReservasController extends BaseController {
             detallesStage.showAndWait();
         } else {
             mostrarAlerta("Advertencia", "Selecciona una reserva para ver los detalles.");
+        }
+    }
+
+    //METODOS PARA CHECKIN CHECKOUT
+    @FXML
+    private void onCheckIn() {
+        // Obtener la reserva seleccionada
+        Reserva reservaSeleccionada = tablaReservas.getSelectionModel().getSelectedItem();
+
+        // Verificar si hay una reserva seleccionada
+        if (reservaSeleccionada == null) {
+            mostrarAlerta("Advertencia", "Selecciona una reserva para hacer el check-in.");
+            return;
+        }
+
+        // Verificar que la reserva no esté ya finalizada
+        if ("Finalizada".equals(reservaSeleccionada.getEstadoReserva())) {
+            mostrarAlerta("Advertencia", "La reserva ya ha sido finalizada.");
+            return;
+        }
+
+        // Verificar que la habitación esté disponible para check-in
+        if (!reservaSeleccionada.getHabitacion().isDisponible()) {
+            mostrarAlerta("Advertencia", "La habitación ya está ocupada.");
+            return;
+        }
+
+        // Cambiar el estado de la habitación y de la reserva
+        reservaSeleccionada.getHabitacion().setEstado(EstadoHabitacion.OCUPADA);
+        reservaSeleccionada.getHabitacion().setDisponible(false);
+        reservaSeleccionada.setEstadoReserva("Finalizada");
+
+        // Guardar cambios en las reservas y habitaciones
+        try {
+            // Guardar la reserva y las habitaciones actualizadas en los archivos JSON
+            gestionReservas.actualizarReservasJson();
+            GestionHabitaciones.getInstancia("HotelManagement_I/habitaciones.json").guardarHabitaciones();
+            cargarReservasEnTabla();  // Actualizar la tabla de reservas
+            mostrarAlerta("Éxito", "Check-in realizado correctamente.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            mostrarAlerta("Error", "No se pudo realizar el check-in.");
+        }
+    }
+
+
+    @FXML
+    private void onCheckOut() {
+        // Obtener la reserva seleccionada
+        Reserva reservaSeleccionada = tablaReservas.getSelectionModel().getSelectedItem();
+
+        // Verificar si hay una reserva seleccionada
+        if (reservaSeleccionada == null) {
+            mostrarAlerta("Advertencia", "Selecciona una reserva para hacer el check-out.");
+            return;
+        }
+
+        // Verificar que la reserva no haya sido ya finalizada
+        if (!"Finalizada".equals(reservaSeleccionada.getEstadoReserva())) {
+            mostrarAlerta("Advertencia", "La reserva no está finalizada.");
+            return;
+        }
+
+        // Cambiar el estado de la habitación y de la reserva
+        reservaSeleccionada.getHabitacion().setEstado(EstadoHabitacion.DISPONIBLE);
+        reservaSeleccionada.getHabitacion().setDisponible(true);
+        reservaSeleccionada.setEstadoReserva("Finalizada");
+
+        // Guardar cambios en las reservas y habitaciones
+        try {
+            // Guardar la reserva y las habitaciones actualizadas en los archivos JSON
+            gestionReservas.actualizarReservasJson();
+            GestionHabitaciones.getInstancia("HotelManagement_I/habitaciones.json").guardarHabitaciones();
+            cargarReservasEnTabla();  // Actualizar la tabla de reservas
+            mostrarAlerta("Éxito", "Check-out realizado correctamente.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            mostrarAlerta("Error", "No se pudo realizar el check-out.");
         }
     }
 

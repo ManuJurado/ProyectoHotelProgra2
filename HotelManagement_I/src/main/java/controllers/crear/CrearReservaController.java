@@ -1,6 +1,7 @@
 package controllers.crear;
 
 import controllers.BaseController;
+import enums.EstadoHabitacion;
 import exceptions.FechaInvalidaException;
 import exceptions.UsuarioNoEncontradoException;
 import javafx.collections.FXCollections;
@@ -93,11 +94,18 @@ public class CrearReservaController extends BaseController {
     }
 
     private void cargarHabitacionesDisponibles() {
-        List<Habitacion> habitacionesDisponibles = gestionHabitaciones.getHabitaciones().stream()
-                .filter(habitacion -> "disponible".equalsIgnoreCase(habitacion.getEstado().toString()))
+        // Filtrar habitaciones cuyo estado sea ALQUILADA, LIMPIEZA, OCUPADA o DISPONIBLE
+        List<Habitacion> habitacionesFiltradas = gestionHabitaciones.getHabitaciones().stream()
+                .filter(habitacion ->
+                                habitacion.getEstado() == EstadoHabitacion.LIMPIEZA ||
+                                habitacion.getEstado() == EstadoHabitacion.OCUPADA ||
+                                habitacion.getEstado() == EstadoHabitacion.DISPONIBLE)
                 .collect(Collectors.toList());
 
-        ObservableList<Habitacion> habitacionesObservable = FXCollections.observableArrayList(habitacionesDisponibles);
+        // Convertir la lista filtrada en una lista observable
+        ObservableList<Habitacion> habitacionesObservable = FXCollections.observableArrayList(habitacionesFiltradas);
+
+        // Asignar la lista observable a la TableView
         tableViewHabitaciones.setItems(habitacionesObservable);
     }
 

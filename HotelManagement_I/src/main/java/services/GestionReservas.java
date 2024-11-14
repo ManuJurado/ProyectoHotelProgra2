@@ -118,31 +118,29 @@ public class GestionReservas implements Gestionable_I<Reserva> {
             throw new ExcesoPasajerosException("La cantidad de personas excede la capacidad de la habitación seleccionada.");
         }
 
-        // Verificar disponibilidad
-        if (!habitacionEncontrada.isDisponible()) {
-            throw new HabitacionOcupadaException("La habitación con ID " + habitacionId + " ya está ocupada.");
-        }
-
         // Verificar superposición de fechas
-        for (Reserva reservaExistente : listaReservas) {
-            if (reservaExistente.getHabitacion().getNumero() == habitacionEncontrada.getNumero()) {
-                LocalDate fechaEntradaExistente = reservaExistente.getFechaEntrada();
-                LocalDate fechaSalidaExistente = reservaExistente.getFechaSalida();
+        try{
+            for (Reserva reservaExistente : listaReservas) {
+                if (reservaExistente.getHabitacion().getNumero() == habitacionEncontrada.getNumero()) {
+                    LocalDate fechaEntradaExistente = reservaExistente.getFechaEntrada();
+                    LocalDate fechaSalidaExistente = reservaExistente.getFechaSalida();
 
-                // Verificar si las fechas se superponen
-                if ((fechaEntrada.isBefore(fechaSalidaExistente) && fechaEntrada.isAfter(fechaEntradaExistente)) ||
-                        (fechaSalida.isAfter(fechaEntradaExistente) && fechaSalida.isBefore(fechaSalidaExistente)) ||
-                        (fechaEntrada.isBefore(fechaEntradaExistente) && fechaSalida.isAfter(fechaSalidaExistente))) {
-                    throw new FechaInvalidaException("La habitación con ID " + habitacionId + " ya está reservada para las fechas solicitadas.");
+                    // Verificar si las fechas se superponen
+                    if ((fechaEntrada.isBefore(fechaSalidaExistente) && fechaEntrada.isAfter(fechaEntradaExistente)) ||
+                            (fechaSalida.isAfter(fechaEntradaExistente) && fechaSalida.isBefore(fechaSalidaExistente)) ||
+                            (fechaEntrada.isBefore(fechaEntradaExistente) && fechaSalida.isAfter(fechaSalidaExistente))) {
+                    }
                 }
             }
+        }catch (RuntimeException e){
+            throw new FechaInvalidaException("La habitación con ID " + habitacionId + " ya está reservada para las fechas solicitadas.");
         }
+
 
         // Crear la reserva con el nuevo ID
         Reserva nuevaReserva = new Reserva(nuevoIdReserva, fechaEntrada, fechaSalida, "Reservada", comentario, cantidadPersonas, pasajeros, serviciosAdicionales, usuarioEncontrado, habitacionEncontrada);
 
         // Actualizar estado de la habitación
-        habitacionEncontrada.setEstado(EstadoHabitacion.ALQUILADA);
         habitacionEncontrada.setDisponible(false);
 
         // Agregar la nueva reserva a la lista
@@ -186,6 +184,7 @@ public class GestionReservas implements Gestionable_I<Reserva> {
         actualizarReservasJson();
     }
 
+
     // Metodo para eliminar una reserva
     public boolean eliminarReserva(String nombreUsuario, String habitacionId, LocalDate fechaEntrada)
             throws ReservaNoEncontradaException {
@@ -218,7 +217,7 @@ public class GestionReservas implements Gestionable_I<Reserva> {
     }
 
     // Metodo para actualizar el archivo JSON con las reservas
-    private void actualizarReservasJson() {
+    public void actualizarReservasJson() {
         try {
             GestionJSON.guardarReservasJson(listaReservas, "HotelManagement_I/reservas.json");
         } catch (JSONException | IOException e) {

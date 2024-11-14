@@ -88,7 +88,7 @@ public class ClienteController extends BaseController {
     @FXML
     private void gestionarMisReservas(ActionEvent event) {
         // Cambiar a la escena de gestionar reservas
-        cambiarEscenaConSceneAnterior("/views/gestion/gestionarMisReservas.fxml", "Gestionar Reservas", (Node) event.getSource());
+        cambiarEscenaConSceneAnterior("/views/gestion/gestionarReservas.fxml", "Gestionar Reservas", (Node) event.getSource());
     }
 
     @FXML
