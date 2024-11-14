@@ -30,24 +30,6 @@ public class MainApp extends Application {
         Pane root = new Pane();
         root.setPrefSize(900, 700);
 
-        // Cargar la imagen de fondo
-        Image backgroundImage = new Image("file:/C:/Users/Manu/OneDrive/Escritorio/ProyectoHotelProgra2/HotelManagement_I/src/main/resources/images/hotel3.png");
-        ImageView backgroundImageView = new ImageView(backgroundImage);
-        backgroundImageView.setFitWidth(900);
-        backgroundImageView.setFitHeight(700);
-
-        // Agregar la imagen de fondo al Pane
-        root.getChildren().add(backgroundImageView);
-
-        // Crear la animación para el fondo (efecto parallax)
-        Timeline timeline = new Timeline(
-                new KeyFrame(Duration.ZERO, new KeyValue(backgroundImageView.translateYProperty(), 0)),
-                new KeyFrame(Duration.seconds(30), new KeyValue(backgroundImageView.translateYProperty(), 100)) // Mueve la imagen hacia abajo
-        );
-        timeline.setCycleCount(Timeline.INDEFINITE); // Repetir la animación infinitamente
-        timeline.setAutoReverse(true); // Hace que la animación vuelva hacia arriba después de cada ciclo
-        timeline.play(); // Iniciar la animación
-
         // Ahora que tenemos el fondo animado, cargamos el video de introducción
         playIntroVideo(root);
 

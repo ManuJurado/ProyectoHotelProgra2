@@ -7,12 +7,7 @@ import exceptions.UsuarioNoEncontradoException;
 import models.Habitacion.*;
 import models.Usuarios.*;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.json.JSONException;
-
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 
@@ -31,9 +26,10 @@ public class Reserva {
     private Usuario usuario;
     private Habitacion habitacion;
 
-    public Reserva(){}
+    public Reserva(){};
 
-    public Reserva(LocalDate fechaEntrada, LocalDate fechaSalida, String estadoReserva, String comentario, int cantidadPersonas, List<Pasajero> pasajeros, List<String> serviciosAdicionales, Usuario usuario, Habitacion habitacion) {
+    public Reserva(int nuevoIdReserva, LocalDate fechaEntrada, LocalDate fechaSalida, String estadoReserva, String comentario, int cantidadPersonas, List<Pasajero> pasajeros, List<String> serviciosAdicionales, Usuario usuario, Habitacion habitacion) {
+        this.id = nuevoIdReserva;
         setFechaReserva(LocalDate.now());
         this.fechaEntrada = fechaEntrada;
         this.fechaSalida = fechaSalida;

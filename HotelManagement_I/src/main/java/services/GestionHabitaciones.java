@@ -1,5 +1,6 @@
 package services;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import enums.EstadoHabitacion;
 import exceptions.*;
 import interfaces.Gestionable_I;
@@ -11,6 +12,8 @@ import manejoJson.GestionJSON;
 import models.Habitacion.*;
 import models.Usuarios.Usuario;
 import org.json.JSONException;
+
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import static enums.EstadoHabitacion.*;
@@ -244,6 +247,25 @@ public class GestionHabitaciones implements Gestionable_I<Habitacion> {
         }
     }
 
+    // Metodo para actualizar una habitación en la lista de habitaciones
+    public void actualizarHabitacion(Habitacion habitacionActualizada) {
+        // Buscar la habitación en la lista
+        Habitacion habitacionExistente = buscarPorIdInt(habitacionActualizada.getNumero());
+
+        if (habitacionExistente != null) {
+            // Actualizar los valores de la habitación existente
+            habitacionExistente.setEstado(habitacionActualizada.getEstado());
+            habitacionExistente.setDisponible(habitacionActualizada.isDisponible());
+            // Aquí puedes actualizar otros atributos según sea necesario
+        } else {
+            // Si la habitación no se encuentra, lanzamos una excepción o la agregamos (si lo deseas)
+            throw new HabitacionInexistenteException("La habitación con el ID " + habitacionActualizada.getNumero() + " no existe.");
+        }
+
+        // Después de actualizar, guardamos la lista de habitaciones
+        actualizarHabitacionesJson();
+    }
+
     // Metodo para establecer el número de habitación automáticamente
     public int establecerNroHabitacion() {
         // Lista de números de habitaciones existentes
@@ -262,6 +284,17 @@ public class GestionHabitaciones implements Gestionable_I<Habitacion> {
 
         // Retornar el siguiente número disponible
         return siguienteNumero;
+    }
+
+    public void guardarHabitaciones() {
+        try {
+            // Código para guardar las habitaciones actualizadas en el archivo JSON
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.writeValue(new File("HotelManagement_I/habitaciones.json"), this.habitaciones);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error al guardar las habitaciones en el archivo JSON.");
+        }
     }
 
     // Metodo para mostrar un mensaje temporal

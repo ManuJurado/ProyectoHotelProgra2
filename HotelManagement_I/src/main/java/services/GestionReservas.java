@@ -23,6 +23,9 @@ public class GestionReservas implements Gestionable_I<Reserva> {
     private List<Reserva> listaReservas;
     private static GestionReservas instancia; // Instancia única de la clase
 
+    // Contador estático para la generación de IDs autoincrementales
+    private static int contadorIdReserva = 1;
+
     // Constructor
     private GestionReservas() {
         this.listaReservas = new ArrayList<>();
@@ -33,6 +36,22 @@ public class GestionReservas implements Gestionable_I<Reserva> {
         this.listaReservas = new ArrayList<>();
         mostrarMensajeTemporal("Cargando lista de reservas...");
         this.listaReservas = GestionJSON.mapeoReservasJson(fileName);
+        this.contadorIdReserva = obtenerUltimoIdReservas();
+    }
+
+    // Metodo para obtener el último ID de las reservas (sin necesidad de pasar el nombre del archivo)
+    private int obtenerUltimoIdReservas() {
+        int ultimoId = 0; // Valor inicial por si no se encuentra ninguna reserva
+
+        // Buscar el ID más alto en las reservas ya cargadas
+        for (Reserva reserva : listaReservas) {
+            if (reserva.getId() > ultimoId) {
+                ultimoId = reserva.getId();
+            }
+        }
+
+        // El contador debe ser el siguiente ID disponible (último ID + 1)
+        return ultimoId + 1;
     }
 
     // Metodo para obtener la instancia única de la clase (Singleton)
@@ -58,6 +77,12 @@ public class GestionReservas implements Gestionable_I<Reserva> {
     public Reserva crearReserva(String nombreUsuario, String habitacionId, LocalDate fechaEntrada, LocalDate fechaSalida,
                                 String comentario, int cantidadPersonas, List<String> serviciosAdicionales, List<Pasajero> pasajeros)
             throws UsuarioNoEncontradoException, HabitacionInexistenteException, HabitacionDuplicadaException, FechaInvalidaException {
+
+        // Obtener el nuevo ID de reserva antes de incrementar el contador
+        int nuevoIdReserva = contadorIdReserva;
+
+        // Incrementar el contador para el siguiente ID
+        contadorIdReserva++;
 
         // Validar cantidad de pasajeros
         if (cantidadPersonas > 4) {
@@ -113,8 +138,8 @@ public class GestionReservas implements Gestionable_I<Reserva> {
             }
         }
 
-        // Crear la reserva
-        Reserva nuevaReserva = new Reserva(fechaEntrada, fechaSalida, "Reservada", comentario, cantidadPersonas, pasajeros, serviciosAdicionales, usuarioEncontrado, habitacionEncontrada);
+        // Crear la reserva con el nuevo ID
+        Reserva nuevaReserva = new Reserva(nuevoIdReserva, fechaEntrada, fechaSalida, "Reservada", comentario, cantidadPersonas, pasajeros, serviciosAdicionales, usuarioEncontrado, habitacionEncontrada);
 
         // Actualizar estado de la habitación
         habitacionEncontrada.setEstado(EstadoHabitacion.ALQUILADA);
@@ -131,8 +156,18 @@ public class GestionReservas implements Gestionable_I<Reserva> {
             throw new RuntimeException("Error al guardar la reserva en el archivo JSON.");
         }
 
+        // Guardar la habitación actualizada en el archivo JSON
+        try {
+            GestionHabitaciones.getInstancia("HotelManagement_I/habitaciones.json").actualizarHabitacion(habitacionEncontrada);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error al guardar los cambios en las habitaciones en el archivo JSON.");
+        }
+
         return nuevaReserva; // Devolver la reserva creada
     }
+
+
 
 
     // Metodo para modificar una reserva existente
