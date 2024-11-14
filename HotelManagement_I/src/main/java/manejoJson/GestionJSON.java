@@ -513,6 +513,7 @@ public class GestionJSON {
 
                 // Crear la reserva
                 Reserva reserva = new Reserva(
+                        idReserva,
                         fechaEntrada,
                         fechaSalida,
                         estadoReserva,
@@ -525,6 +526,8 @@ public class GestionJSON {
                 );
                 reserva.setFechaReserva(fechaReserva);
                 reserva.setId(idReserva);
+
+                System.out.println(reserva);
                 reservas.add(reserva);
             }
 
