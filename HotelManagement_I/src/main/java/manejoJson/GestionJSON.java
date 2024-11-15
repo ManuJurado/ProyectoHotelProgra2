@@ -452,7 +452,6 @@ public class GestionJSON {
     // --------------------------------- MAPEO RESERVAS -----------------------------------------------------//
     // --------------------------------- MAPEO RESERVAS -----------------------------------------------------//
 
-    // Metodo que mapea las reservas desde un archivo JSON
     public static List<Reserva> mapeoReservasJson(String archivoJson) {
         List<Reserva> reservas = new ArrayList<>();
 
@@ -505,10 +504,20 @@ public class GestionJSON {
                 // Buscar la habitación correspondiente a ese número
                 Habitacion habitacion = gestionHabitaciones.buscarPorIdInt(numeroHabitacion);
 
-                // Verificar que la habitación esté disponible (si es null, no seguimos con esta reserva)
+                // Creamos una bandera para indicar si la habitación fue eliminada
+                boolean habitacionEliminada = false;
+
+                // Verificar si la habitación existe
                 if (habitacion == null) {
-                    System.err.println("No se encontró la habitación con número: " + numeroHabitacion);
-                    continue;
+                    // Si no se encuentra, marcamos que la habitación fue eliminada
+                    habitacionEliminada = true;
+                    System.err.println("La habitación con número: " + numeroHabitacion + " fue eliminada, pero el registro de reserva se mantiene(cancelada).");
+
+                    // Verificamos el estado de la reserva: si no está cancelada, la cancelamos
+                    if (!estadoReserva.equals("Cancelada")) {
+                        System.out.println("La reserva con ID: " + idReserva + " será cancelada debido a la eliminación de la habitación.");
+                        estadoReserva = "Cancelada"; // Cambiar el estado de la reserva a "Cancelada"
+                    }
                 }
 
                 // Crear la reserva
@@ -527,7 +536,18 @@ public class GestionJSON {
                 reserva.setFechaReserva(fechaReserva);
                 reserva.setId(idReserva);
 
-                System.out.println(reserva);
+                // Agregar un campo en la reserva para indicar si la habitación fue eliminada
+                reserva.setHabitacionEliminada(habitacionEliminada);
+
+                // Si la habitación fue eliminada, usamos el número auxiliar
+                if (habitacionEliminada) {
+                    Integer numeroAuxiliarHabitacion = jsonHabitacion.optInt("numeroAuxiliarHabitacion", -1);
+                    if (numeroAuxiliarHabitacion != -1) {
+                        reserva.setNumeroHabitacion(numeroAuxiliarHabitacion);  // Guardar el número auxiliar
+                    }
+                }
+
+                // Añadimos la reserva, incluso si la habitación no existe
                 reservas.add(reserva);
             }
 
@@ -652,6 +672,11 @@ public class GestionJSON {
         jsonHabitacion.put("estado", reserva.getHabitacion().getEstado().toString());
         jsonHabitacion.put("detalleEstado", reserva.getHabitacion().getDetalleEstado());
 
+        // Agregar el número auxiliar de la habitación, si existe
+        if (reserva.getNumeroHabitacion() != null) {
+            jsonHabitacion.put("numeroAuxiliarHabitacion", reserva.getNumeroHabitacion());
+        }
+
         // Agregar atributos específicos según el tipo de habitación
         if (reserva.getHabitacion() instanceof Apartamento) {
             Apartamento apartamento = (Apartamento) reserva.getHabitacion();
@@ -674,4 +699,5 @@ public class GestionJSON {
 
         return jsonReserva;
     }
+
 }

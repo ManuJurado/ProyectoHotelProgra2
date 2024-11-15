@@ -115,8 +115,9 @@ public class CrearClienteController extends BaseController {
             validarCampo(cliente::setTelefono, telefonoField.getText(), "Teléfono", errores);
 
             // Validación de las contraseñas
-            String contrasenia = contraseniaField.getText();
-            String confirmarContrasenia = confirmarContraseniaField.getText();
+            String contrasenia = contraseniaField.isVisible() ? contraseniaField.getText() : passwordTextField.getText();
+            String confirmarContrasenia = confirmarContraseniaField.isVisible() ? confirmarContraseniaField.getText() : confirmarPasswordTextField.getText();
+
             if (contrasenia == null || confirmarContrasenia == null || !contrasenia.equals(confirmarContrasenia)) {
                 errores.add("Las contraseñas no coinciden.");
             } else {
@@ -126,6 +127,7 @@ public class CrearClienteController extends BaseController {
                 } catch (IllegalArgumentException e) {
                     errores.add(e.getMessage());  // Capturamos la excepción y añadimos el mensaje de error
                 }
+
             }
 
             // Validación de la fecha de nacimiento

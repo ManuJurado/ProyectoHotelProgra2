@@ -20,32 +20,10 @@ public class ConserjeController extends BaseController{
         this.previousScene = previousScene;
     }
 
-    @FXML
-    private void checkIn(ActionEvent event) {
-        // Lógica para realizar el check-in
-        mostrarAlerta("Check In", "Realizando check-in de cliente.");
-        // Lógica del check-in aquí
-    }
-
-    @FXML
-    private void checkOut(ActionEvent event) {
-        // Lógica para realizar el check-out
-        mostrarAlerta("Check Out", "Realizando check-out de cliente.");
-        // Lógica del check-out aquí
-    }
-
-    @FXML
-    private void asignarReservaACliente(ActionEvent event) {
-        // Lógica para asignar una reserva a un cliente
-        mostrarAlerta("Asignar Reserva", "Asignando reserva a cliente.");
-        // Lógica de asignación aquí
-    }
 
     @FXML
     private void verListaReservas(ActionEvent event) {
-        // Lógica para ver la lista de reservas
-        mostrarAlerta("Lista de Reservas", "Mostrando lista de reservas.");
-        // Lógica para mostrar las reservas aquí
+        cambiarEscenaConSceneAnterior("/views/gestion/gestionarReservas.fxml","Gestionar Reservas",(Node) event.getSource());
     }
 
     @FXML
@@ -57,13 +35,6 @@ public class ConserjeController extends BaseController{
     private void verListaClientes(ActionEvent event) {
         // Lógica para ver la lista de clientes
         cambiarEscenaConSceneAnterior("/views/gestion/gestionarUsuarios.fxml", "Gestionar Usuarios", (Node) event.getSource());
-    }
-
-    @FXML
-    private void realizarReservaSinCliente(ActionEvent event) {
-        // Lógica para realizar una reserva sin cliente
-        mostrarAlerta("Reserva Sin Cliente", "Realizando reserva sin cliente.");
-        // Lógica de reserva sin cliente aquí
     }
 
     @FXML

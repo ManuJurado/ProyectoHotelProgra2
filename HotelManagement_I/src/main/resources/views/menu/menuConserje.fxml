@@ -6,13 +6,9 @@
 
 <VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.ConserjeController">
     <!-- Opciones para el Conserje -->
-    <Button text="Check In" onAction="#checkIn"/>
-    <Button text="Check Out" onAction="#checkOut"/>
-    <Button text="Asignar Reserva a Cliente" onAction="#asignarReservaACliente"/>
     <Button text="Ver Lista de Reservas" onAction="#verListaReservas"/>
     <Button text="Ver Lista de Habitaciones" onAction="#verListaHabitaciones"/>
     <Button text="Ver Lista de Clientes" onAction="#verListaClientes"/>
-    <Button text="Realizar Reserva Sin Cliente" onAction="#realizarReservaSinCliente"/>
     <Button text="Modificar Datos de Usuario" onAction="#modificarDatosUsuario"/>
     <Button text="Cerrar Sesión" onAction="#cerrarSesion"/>
     <Button text="Salir de la Aplicación" onAction="#salir"/>

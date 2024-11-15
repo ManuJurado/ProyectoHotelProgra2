@@ -55,7 +55,8 @@
     <CheckBox text="Posee Cocina?" fx:id="cocinaCheckBox" />
 
     <!-- Campos específicos para apartamento -->
-    <HBox>
+    <HBox alignment="CENTER">
+        <Label text="cantidad de ambientes"/>
     <ComboBox fx:id="comboBoxAmbientes" promptText="Cantidad de ambientes">
         <items>
             <FXCollections fx:factory="observableArrayList">

@@ -5,6 +5,7 @@
 
 <?import javafx.collections.FXCollections?>
 <?import java.lang.String?>
+
 <AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.gestionar.GestionarUsuariosController">
     <children>
         <Label text="Gestión de Usuarios" layoutX="20" layoutY="20" />

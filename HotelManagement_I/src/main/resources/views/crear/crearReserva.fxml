@@ -11,7 +11,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.CheckBox?>
 
-<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.crear.CrearReservaController" spacing="10" prefHeight="600" prefWidth="500">
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.crear.CrearModificarReservaController" spacing="10" prefHeight="600" prefWidth="500">
 
     <!-- Fecha de entrada y salida -->
     <HBox spacing="10">

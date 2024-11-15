@@ -1,1 +1,77 @@
-[{"fechaNacimiento":"1995-08-27","apellido":"Sosa","direccion":"Catalunia 5157","tipoUsuario":"CLIENTE","contrasenia":"user1234","puntosFidelidad":50,"telefono":"1123456789","nombre":"Manuel","correoElectronico":"manolo@example.com","dni":"39098906"},{"apellido":"admin","tipoUsuario":"ADMINISTRADOR","contrasenia":"111111","nombre":"admin","correoElectronico":"admin@gmail.com","dni":"222222222"},{"apellido":"Salias","tipoUsuario":"ADMINISTRADOR","contrasenia":"414243","nombre":"Emiliano","correoElectronico":"emisalias@gmail.com","dni":"41332913"},{"fechaNacimiento":"1999-01-16","apellido":"Salias","direccion":"Chaco 1670","tipoUsuario":"CLIENTE","contrasenia":"414243","puntosFidelidad":0,"telefono":"2235507070","nombre":"Emiliano","correoElectronico":"emicliente@gmail.com","dni":"41332912"}]
+[
+  {
+    "apellido": "admin",
+    "tipoUsuario": "ADMINISTRADOR",
+    "contrasenia": "111111",
+    "nombre": "admin",
+    "correoElectronico": "admin@gmail.com",
+    "dni": "222222222"
+  },
+  {
+    "apellido": "Salias",
+    "tipoUsuario": "ADMINISTRADOR",
+    "contrasenia": "414243",
+    "nombre": "Emiliano",
+    "correoElectronico": "emisalias@gmail.com",
+    "dni": "41332913"
+  },
+  {
+    "fechaNacimiento": "1999-01-16",
+    "apellido": "Salias",
+    "direccion": "Chaco 1670",
+    "tipoUsuario": "CLIENTE",
+    "contrasenia": "414243",
+    "puntosFidelidad": 0,
+    "telefono": "2235507070",
+    "nombre": "Emiliano",
+    "correoElectronico": "emicliente@gmail.com",
+    "dni": "41332912"
+  },
+  {
+    "fechaIngreso": "2024-11-01",
+    "apellido": "adsadsads",
+    "tipoUsuario": "CONSERJE",
+    "contrasenia": "123456",
+    "estadoTrabajo": "Activo",
+    "telefono": "324324324324324",
+    "nombre": "adsaadsads",
+    "correoElectronico": "conserje@gmail.com",
+    "dni": "5466564564"
+  },
+  {
+    "fechaNacimiento": "2013-06-01",
+    "apellido": "Sosa",
+    "direccion": "cataluniai 5165",
+    "tipoUsuario": "CLIENTE",
+    "contrasenia": "123456",
+    "puntosFidelidad": 0,
+    "telefono": "432324324243324",
+    "nombre": "Manuel",
+    "correoElectronico": "otro@hotmail.com",
+    "dni": "39098907"
+  },
+  {
+    "fechaNacimiento": "2005-12-15",
+    "apellido": "sosa",
+    "direccion": "catalunia 4300",
+    "tipoUsuario": "CLIENTE",
+    "contrasenia": "123456",
+    "puntosFidelidad": 0,
+    "telefono": "22361545965",
+    "nombre": "manu",
+    "correoElectronico": "manujurado27@hotmail.com",
+    "dni": "5616516515"
+  },
+  {
+    "fechaNacimiento": "2024-11-02",
+    "apellido": "sadsadasd",
+    "direccion": "asdasdsad",
+    "tipoUsuario": "CLIENTE",
+    "contrasenia": "123456",
+    "puntosFidelidad": 0,
+    "telefono": "324234243234",
+    "nombre": "asadsds",
+    "correoElectronico": "ascassc@gmail.com",
+    "dni": "3244233243"
+  }
+]
