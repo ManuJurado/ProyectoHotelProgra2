@@ -14,6 +14,7 @@ import services.GestionUsuario;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,19 +23,11 @@ import java.util.function.Consumer;
 public class CrearConserjeController extends BaseController {
 
     @FXML
-    private TextField nombreField;
-    @FXML
-    private TextField apellidoField;
-    @FXML
-    private TextField dniField;
+    private TextField nombreField,apellidoField,dniField,correoElectronicoField,telefonoField,estadoTrabajoField;
+
     @FXML
     private PasswordField contraseniaField;
-    @FXML
-    private TextField correoElectronicoField;
-    @FXML
-    private TextField telefonoField;
-    @FXML
-    private TextField estadoTrabajoField;
+
     @FXML
     private DatePicker fechaIngresoPicker;
 
@@ -101,11 +94,11 @@ public class CrearConserjeController extends BaseController {
                     throw new AtributoFaltanteException("El correo electrónico ya está registrado.");
                 }
 
-                // Ahora, cuando vayas a guardar, formateas la fecha a "yyyy-MM-dd" solo para el almacenamiento
-                SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                 String fechaIngresoString = null;
                 if (conserje.getFechaIngreso() != null) {
-                    fechaIngresoString = formato.format(conserje.getFechaIngreso());
+                    fechaIngresoString = conserje.getFechaIngreso().format(formatter);
                 }
 
                 // Guardar el conserje en el JSON, manteniendo la fecha como Date en la clase Conserje
@@ -121,8 +114,7 @@ public class CrearConserjeController extends BaseController {
                 );
 
                 // Llamar a actualizarListaUsuarios() en el controlador de la escena anterior, si aplica
-                if (previousScene != null && previousScene.getUserData() instanceof GestionarUsuariosController) {
-                    GestionarUsuariosController gestionarUsuariosController = (GestionarUsuariosController) previousScene.getUserData();
+                if (previousScene != null && previousScene.getUserData() instanceof GestionarUsuariosController gestionarUsuariosController) {
                     gestionarUsuariosController.actualizarListaUsuarios();
                 }
 

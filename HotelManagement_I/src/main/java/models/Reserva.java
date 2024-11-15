@@ -26,6 +26,12 @@ public class Reserva {
     private Usuario usuario;
     private Habitacion habitacion;
 
+    //campos auxiliares por eliminacion de habitaciones
+    private boolean habitacionEliminada;
+    private Integer numeroHabitacion;
+
+
+
     public Reserva(){};
 
     public Reserva(int nuevoIdReserva, LocalDate fechaEntrada, LocalDate fechaSalida, String estadoReserva, String comentario, int cantidadPersonas, List<Pasajero> pasajeros, List<String> serviciosAdicionales, Usuario usuario, Habitacion habitacion) {
@@ -168,6 +174,25 @@ public class Reserva {
         }
         this.pasajeros = pasajeros;
     }
+
+    public void setHabitacionEliminada(boolean habitacionEliminada) {
+        this.habitacionEliminada = habitacionEliminada;
+    }
+
+    public boolean getHabitacionEliminada() {
+        return this.habitacionEliminada;
+    }
+
+    public Integer getNumeroHabitacion() {
+        return numeroHabitacion;
+    }
+
+    public void setNumeroHabitacion(Integer numeroHabitacion) {
+        this.numeroHabitacion = numeroHabitacion;
+    }
+
+
+
 
     @Override
     public String toString() {

@@ -1,17 +1,19 @@
 package controllers.gestionar;
 
 import controllers.BaseController;
-import controllers.crear.CrearReservaController;
-import enums.EstadoHabitacion;
+import controllers.GlobalData;
 import enums.TipoUsuario;
-import exceptions.AtributoFaltanteException;
+import controllers.crear.CrearModificarReservaController;
+import exceptions.HabitacionInexistenteException;
+import exceptions.PasajerosNoCoincidenException;
+import exceptions.ReservaCanceladaException;
+import exceptions.ReservaNoEncontradaException;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -19,7 +21,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import models.Pasajero;
-import services.GestionHabitaciones;
 import services.GestionReservas;
 import models.Reserva;
 import javafx.fxml.FXML;
@@ -27,11 +28,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import services.Sesion;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class GestionarReservasController extends BaseController {
 
@@ -53,7 +53,14 @@ public class GestionarReservasController extends BaseController {
     private TableColumn<Reserva, String> estadoColumn; // Columna para el estado de la reserva
 
     @FXML
-    private Button buttonModificarReserva,buttonCheckIn,buttonCheckOut;
+    private Button buttonModificarReserva,buttonCheckIn,buttonCheckOut, buttonCancelar, buttonEliminar;
+
+    private Scene previousScene;  // Cambiar a Scene en vez de Stage
+
+    // Metodo para establecer la escena anterior
+    public void setPreviousScene(Scene previousScene) {
+        this.previousScene = previousScene;
+    }
 
     @FXML
     public void initialize() {
@@ -61,12 +68,25 @@ public class GestionarReservasController extends BaseController {
             buttonModificarReserva.setVisible(false);
             buttonCheckIn.setVisible(false);
             buttonCheckOut.setVisible(false);
+            buttonCancelar.setVisible(false);
+            buttonEliminar.setVisible(false);
         }else if (Sesion.getUsuarioLogueado().getTipoUsuario() == TipoUsuario.CONSERJE){
             buttonModificarReserva.setVisible(false);
         }
 
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        habitacionColumn.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getHabitacion().getNumero())));
+        habitacionColumn.setCellValueFactory(cellData -> {
+            Reserva reserva = cellData.getValue();  // Obtenemos la reserva de la celda
+            // Comprobamos si la habitación es eliminada, si no, obtenemos el número de habitación
+            if (reserva.getHabitacionEliminada()) {
+                // Si la habitación fue eliminada, usamos el numeroAuxiliarHabitacion (asegurándonos de que no sea nulo)
+                return new SimpleStringProperty(String.valueOf(reserva.getNumeroHabitacion()));
+            } else {
+                // Si la habitación no fue eliminada, usamos el número de la habitación
+                return new SimpleStringProperty(String.valueOf(reserva.getHabitacion().getNumero()));
+            }
+        });
+
         fechaInicioColumn.setCellValueFactory(new PropertyValueFactory<>("fechaEntrada"));
         fechaFinColumn.setCellValueFactory(new PropertyValueFactory<>("fechaSalida"));
         clienteColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getUsuario().getNombre()));
@@ -83,46 +103,62 @@ public class GestionarReservasController extends BaseController {
     }
 
     private void cargarReservasEnTabla() {
-        reservas = gestionReservas.getListaReservas();  // Cargar lista desde el servicio
-        if(Sesion.getUsuarioLogueado().getTipoUsuario() == TipoUsuario.CLIENTE){
+        // Cargar la lista de reservas desde el servicio
+        reservas = gestionReservas.getListaReservas();
+
+        // Crear una lista filtrada solo si el usuario es de tipo CLIENTE
+        ObservableList<Reserva> reservasFiltradas;
+
+        if (Sesion.getUsuarioLogueado().getTipoUsuario() == TipoUsuario.CLIENTE) {
             List<Reserva> listaFiltrada = new ArrayList<>();
-            for (Reserva r : reservas){
-                if(r.getUsuario().getDni().equals(Sesion.getUsuarioLogueado().getDni())){
+
+            // Filtrar las reservas para mostrar solo las del cliente logueado
+            for (Reserva r : reservas) {
+                if (r.getUsuario().getDni().equals(Sesion.getUsuarioLogueado().getDni())) {
                     listaFiltrada.add(r);
                 }
             }
-            ObservableList<Reserva> reservasFiltradas = FXCollections.observableArrayList(listaFiltrada);
-            tablaReservas.setItems(reservasFiltradas);
-        }else {
-        ObservableList<Reserva> observableReservas = FXCollections.observableArrayList(reservas);
-        tablaReservas.setItems(observableReservas);
+            reservasFiltradas = FXCollections.observableArrayList(listaFiltrada);
+        } else {
+            // Si el usuario no es CLIENTE, mostrar todas las reservas
+            reservasFiltradas = FXCollections.observableArrayList(reservas);
         }
+
+        // Asignar la lista filtrada a la tabla
+        tablaReservas.setItems(reservasFiltradas);
+
+        // Refrescar la tabla si es necesario
+        tablaReservas.refresh();
     }
+
 
     public void setReservas(List<Reserva> reservas) {
         this.reservas = reservas;
         cargarReservasEnTabla();
     }
 
-    // Métodos para crear, modificar, cancelar y ver detalles de reservas
     @FXML
     private void onCrearReserva() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/crear/crearReserva.fxml"));
             Parent root = loader.load();
 
-            // El controlador de la ventana de crear reserva será cargado automáticamente con el FXMLLoader
-            CrearReservaController crearController = loader.getController();
+            // Obtener el controlador de la ventana de crear/modificar reserva
+            CrearModificarReservaController crearController = loader.getController();
 
+            // Crear y mostrar la nueva ventana de creación de reserva
             Stage stage = new Stage();
             stage.setTitle("Crear Reserva");
             stage.setScene(new Scene(root));
-            stage.showAndWait();  // Mostrar la ventana y esperar hasta que se cierre
+            stage.initModality(Modality.APPLICATION_MODAL);  // Hacer que la ventana sea modal
+            stage.showAndWait();  // Esperar hasta que la ventana de creación se cierre
 
-            cargarReservasEnTabla();  // Actualizar la tabla después de que la ventana de creación de reserva se haya cerrado
+            // Recargar la tabla de reservas
+            cargarReservasEnTabla();
+
         } catch (IOException e) {
             e.printStackTrace();
-            mostrarAlerta("Error", "No se pudo abrir la ventana de crear reserva.");
+            mostrarAlerta("Error", "No se pudo abrir la ventana de crear reserva.\n" + e.getMessage());
         }
     }
 
@@ -135,32 +171,87 @@ public class GestionarReservasController extends BaseController {
             return;
         }
 
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/crear/crearReserva.fxml"));
-            Parent root = loader.load();
+        if (!reservaSeleccionada.getEstadoReserva().equalsIgnoreCase("Cancelada")) {
+            try {
+                GlobalData.setReservaSeleccionada(reservaSeleccionada);
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/crear/crearReserva.fxml"));
+                Parent root = loader.load();
 
-            // Obtener el controlador de la nueva ventana
-            CrearReservaController crearController = loader.getController();
+                // Obtener el controlador de la nueva ventana
+                CrearModificarReservaController crearController = loader.getController();
 
-            // Pasar la reserva seleccionada para que la ventana de modificación la pueda cargar
-//            crearController.setReservaParaModificar(reservaSeleccionada);
+                // Pasar la reserva seleccionada para que la ventana de modificación la pueda cargar
 
-            // Mostrar la ventana para modificar la reserva
-            Stage stage = new Stage();
-            stage.setTitle("Modificar Reserva");
-            stage.setScene(new Scene(root));
-            stage.showAndWait();
+                // Mostrar la ventana para modificar la reserva
+                Stage stage = new Stage();
+                stage.setTitle("Modificar Reserva");
+                stage.setScene(new Scene(root));
+                stage.showAndWait();
 
-            // Una vez cerrada la ventana, actualizar la tabla con las reservas modificadas
-            cargarReservasEnTabla();
-        } catch (IOException e) {
-            e.printStackTrace();
-            mostrarAlerta("Error", "No se pudo abrir la ventana de modificar reserva.");
+                // Una vez cerrada la ventana, actualizar la tabla con las reservas modificadas
+                cargarReservasEnTabla();
+                GlobalData.limpiarReservaSeleccionada();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                mostrarAlerta("Error", "No se pudo abrir la ventana de modificar reserva.");
+            }
+        }else {
+            mostrarAlerta("No se puede modificar una reserva cancelada");
         }
     }
 
     @FXML
     private void onCancelarReserva() {
+        Reserva reservaSeleccionada = tablaReservas.getSelectionModel().getSelectedItem();
+
+        if (reservaSeleccionada == null) {
+            mostrarAlerta("Advertencia", "Selecciona una reserva para cancelar.");
+            return;
+        }
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "¿Estás seguro de que deseas cancelar esta reserva?");
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            try {
+                if (reservaSeleccionada == null) {
+                    mostrarAlerta("Advertencia", "Selecciona una reserva para cancelar.");
+                    return;
+                }
+
+                // Verificar el estado de la reserva (no debe estar finalizada ni cancelada)
+                if (reservaSeleccionada.getEstadoReserva().equals("Finalizada")) {
+                    mostrarAlerta("Error", "No se puede cancelar una reserva finalizada.");
+                    return;
+                }
+
+                if (reservaSeleccionada.getEstadoReserva().equals("Cancelada")) {
+                    mostrarAlerta("Error", "La reserva ya está cancelada.");
+                    return;
+                }
+
+                // Si pasa las validaciones, cambiar el estado a "Cancelada"
+                reservaSeleccionada.setEstadoReserva("Cancelada");
+
+                // Actualizar la reserva en el sistema
+                gestionReservas.modificarReserva(reservaSeleccionada);
+
+                // Mostrar un mensaje de éxito
+                mostrarAlerta("Éxito", "La reserva ha sido cancelada exitosamente.");
+
+                // Actualizar la tabla con las reservas modificadas
+                cargarReservasEnTabla();
+
+            } catch (Exception e) {
+                // Mostrar un mensaje de error si ocurre una excepción
+                mostrarAlerta("Error", "Ocurrió un error al cancelar la reserva: " + e.getMessage());
+            }
+        }
+    }
+
+    @FXML
+    private void onEliminarReserva(){
         // Obtener la reserva seleccionada de la tabla
         Reserva reservaSeleccionada = tablaReservas.getSelectionModel().getSelectedItem();
 
@@ -171,7 +262,7 @@ public class GestionarReservasController extends BaseController {
         }
 
         // Confirmación de cancelación
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "¿Estás seguro de que deseas cancelar esta reserva?");
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "¿Estás seguro de que deseas eliminar esta reserva?");
         Optional<ButtonType> result = alert.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
@@ -179,16 +270,16 @@ public class GestionarReservasController extends BaseController {
                 // Asegúrate de tener una instancia de GestionReservas
                 GestionReservas gestionReservas = GestionReservas.getInstancia("reservas.json");
 
-                // Llamar al metodo eliminarReserva para cancelar la reserva
-                gestionReservas.eliminarReserva(reservaSeleccionada.getUsuario().getNombre(),
-                        String.valueOf(reservaSeleccionada.getHabitacion().getNumero()),
-                        reservaSeleccionada.getFechaEntrada());
-
+                    gestionReservas.eliminarReserva(
+                            reservaSeleccionada.getUsuario().getNombre(),
+                            String.valueOf(reservaSeleccionada.getHabitacion().getNumero()),
+                            reservaSeleccionada.getFechaEntrada()
+                    );
                 // Actualizar la tabla de reservas
                 cargarReservasEnTabla();
 
                 // Mostrar alerta de éxito
-                mostrarAlerta("Éxito", "La reserva ha sido cancelada exitosamente.");
+                mostrarAlerta("Éxito", "La reserva ha sido eliminada exitosamente.");
             } catch (Exception e) {
                 e.printStackTrace();
                 mostrarAlerta("Error", "No se pudo cancelar la reserva.");
@@ -225,6 +316,17 @@ public class GestionarReservasController extends BaseController {
                 vbox.getChildren().add(serviciosLabel);
             }
 
+            // Detalles de los pasajeros
+            if (reservaSeleccionada.getPasajeros() != null && !reservaSeleccionada.getPasajeros().isEmpty()) {
+                Label pasajerosLabel = new Label("Pasajeros:");
+                vbox.getChildren().add(pasajerosLabel);
+
+                for (Pasajero pasajero : reservaSeleccionada.getPasajeros()) {
+                    Label pasajeroInfo = new Label("- " + pasajero.getNombre() + " " + pasajero.getApellido() + " (DNI: " + pasajero.getDni() + ")");
+                    vbox.getChildren().add(pasajeroInfo);
+                }
+            }
+
             // Botón para cerrar
             Button cerrarButton = new Button("Cerrar");
             cerrarButton.setOnAction(e -> detallesStage.close());
@@ -240,45 +342,59 @@ public class GestionarReservasController extends BaseController {
         }
     }
 
-    //METODOS PARA CHECKIN CHECKOUT
+
     @FXML
     private void onCheckIn() {
         // Obtener la reserva seleccionada
         Reserva reservaSeleccionada = tablaReservas.getSelectionModel().getSelectedItem();
 
-        // Verificar si hay una reserva seleccionada
         if (reservaSeleccionada == null) {
             mostrarAlerta("Advertencia", "Selecciona una reserva para hacer el check-in.");
             return;
         }
 
-        // Verificar que la reserva no esté ya finalizada
-        if ("Finalizada".equals(reservaSeleccionada.getEstadoReserva())) {
-            mostrarAlerta("Advertencia", "La reserva ya ha sido finalizada.");
-            return;
+        // Verificar si la reserva está cancelada
+        if (reservaSeleccionada.getEstadoReserva().equals("Cancelada")) {
+            mostrarAlerta("Error", "La reserva está cancelada y no se puede realizar el check-in.");
+            return; // Salir del metodo si la reserva está cancelada
         }
 
-        // Verificar que la habitación esté disponible para check-in
-        if (!reservaSeleccionada.getHabitacion().isDisponible()) {
-            mostrarAlerta("Advertencia", "La habitación ya está ocupada.");
-            return;
-        }
-
-        // Cambiar el estado de la habitación y de la reserva
-        reservaSeleccionada.getHabitacion().setEstado(EstadoHabitacion.OCUPADA);
-        reservaSeleccionada.getHabitacion().setDisponible(false);
-        reservaSeleccionada.setEstadoReserva("Finalizada");
-
-        // Guardar cambios en las reservas y habitaciones
+        // Abrir la ventana de DNI de pasajeros
         try {
-            // Guardar la reserva y las habitaciones actualizadas en los archivos JSON
-            gestionReservas.actualizarReservasJson();
-            GestionHabitaciones.getInstancia("HotelManagement_I/habitaciones.json").guardarHabitaciones();
-            cargarReservasEnTabla();  // Actualizar la tabla de reservas
-            mostrarAlerta("Éxito", "Check-in realizado correctamente.");
-        } catch (Exception e) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/detalles/checkInPasajeros.fxml"));
+            Parent root = loader.load();
+
+            // Obtener el controlador de la ventana y pasarle la cantidad de pasajeros
+            CheckInController controller = loader.getController();
+            controller.inicializarCampos(reservaSeleccionada.getCantidadPersonas());
+            int cantidadPasajeros = reservaSeleccionada.getCantidadPersonas();
+            controller.setCantidadPasajeros(cantidadPasajeros);
+
+            // Crear y mostrar el nuevo Stage
+            Stage stage = new Stage();
+            stage.setTitle("Ingresar DNIs de los Pasajeros");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+
+            // Recuperar los pasajeros ingresados
+
+            // Intentar realizar el check-in con la lista obtenida
+            try {
+                List<Pasajero> pasajerosCheckIn = controller.obtenerPasajerosCheckIn();
+                gestionReservas.realizarCheckIn(reservaSeleccionada.getId(), pasajerosCheckIn);
+                mostrarAlerta("Éxito", "Check-in realizado correctamente.");
+                cargarReservasEnTabla(); // Refrescar la tabla de reservas
+            } catch (PasajerosNoCoincidenException e) {
+                mostrarAlerta("Error", "Los DNIs ingresados no coinciden con la reserva.");
+            } catch (RuntimeException e) {
+                mostrarAlerta("Error", "DNI invalido");
+            } catch (ReservaCanceladaException e) {
+                mostrarAlerta("Error", "La reserva está cancelada y no se puede realizar el check-in.");
+            }
+        } catch (IOException e) {
             e.printStackTrace();
-            mostrarAlerta("Error", "No se pudo realizar el check-in.");
+            mostrarAlerta("Error", "No se pudo abrir la ventana para ingresar los DNIs de los pasajeros.");
         }
     }
 
@@ -294,24 +410,28 @@ public class GestionarReservasController extends BaseController {
             return;
         }
 
-        // Verificar que la reserva no haya sido ya finalizada
-        if (!"Finalizada".equals(reservaSeleccionada.getEstadoReserva())) {
-            mostrarAlerta("Advertencia", "La reserva no está finalizada.");
+        // Verificar que el día de finalización coincida con el día actual
+        LocalDate fechaActual = LocalDate.now();
+        if (!reservaSeleccionada.getFechaSalida().equals(fechaActual)) {
+            mostrarAlerta("Advertencia", "La fecha de finalización de la reserva no coincide con el día actual. No se puede realizar el check-out.");
             return;
         }
 
-        // Cambiar el estado de la habitación y de la reserva
-        reservaSeleccionada.getHabitacion().setEstado(EstadoHabitacion.DISPONIBLE);
-        reservaSeleccionada.getHabitacion().setDisponible(true);
-        reservaSeleccionada.setEstadoReserva("Finalizada");
-
-        // Guardar cambios en las reservas y habitaciones
         try {
-            // Guardar la reserva y las habitaciones actualizadas en los archivos JSON
-            gestionReservas.actualizarReservasJson();
-            GestionHabitaciones.getInstancia("HotelManagement_I/habitaciones.json").guardarHabitaciones();
-            cargarReservasEnTabla();  // Actualizar la tabla de reservas
+            // Realizar el check-out utilizando el metodo `realizarCheckOut`
+            gestionReservas.realizarCheckOut(reservaSeleccionada.getId());
+
+            // Actualizar la tabla de reservas
+            cargarReservasEnTabla();
+
+            // Mostrar mensaje de éxito
             mostrarAlerta("Éxito", "Check-out realizado correctamente.");
+        } catch (ReservaNoEncontradaException e) {
+            mostrarAlerta("Error", "No se encontró la reserva seleccionada.");
+        } catch (HabitacionInexistenteException e) {
+            mostrarAlerta("Error", "No se encontró la habitación asociada a la reserva.");
+        } catch (ReservaCanceladaException e) {
+            mostrarAlerta("Error", "La reserva está cancelada y no se puede realizar el check-out.");
         } catch (Exception e) {
             e.printStackTrace();
             mostrarAlerta("Error", "No se pudo realizar el check-out.");
@@ -319,11 +439,9 @@ public class GestionarReservasController extends BaseController {
     }
 
 
-
-
     @FXML
     private void volverAlMenuAdmin(ActionEvent event) {
-        cambiarEscena("/views/menu/menuAdministrador.fxml", "Menú Administrador", (Node) event.getSource());
+        volverAEscenaAnterior(event, previousScene);
     }
 
 

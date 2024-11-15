@@ -21,13 +21,16 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import models.Habitacion.*;
+import models.Reserva;
 import models.Usuarios.Usuario;
 import services.GestionHabitaciones;
+import services.GestionReservas;
 import services.GestionUsuario;
 import services.Sesion;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.lang.String.valueOf;
 
@@ -312,34 +315,74 @@ public class GestionarHabitacionesController extends BaseController {
         Habitacion habitacionSeleccionada = tablaHabitaciones.getSelectionModel().getSelectedItem();
 
         if (habitacionSeleccionada != null) {
-            // Mostrar alerta de confirmación
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Confirmación de eliminación");
-            alert.setHeaderText("¿Está seguro de eliminar esta habitación?");
-            alert.setContentText("Esta acción no se puede deshacer.");
+            // Buscar las reservas asociadas a la habitación que no estén canceladas
+            List<Reserva> reservasAsociadas = GestionReservas.getInstancia("HotelManagement_I/reservas.json").obtenerReservasNoCanceladas()
+                    .stream()
+                    .filter(reserva -> reserva.getHabitacion().equals(habitacionSeleccionada))
+                    .collect(Collectors.toList());
 
-            // Si el administrador acepta
-            alert.showAndWait().ifPresent(response -> {
-                if (response == ButtonType.OK) {
-                    // Llamar al servicio para eliminar la habitación
-                    boolean eliminada = gestionHabitaciones.eliminar(valueOf(habitacionSeleccionada.getNumero()));
+            // Si hay reservas asociadas, mostrar una alerta
+            if (!reservasAsociadas.isEmpty()) {
+                // Mostrar alerta de confirmación
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Confirmación de eliminación");
+                alert.setHeaderText("¿Está seguro de eliminar esta habitación?");
+                alert.setContentText("Esta acción no se puede deshacer. Todas las reservas asociadas a esta habitación serán canceladas.");
 
-                    if (eliminada) {
-                        // Mostrar una alerta de éxito
-                        mostrarAlerta("Éxito", "La habitación ha sido eliminada correctamente.");
-                        // Actualizar la lista de habitaciones
-                        cargarHabitaciones();
-                    } else {
-                        // Mostrar una alerta de error si no se pudo eliminar
-                        mostrarAlerta("Error", "Hubo un problema al eliminar la habitación.");
+                // Si el administrador acepta
+                alert.showAndWait().ifPresent(response -> {
+                    if (response == ButtonType.OK) {
+                        // Cancelar las reservas asociadas a la habitación
+                        for (Reserva reserva : reservasAsociadas) {
+                            reserva.setEstadoReserva("Cancelada");  // Cambiar el estado a "Cancelada"
+                            reserva.setHabitacionEliminada(true);
+                        }
+
+                        // Llamar al servicio para eliminar la habitación
+                        boolean eliminada = gestionHabitaciones.eliminar(String.valueOf(habitacionSeleccionada.getNumero()));
+
+                        if (eliminada) {
+                            // Mostrar una alerta de éxito
+                            mostrarAlerta("Éxito", "La habitación ha sido eliminada correctamente.");
+                            // Actualizar la lista de habitaciones
+                            cargarHabitaciones();
+                        } else {
+                            // Mostrar una alerta de error si no se pudo eliminar
+                            mostrarAlerta("Error", "Hubo un problema al eliminar la habitación.");
+                        }
                     }
-                }
-            });
+                });
+            } else {
+                // Si no hay reservas asociadas
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Confirmación de eliminación");
+                alert.setHeaderText("¿Está seguro de eliminar esta habitación?");
+                alert.setContentText("Esta acción no se puede deshacer.");
+
+                // Si el administrador acepta
+                alert.showAndWait().ifPresent(response -> {
+                    if (response == ButtonType.OK) {
+                        // Llamar al servicio para eliminar la habitación
+                        boolean eliminada = gestionHabitaciones.eliminar(String.valueOf(habitacionSeleccionada.getNumero()));
+
+                        if (eliminada) {
+                            // Mostrar una alerta de éxito
+                            mostrarAlerta("Éxito", "La habitación ha sido eliminada correctamente.");
+                            // Actualizar la lista de habitaciones
+                            cargarHabitaciones();
+                        } else {
+                            // Mostrar una alerta de error si no se pudo eliminar
+                            mostrarAlerta("Error", "Hubo un problema al eliminar la habitación.");
+                        }
+                    }
+                });
+            }
         } else {
             // Si no se seleccionó ninguna habitación
             mostrarAlerta("Selección requerida", "Por favor, seleccione una habitación para eliminar.");
         }
     }
+
 
 
     @FXML

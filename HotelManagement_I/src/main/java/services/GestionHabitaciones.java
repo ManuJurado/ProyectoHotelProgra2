@@ -250,8 +250,10 @@ public class GestionHabitaciones implements Gestionable_I<Habitacion> {
     // Metodo para actualizar una habitación en la lista de habitaciones
     public void actualizarHabitacion(Habitacion habitacionActualizada) {
         // Buscar la habitación en la lista
+        System.out.println("TESTEO 2" + habitacionActualizada);
         Habitacion habitacionExistente = buscarPorIdInt(habitacionActualizada.getNumero());
 
+        System.out.println("TESTEO 3" + habitacionExistente);
         if (habitacionExistente != null) {
             // Actualizar los valores de la habitación existente
             habitacionExistente.setEstado(habitacionActualizada.getEstado());
